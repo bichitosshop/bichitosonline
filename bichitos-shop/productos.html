@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Productos — BICHITOS SHOP</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="header">
+    <div class="container header-flex">
+        <a href="index.html" class="logo">🐾 BICHITOS SHOP</a>
+        <nav class="nav" id="nav">
+            <a href="index.html">Inicio</a>
+            <a href="productos.html" class="active">Productos</a>
+            <a href="contacto.html">Contacto</a>
+            <a href="#" class="cart-icon" id="cartToggle">🛒 <span id="cartCount">0</span></a>
+        </nav>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
+</header>
+
+<section class="page-header">
+    <div class="container"><h1>Nuestros productos</h1></div>
+</section>
+
+<section class="productos-page">
+    <div class="container">
+        <div class="filtros">
+            <div class="filtros-botones">
+                <button class="filtro-btn active" data-categoria="todas">🐾 Todas</button>
+                <button class="filtro-btn" data-categoria="perros">🐶 Perros</button>
+                <button class="filtro-btn" data-categoria="gatos">🐱 Gatos</button>
+            </div>
+            <input type="text" class="buscador" id="buscador" placeholder="🔍 Buscar producto..." />
+        </div>
+        <div class="productos-grid" id="productosGrid"></div>
+    </div>
+</section>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-panel" id="cartPanel">
+    <div class="cart-header"><h3>🛒 Tu carrito</h3><button id="cartClose">✕</button></div>
+    <div class="cart-items" id="cartItems"><p class="cart-empty">El carrito está vacío</p></div>
+    <div class="cart-footer">
+        <div class="cart-total"><span>Total:</span><span id="cartTotal">$0</span></div>
+        <button class="btn-whatsapp btn-cart-send" id="cartSend">💬 Enviar pedido por WhatsApp</button>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container footer-grid">
+        <div><h4>🐾 BICHITOS SHOP</h4><p>Alimentos y accesorios para mascotas</p></div>
+        <div><h4>Contacto</h4><p>📱 <a href="https://wa.me/5492615081413">+54 9 261 508-1413</a></p></div>
+        <div><h4>Horarios</h4><p>Lun a Sáb: 9:00 – 20:00</p></div>
+    </div>
+    <div class="container footer-bottom"><p>&copy; 2026 BICHITOS SHOP</p></div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
