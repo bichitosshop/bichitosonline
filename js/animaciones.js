@@ -1,151 +1,62 @@
-const bgCanvas = document.getElementById('bgCanvas');
-const ctx = bgCanvas.getContext('2d');
-let animFrame = null;
-let activePet = null;
-let petX, petY, targetX, frame = 0;
-const COLOR = '#FF7F2A';
-const OPACITY = 0.15;
-const SPEED = 0.8;
+const SVG_DOG = `<svg viewBox="0 0 256 256" width="120" height="120" fill="#FF7F2A"><path d="M239.71,125l-16.42-88a16,16,0,0,0-19.61-12.58l-.31.09L150.85,40h-45.7L52.63,24.56l-.31-.09A16,16,0,0,0,32.71,37.05L16.29,125a15.77,15.77,0,0,0,9.12,17.52A16.26,16.26,0,0,0,32.12,144,15.48,15.48,0,0,0,40,141.84V184a40,40,0,0,0,40,40h96a40,40,0,0,0,40-40V141.85a15.5,15.5,0,0,0,7.87,2.16,16.31,16.31,0,0,0,6.72-1.47A15.77,15.77,0,0,0,239.71,125ZM176,208H136V195.31l13.66-13.65a8,8,0,0,0-11.32-11.32L128,180.69l-10.34-10.35a8,8,0,0,0-11.32,11.32L120,195.31V208H80a24,24,0,0,1-24-24V123.11L107.93,56h40.14L200,123.11V184A24,24,0,0,1,176,208Zm-72-68a12,12,0,1,1-12-12A12,12,0,0,1,104,140Zm72,0a12,12,0,1,1-12-12A12,12,0,0,1,176,140Z"/></svg>`;
 
-function resizeCanvas() {
-    bgCanvas.width = window.innerWidth;
-    bgCanvas.height = window.innerHeight;
+const SVG_CAT = `<svg viewBox="0 0 400 380" width="130" height="130" fill="#FF7F2A"><path d="M 151.34904,307.20455 L 264.34904,307.20455 C 264.34904,291.14096 263.2021,287.95455 236.59904,287.95455 C 240.84904,275.20455 258.12424,244.35808 267.72404,244.35808 C 276.21707,244.35808 286.34904,244.82592 286.34904,264.20455 C 286.34904,286.20455 323.37171,321.67547 332.34904,307.20455 C 345.72769,285.63897 309.34904,292.21514 309.34904,240.20455 C 309.34904,169.05135 350.87417,179.18071 350.87417,139.20455 C 350.87417,119.20455 345.34904,116.50374 345.34904,102.20455 C 345.34904,83.30695 361.99717,84.403577 358.75805,68.734879 C 356.52061,57.911656 354.76962,49.23199 353.46516,36.143889 C 352.53959,26.857305 352.24452,16.959398 342.59855,17.357382 C 331.26505,17.824992 326.96549,37.77419 309.34904,39.204549 C 291.76851,40.631991 276.77834,24.238028 269.97404,26.579549 C 263.22709,28.901334 265.34904,47.204549 269.34904,60.204549 C 275.63588,80.636771 289.34904,107.20455 264.34904,111.20455 C 239.34904,115.20455 196.34904,119.20455 165.34904,160.20455 C 134.34904,201.20455 135.49342,249.3212 123.34904,264.20455 C 82.590696,314.15529 40.823919,293.64625 40.823919,335.20455 C 40.823919,353.81019 72.349045,367.20455 77.349045,361.20455 C 82.349045,355.20455 34.863764,337.32587 87.995492,316.20455 C 133.38711,298.16014 137.43914,294.47663 151.34904,307.20455 z"/></svg>`;
+
+let activePet = null;
+let petEl = null;
+let petX, petY, targetX, frameId;
+const SPEED = 0.7;
+
+function crearElemento(tipo) {
+    const el = document.createElement('div');
+    el.className = 'pet-animation';
+    el.innerHTML = tipo === 'perro' ? SVG_DOG : SVG_CAT;
+    el.style.cssText = `
+        position: fixed;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.15;
+        transition: opacity 0.8s ease;
+        will-change: transform;
+    `;
+    const size = 80 + Math.random() * 50;
+    el.style.width = size + 'px';
+    document.body.appendChild(el);
+    return el;
 }
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
 function programarProximo() {
     const delay = 15000 + Math.random() * 15000;
     setTimeout(() => {
         const tipo = Math.random() > 0.5 ? 'perro' : 'gato';
         const desdeIzquierda = Math.random() > 0.5;
-        petX = desdeIzquierda ? -120 : bgCanvas.width + 120;
-        petY = 80 + Math.random() * (bgCanvas.height - 250);
-        targetX = desdeIzquierda ? bgCanvas.width + 120 : -120;
+        petX = desdeIzquierda ? -130 : window.innerWidth + 30;
+        petY = 60 + Math.random() * (window.innerHeight - 200);
+        targetX = desdeIzquierda ? window.innerWidth + 30 : -130;
         activePet = { tipo, desdeIzquierda };
-        frame = 0;
+        petEl = crearElemento(tipo);
+        petEl.style.transform = `translate(${petX}px, ${petY}px)`;
+        petEl.style.opacity = '0';
+        requestAnimationFrame(() => { petEl.style.opacity = '0.15'; });
         animar();
         programarProximo();
     }, delay);
 }
 
 function animar() {
-    if (!activePet) return;
-    ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-
+    if (!activePet || !petEl) return;
     petX += activePet.desdeIzquierda ? SPEED : -SPEED;
     if ((activePet.desdeIzquierda && petX > targetX) ||
         (!activePet.desdeIzquierda && petX < targetX)) {
+        petEl.style.opacity = '0';
+        setTimeout(() => { if (petEl && petEl.parentNode) petEl.remove(); }, 800);
         activePet = null;
-        ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        petEl = null;
         return;
     }
-
-    ctx.save();
-    ctx.globalAlpha = OPACITY;
-    ctx.fillStyle = COLOR;
-    ctx.strokeStyle = COLOR;
-    ctx.lineWidth = 3;
-    ctx.lineCap = 'round';
-
-    const drawX = petX;
-    const drawY = petY;
-
-    if (activePet.tipo === 'perro') {
-        dibujarPerro(drawX, drawY);
-    } else {
-        dibujarGato(drawX, drawY);
-    }
-
-    ctx.restore();
-    frame++;
-    animFrame = requestAnimationFrame(animar);
-}
-
-function dibujarPerro(x, y) {
-    const b = Math.sin(frame * 0.08) * 3;
-    // Cuerpo
-    ctx.beginPath();
-    ctx.ellipse(x, y + b, 28, 16, 0, 0, Math.PI * 2);
-    ctx.fill();
-    // Cabeza
-    ctx.beginPath();
-    ctx.arc(x + 33, y - 5 + b, 14, 0, Math.PI * 2);
-    ctx.fill();
-    // Hocico
-    ctx.beginPath();
-    ctx.ellipse(x + 44, y - 1 + b, 7, 5, 0, 0, Math.PI * 2);
-    ctx.fill();
-    // Oreja
-    ctx.beginPath();
-    ctx.ellipse(x + 28, y - 18 + b, 5, 9, -0.3, 0, Math.PI * 2);
-    ctx.fill();
-    // Patas traseras
-    ctx.fillRect(x - 12, y + 10 + b, 4, 18);
-    ctx.fillRect(x - 2, y + 10 + b, 4, 18);
-    // Patas delanteras con movimiento
-    const sw = Math.sin(frame * 0.12) * 4;
-    ctx.fillRect(x + 12, y + 10 + b + sw, 4, 18);
-    ctx.fillRect(x + 22, y + 10 + b - sw, 4, 18);
-    // Cola
-    const tw = Math.sin(frame * 0.18) * 12;
-    ctx.beginPath();
-    ctx.moveTo(x - 26, y - 4 + b);
-    ctx.quadraticCurveTo(x - 36, y - 18 + b + tw, x - 28, y - 28 + b + tw);
-    ctx.stroke();
-    // Hueso
-    ctx.fillRect(x + 46, y + 4 + b, 16, 3);
-    ctx.beginPath();
-    ctx.arc(x + 48, y + 5.5 + b, 3.5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(x + 60, y + 5.5 + b, 3.5, 0, Math.PI * 2);
-    ctx.fill();
-}
-
-function dibujarGato(x, y) {
-    const b = Math.sin(frame * 0.1) * 3;
-    // Cuerpo
-    ctx.beginPath();
-    ctx.ellipse(x, y + b, 22, 13, 0, 0, Math.PI * 2);
-    ctx.fill();
-    // Cabeza
-    ctx.beginPath();
-    ctx.arc(x + 27, y - 6 + b, 12, 0, Math.PI * 2);
-    ctx.fill();
-    // Orejas puntiagudas
-    ctx.beginPath();
-    ctx.moveTo(x + 20, y - 16 + b);
-    ctx.lineTo(x + 22, y - 30 + b);
-    ctx.lineTo(x + 28, y - 18 + b);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(x + 31, y - 18 + b);
-    ctx.lineTo(x + 36, y - 30 + b);
-    ctx.lineTo(x + 38, y - 16 + b);
-    ctx.fill();
-    // Cola
-    const tw = Math.sin(frame * 0.12) * 18;
-    ctx.beginPath();
-    ctx.moveTo(x + 22, y - 4 + b);
-    ctx.quadraticCurveTo(x + 36, y - 12 + b + tw, x + 40, y - 28 + b);
-    ctx.stroke();
-    // Patas
-    ctx.fillRect(x - 10, y + 8 + b, 3, 13);
-    ctx.fillRect(x - 2, y + 8 + b, 3, 13);
-    ctx.fillRect(x + 8, y + 8 + b, 3, 13);
-    ctx.fillRect(x + 16, y + 8 + b, 3, 13);
-    // Bola de lana
-    const bx = x + 18 + Math.sin(frame * 0.04) * 12;
-    const by = y + 22 + b;
-    ctx.beginPath();
-    ctx.arc(bx, by, 7, 0, Math.PI * 2);
-    ctx.fill();
-    // Hilo de la bola
-    ctx.beginPath();
-    ctx.moveTo(bx, by);
-    ctx.quadraticCurveTo(bx + 13, by - 18, bx + 22, by - 13);
-    ctx.stroke();
+    const bounce = Math.sin(Date.now() * 0.003) * 3;
+    petEl.style.transform = `translate(${petX}px, ${petY + bounce}px)`;
+    frameId = requestAnimationFrame(animar);
 }
 
 programarProximo();
