@@ -111,16 +111,78 @@ a { text-decoration: none; color: inherit; }
 }
 .hero-content p { font-size: 1.1rem; opacity: .9; margin-bottom: 25px; }
 
+/* ===== PET SILHOUETTE ANIMATIONS ===== */
+.pet-scene {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+.pet-silhouette {
+    position: absolute;
+    bottom: 15px;
+    width: 140px;
+    height: 100px;
+    will-change: transform;
+}
+.pet-silhouette svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.pet-dog {
+    animation: walkDog 18s linear infinite;
+}
+.pet-cat {
+    animation: walkCat 14s linear infinite;
+    width: 110px;
+    height: 80px;
+    bottom: 20px;
+}
+
+@keyframes walkDog {
+    0%   { transform: translateX(calc(100vw + 60px)) translateY(0) rotate(0deg); }
+    25%  { transform: translateX(calc(75vw - 50%)) translateY(-4px) rotate(1deg); }
+    50%  { transform: translateX(calc(50vw - 50%)) translateY(0) rotate(0deg); }
+    75%  { transform: translateX(calc(25vw - 50%)) translateY(-4px) rotate(-1deg); }
+    100% { transform: translateX(calc(-60px - 100%)) translateY(0) rotate(0deg); }
+}
+@keyframes walkCat {
+    0%   { transform: translateX(calc(100vw + 80px)) translateY(0); }
+    30%  { transform: translateX(calc(70vw - 50%)) translateY(-3px); }
+    60%  { transform: translateX(calc(40vw - 50%)) translateY(0); }
+    90%  { transform: translateX(calc(10vw - 50%)) translateY(-3px); }
+    100% { transform: translateX(calc(-80px - 100%)) translateY(0); }
+}
+
+@keyframes wagTail {
+    0%, 100% { transform: rotate(-5deg); }
+    50%      { transform: rotate(10deg); }
+}
+@keyframes bobHead {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-2px); }
+}
+.pet-dog .tail { transform-origin: 20px 48px; animation: wagTail 0.6s ease-in-out infinite; }
+.pet-dog .head { animation: bobHead 0.8s ease-in-out infinite; }
+.pet-cat .tail { transform-origin: 25px 42px; animation: wagTail 0.5s ease-in-out infinite; }
+
 .btn-primary, .btn-whatsapp {
     display: inline-block;
-    padding: 14px 38px;
+    padding: 14px 44px;
     border: none;
-    border-radius: 50px;
     font-weight: 700;
     font-size: .95rem;
     cursor: pointer;
     margin: 5px;
+    position: relative;
     transition: transform .2s, box-shadow .2s;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 70'%3E%3Cpath d='M40,12 Q8,12 5,35 Q8,58 40,58 L260,58 Q292,58 295,35 Q292,12 260,12 Z' fill='black'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 70'%3E%3Cpath d='M40,12 Q8,12 5,35 Q8,58 40,58 L260,58 Q292,58 295,35 Q292,12 260,12 Z' fill='black'/%3E%3C/svg%3E");
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
 }
 
 .btn-primary {
@@ -289,12 +351,17 @@ a { text-decoration: none; color: inherit; }
 .filtro-btn {
     background: var(--cream);
     border: 2px solid transparent;
-    padding: 10px 22px;
-    border-radius: 50px;
+    padding: 10px 24px;
     font-weight: 600;
     cursor: pointer;
     transition: all .2s;
     font-size: .9rem;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 70'%3E%3Cpath d='M40,12 Q8,12 5,35 Q8,58 40,58 L260,58 Q292,58 295,35 Q292,12 260,12 Z' fill='black'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 70'%3E%3Cpath d='M40,12 Q8,12 5,35 Q8,58 40,58 L260,58 Q292,58 295,35 Q292,12 260,12 Z' fill='black'/%3E%3C/svg%3E");
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
 }
 .buscador {
     flex: 1;
@@ -430,5 +497,5 @@ a { text-decoration: none; color: inherit; }
     .header-flex { padding: 10px 16px; }
     .hero { padding: 60px 0 50px; }
     .page-header { padding: 30px 0; }
-    .btn-primary, .btn-whatsapp { padding: 11px 28px; font-size: .85rem; }
+    .btn-primary, .btn-whatsapp { padding: 11px 30px; font-size: .85rem; }
 }
