@@ -170,11 +170,12 @@ function crearCard(p) {
     const icono = p.categoria === 'gatos' ? '🐱' : '🐶';
     const enCarrito = carrito.find(i => i.id === p.id);
     const cant = enCarrito ? enCarrito.cant : 0;
+    const subtotal = enCarrito ? p.precio * enCarrito.cant : 0;
     const imgHtml = p.imagen
         ? `<img src="${p.imagen}" alt="${p.nombre}" style="width:100%;height:100%;object-fit:cover;" />`
         : `<span style="font-size:3.5rem;">${icono}</span>`;
     return `
-        <div class="producto-card">
+        <div class="producto-card${cant > 0 ? ' en-carrito' : ''}">
             <div class="producto-img ${p.categoria}">${imgHtml}</div>
             <div class="producto-body">
                 <div class="producto-marca">${p.marca || ''}</div>
@@ -185,6 +186,7 @@ function crearCard(p) {
                     <span>${cant}</span>
                     <button class="qty-btn" data-id="${p.id}" data-accion="sumar">+</button>
                 </div>
+                ${cant > 0 ? `<div class="producto-subtotal">Subtotal: $${subtotal.toLocaleString('es-AR')}</div>` : ''}
             </div>
         </div>
     `;
@@ -228,6 +230,7 @@ document.addEventListener('click', function(e) {
     const qtyBtn = e.target.closest('.qty-btn, .qty-cart');
     if (qtyBtn) {
         const id = parseInt(qtyBtn.dataset.id);
+        const esCard = qtyBtn.classList.contains('qty-btn');
         if (qtyBtn.dataset.accion === 'sumar') {
             const item = carrito.find(i => i.id === id);
             if (item) {
@@ -237,13 +240,15 @@ document.addEventListener('click', function(e) {
                 if (!prod) return;
                 carrito.push({ ...prod, cant: 1 });
             }
+            renderAll();
+            if (esCard) abrirCarrito();
         } else {
             const item = carrito.find(i => i.id === id);
             if (!item) return;
             item.cant--;
             if (item.cant <= 0) carrito = carrito.filter(i => i.id !== id);
+            renderAll();
         }
-        renderAll();
         return;
     }
     const rem = e.target.closest('.cart-item-remove');
