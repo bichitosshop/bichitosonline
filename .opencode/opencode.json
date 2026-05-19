@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "command": {
+    "audit": {
+      "description": "Analiza accesibilidad, rendimiento y consistencia visual",
+      "prompt": "Ejecuta una auditoría completa del proyecto. Lee .opencode/commands/audit.md para los chequeos a realizar. Reporta hallazgos por severidad: crítico, mayor, menor."
+    },
+    "newpage": {
+      "description": "Genera una nueva página con SEO, layout y HTML semántico",
+      "prompt": "Generá una nueva página HTML siguiendo la estructura en .opencode/commands/newpage.md. Preguntame el nombre de la página antes de crear archivos."
+    },
+    "tokens": {
+      "description": "Encuentra valores hardcodeados y los convierte a variables del sistema de diseño",
+      "prompt": "Escaneá CSS y JS buscando valores hardcodeados como colores hex, border-radius, box-shadow, espaciados. Seguí el criterio en .opencode/commands/tokens.md. Mostrame cada hallazgo con archivo:línea y la variable sugerida."
+    }
+  }
+}
