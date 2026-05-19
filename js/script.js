@@ -181,12 +181,12 @@ function crearCard(p) {
                 <div class="producto-marca">${p.marca || ''}</div>
                 <div class="producto-nombre">${p.nombre}</div>
                 <div class="producto-precio">$${p.precio.toLocaleString('es-AR')}</div>
-                <div class="producto-cantidad">
+                <div class="qty-selector">
                     <button class="qty-btn" data-id="${p.id}" data-accion="restar">−</button>
-                    <span>${cant}</span>
+                    <span class="qty-cant">${cant}</span>
                     <button class="qty-btn" data-id="${p.id}" data-accion="sumar">+</button>
                 </div>
-                ${cant > 0 ? `<div class="producto-subtotal">Subtotal: $${subtotal.toLocaleString('es-AR')}</div>` : ''}
+                ${cant > 0 ? `<div class="producto-subtotal">🛒 $${subtotal.toLocaleString('es-AR')}</div>` : ''}
             </div>
         </div>
     `;
@@ -241,7 +241,6 @@ document.addEventListener('click', function(e) {
                 carrito.push({ ...prod, cant: 1 });
             }
             renderAll();
-            if (esCard) abrirCarrito();
         } else {
             const item = carrito.find(i => i.id === id);
             if (!item) return;
