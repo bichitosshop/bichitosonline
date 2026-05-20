@@ -1,52 +1,6 @@
 // API Service for Bichitos Shop
 // Follows REST principles and provides a clean interface for product data
 
-const PRODUCT_IMAGES_MAP = {
-    'ESTAMPAPLUSPERRORAZASPEQUENAS': 'https://nutrega.com.ar/wp-content/uploads/2023/03/plus-rp.jpg',
-    'ESTAMPAPLUSPERRORAZASPEQUEÑAS': 'https://nutrega.com.ar/wp-content/uploads/2023/03/plus-rp.jpg',
-    'ESTAMPAPLUSPERRO': 'https://acdn-us.mitiendanube.com/stores/004/788/704/products/estampa-plus-alimento-perro-adulto-26-proteinas-cae8966fc78db91b1117412954978076-480-0.webp',
-    'ESTAMPAPLUSCACHORRO': 'https://nutrega.com.ar/wp-content/uploads/2023/03/cachorros-plus.jpg',
-    'ESTAMPAPLUSGATO': 'https://nutrega.com.ar/images/estampa-gato.jpg',
-    'ESTAMPAGATO': 'https://nutrega.com.ar/images/estampa-gato.jpg',
-    'ESTAMPACRIADORES': 'https://acdn-us.mitiendanube.com/stores/003/845/983/products/estampa-criadores-perros-adultos-pet-shop-animall-com-ar-835d8135a18fa85ab117004823687926-640-0.webp',
-    'VALIANTCRIADORES': 'https://supermercadodemascotas.com.ar/wp-content/uploads/2022/08/Diseno-sin-titulo-11-600x600.png',
-    'ESTAMPAINSIGNIAPERROADULTO': 'https://nutrega.com.ar/wp-content/uploads/2023/03/estmapa-myg.jpg',
-    'ESTAMPAINSIGNIAPERROCACHORRO': 'https://nutrega.com.ar/wp-content/uploads/2023/03/cachorros-1.jpg',
-    'ESTAMPAINSIGNIAPERROMORDIDAPEQUENA': 'https://nutrega.com.ar/wp-content/uploads/2023/03/estampa-rp.jpg',
-    'ESTAMPAINSIGNIAPERROMORDIDAPEQUEÑA': 'https://nutrega.com.ar/wp-content/uploads/2023/03/estampa-rp.jpg',
-    'JASPEADULTO': 'https://jaspe-nutricion.com.ar/img/tradicional/Tradicional-Adultos.webp',
-    'JASPECACHORRO': 'https://jaspe-nutricion.com.ar/img/tradicional/Tradicional-Cachorros.webp',
-    'JASPECACHPREMIUM': 'https://jaspe-nutricion.com.ar/img/premium/Premium-Cachorros.webp',
-    'JASPEPREMIUM': 'https://jaspe-nutricion.com.ar/img/premium/Premium-Adultos-Mordida-Tradicional.webp',
-    'JASPECRIADORES': 'https://jaspe-nutricion.com.ar/img/premium/Premium-Criadores.webp',
-    'JASPEGATO': 'https://jaspe-nutricion.com.ar/img/tradicional/Tradicional-Gatos.webp',
-    'JASPEGATOPREMIUM': 'https://jaspe-nutricion.com.ar/img/premium/Premium-Gatos.webp',
-    'LIWU': 'https://acdn-us.mitiendanube.com/stores/979/500/products/tmp_b64_b99b0bf6-730f-4d04-9274-d753a5e8deae_979500_6251921-0ea2bbf7ab216ea8d817732341486204-640-0.webp',
-    'LIWUÉ': 'https://acdn-us.mitiendanube.com/stores/979/500/products/tmp_b64_b99b0bf6-730f-4d04-9274-d753a5e8deae_979500_6251921-0ea2bbf7ab216ea8d817732341486204-640-0.webp',
-    'LIWUEPLUS': 'https://acdn-us.mitiendanube.com/stores/979/500/products/tmp_b64_b99b0bf6-730f-4d04-9274-d753a5e8deae_979500_6251921-0ea2bbf7ab216ea8d817732341486204-640-0.webp',
-    'VAGONETAGOURMET': 'https://vagoneta.com.ar/img/producto-perros-gourmet.png',
-    'VAGONETACARNEY': 'https://vagoneta.com.ar/img/producto-perros-gourmet.png',
-    'VAGONETATRADICIONAL': 'https://vagoneta.com.ar/img/producto-perros-adultos.png',
-    'VAGONETARAZAPEQUENA': 'https://vagoneta.com.ar/img/producto-perros-adultos.png',
-    'VAGONETARAZAPEQUEÑA': 'https://vagoneta.com.ar/img/producto-perros-adultos.png',
-    'VAGONETACACHORRO': 'https://vagoneta.com.ar/img/producto-cachorros.png',
-    'VAGONETAGATO': 'https://vagoneta.com.ar/img/producto-gatos.png',
-    'VAGONETAGATOGOURMET': 'https://vagoneta.com.ar/img/producto-gatos-gourmet.png',
-    'VAGONETAGATITO': 'https://vagoneta.com.ar/img/producto-gatitos.png',
-    'DRPERROT': 'https://drperrot.com.ar/img/producto.png',
-};
-
-function buscarImagenProducto(nombre) {
-    const key = nombre.toUpperCase().replace(/[^A-Z0-9ÁÉÍÓÚÑÜ]/g, '');
-    for (const [k, url] of Object.entries(PRODUCT_IMAGES_MAP)) {
-        if (key.startsWith(k)) return url;
-    }
-    for (const [k, url] of Object.entries(PRODUCT_IMAGES_MAP)) {
-        if (key.includes(k)) return url;
-    }
-    return '';
-}
-
 class ProductosAPI {
     constructor() {
         this.baseUrl = '';
@@ -78,20 +32,18 @@ class ProductosAPI {
                 const products = this.parseCSV(csvText);
                 
                 // Update cache
-                const enriched = this.enrichWithImages(products);
-                this.productsCache = enriched;
+                this.productsCache = products;
                 this.cacheTimestamp = Date.now();
                 
-                return enriched;
+                return products;
             } else {
                 // Fallback to local data
                 throw new Error('Using fallback data');
             }
-            } catch (error) {
-                console.warn('Failed to fetch from API, using fallback data:', error);
-                const products = this.getFallbackProducts();
-                return this.enrichWithImages(products);
-            }
+        } catch (error) {
+            console.warn('Failed to fetch from API, using fallback data:', error);
+            return this.getFallbackProducts();
+        }
     }
 
     /**
@@ -252,20 +204,6 @@ class ProductosAPI {
             { id:67, nombre:'Vagoneta Gatito x 10 Kg', categoria:'gatos', precio:34545, destacado:false, marca:'Vagoneta', stock:7 },
             { id:68, nombre:'Vagoneta Gatito x 0,5 Kg (pack x12u)', categoria:'gatos', precio:30536, destacado:false, marca:'Vagoneta', stock:12 }
         ];
-    }
-
-    /**
-     * Enrich products with image URLs from the mapping
-     * @param {Array} products - Product array
-     * @returns {Array} Products with imagen field populated
-     */
-    enrichWithImages(products) {
-        return products.map(p => {
-            if (!p.imagen) {
-                p.imagen = buscarImagenProducto(p.nombre);
-            }
-            return p;
-        });
     }
 
     /**
