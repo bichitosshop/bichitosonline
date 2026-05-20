@@ -6,6 +6,7 @@
     <title>BICHITOS SHOP — Alimentos para mascotas</title>
     <meta name="description" content="Alimentos premium para perros y gatos en Mendoza. Calidad que se nota.">
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
@@ -97,18 +98,47 @@
     <div class="container footer-bottom"><p>&copy; 2026 BICHITOS SHOP</p></div>
 </footer>
 
-<div class="checkout-float" id="checkoutFloat">
-    <div>
-        <div class="checkout-float-total">
-            <span>Total:</span>
-            <strong id="checkoutFloatTotal">$0</strong>
+<button class="cart-fab" id="cartFab" aria-label="Abrir carrito">
+    🛒
+    <span class="cart-fab-badge" id="cartFabBadge">0</span>
+</button>
+
+<div class="checkout-modal" id="checkoutModal">
+    <div class="checkout-modal-overlay" id="checkoutModalOverlay"></div>
+    <div class="checkout-modal-content">
+        <div class="checkout-modal-header">
+            <h3>📋 Completá tu pedido</h3>
+            <button id="checkoutModalClose" aria-label="Cerrar">✕</button>
         </div>
-        <span class="checkout-float-count" id="checkoutFloatCount">0 productos</span>
+        <div class="checkout-form">
+            <div class="checkout-field">
+                <label for="checkoutName">Tu nombre</label>
+                <input type="text" id="checkoutName" placeholder="ej: Juan Pérez" required />
+            </div>
+
+            <div class="checkout-field">
+                <label for="checkoutAddress">Dirección de entrega</label>
+                <input type="text" id="checkoutAddress" placeholder="ej: Av. San Martín 123, Mendoza" />
+            </div>
+
+            <div class="checkout-map-wrap" id="checkoutMapWrap">
+                <div id="checkoutMap"></div>
+            </div>
+
+            <div class="checkout-map-actions">
+                <input type="text" class="checkout-map-search" id="checkoutMapSearch" placeholder="🔍 Buscar dirección..." />
+                <button class="btn-map-action" id="checkoutUseLocation">📍 Mi ubicación</button>
+            </div>
+
+            <div class="checkout-resumen" id="checkoutResumen"></div>
+
+            <button class="btn-primary" id="checkoutSubmit">💬 Enviar pedido por WhatsApp</button>
+        </div>
     </div>
-    <button class="btn-whatsapp" id="checkoutFloatSend">💬 Finalizar compra</button>
 </div>
 
 <script src="js/api-service.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>

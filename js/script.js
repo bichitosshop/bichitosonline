@@ -4,6 +4,9 @@ const CART_STORAGE_KEY = 'bichitos_carrito';
 
 let productos = [];
 let carrito = [];
+let mapaCheckout = null;
+let markerCheckout = null;
+let coordsCheckout = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarCarritoStorage();
@@ -107,7 +110,7 @@ function crearCard(p) {
                     <button class="qty-btn" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">+</button>
                 </div>
                 ${cant === 0 ? `<button class="btn-add-cart" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">🛒 Agregar</button>` : ''}
-                ${cant > 0 ? `<div class="producto-subtotal">🛒 $${subtotal.toLocaleString('es-AR')} ${cant === 1 ? '<span class="badge-added">✅ Agregado</span>' : ''}</div>` : ''}
+                ${cant > 0 ? `<div class="producto-subtotal">🛒 $${subtotal.toLocaleString('es-AR')}</div>` : ''}
             </div>
         </div>
     `;
@@ -117,25 +120,16 @@ function renderCarrito() {
     const items = document.getElementById('cartItems');
     const total = document.getElementById('cartTotal');
     const count = document.getElementById('cartCount');
-    const floatBar = document.getElementById('checkoutFloat');
-    const floatTotal = document.getElementById('checkoutFloatTotal');
-    const floatCount = document.getElementById('checkoutFloatCount');
+    const fab = document.getElementById('cartFab');
+    const fabBadge = document.getElementById('cartFabBadge');
     if (!items) return;
 
     const totalCant = carrito.reduce((s, i) => s + i.cant, 0);
     if (count) count.textContent = totalCant;
+    if (fab) fab.classList.toggle('visible', totalCant > 0);
+    if (fabBadge) fabBadge.textContent = totalCant;
 
     const totalPrecio = carrito.reduce((s, i) => s + i.precio * i.cant, 0);
-
-    if (floatBar) {
-        floatBar.classList.toggle('visible', carrito.length > 0);
-    }
-    if (floatTotal) {
-        floatTotal.textContent = '$' + totalPrecio.toLocaleString('es-AR');
-    }
-    if (floatCount) {
-        floatCount.textContent = totalCant === 1 ? '1 producto' : totalCant + ' productos';
-    }
 
     if (carrito.length === 0) {
         items.innerHTML = '<p class="cart-empty">El carrito está vacío</p>';
@@ -203,15 +197,131 @@ function cerrarCarrito() {
     document.getElementById('cartOverlay')?.classList.remove('open');
 }
 
-function enviarWhatsApp() {
-    if (carrito.length === 0) return alert('El carrito está vacío');
+function abrirCheckout() {
+    if (carrito.length === 0) return;
+    document.getElementById('checkoutModal').classList.add('open');
+    actualizarResumenCheckout();
+    initMapaCheckout();
+    document.getElementById('checkoutName')?.focus();
+}
+
+function cerrarCheckout() {
+    document.getElementById('checkoutModal').classList.remove('open');
+}
+
+function actualizarResumenCheckout() {
+    const el = document.getElementById('checkoutResumen');
+    if (!el) return;
+    const total = carrito.reduce((s, i) => s + i.precio * i.cant, 0);
+    const cant = carrito.reduce((s, i) => s + i.cant, 0);
+    el.innerHTML = `<strong>${cant}</strong> producto${cant !== 1 ? 's' : ''} — Total: <strong>$${total.toLocaleString('es-AR')}</strong>`;
+}
+
+function initMapaCheckout() {
+    const container = document.getElementById('checkoutMap');
+    if (!container || container._leaflet_id) return;
+    mapaCheckout = L.map('checkoutMap').setView([-32.8895, -68.8458], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(mapaCheckout);
+    mapaCheckout.on('click', function(e) {
+        colocarMarcador(e.latlng.lat, e.latlng.lng);
+        buscarDireccion(e.latlng.lat, e.latlng.lng);
+    });
+    setTimeout(() => mapaCheckout.invalidateSize(), 300);
+}
+
+function colocarMarcador(lat, lng) {
+    coordsCheckout = { lat, lng };
+    if (markerCheckout) {
+        markerCheckout.setLatLng([lat, lng]);
+    } else {
+        markerCheckout = L.marker([lat, lng], { draggable: true }).addTo(mapaCheckout);
+        markerCheckout.on('dragend', function() {
+            const pos = markerCheckout.getLatLng();
+            coordsCheckout = { lat: pos.lat, lng: pos.lng };
+            buscarDireccion(pos.lat, pos.lng);
+        });
+    }
+    document.getElementById('checkoutAddress').value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+}
+
+async function buscarDireccion(lat, lng) {
+    try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=es`);
+        const data = await res.json();
+        if (data.display_name) {
+            document.getElementById('checkoutAddress').value = data.display_name;
+        }
+    } catch (e) {
+        // fallback a coordenadas
+    }
+}
+
+async function buscarEnMapa(query) {
+    if (!query.trim()) return;
+    try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&accept-language=es`);
+        const data = await res.json();
+        if (data.length > 0) {
+            const r = data[0];
+            mapaCheckout.setView([r.lat, r.lon], 15);
+            colocarMarcador(parseFloat(r.lat), parseFloat(r.lon));
+        } else {
+            alert('No se encontró esa dirección');
+        }
+    } catch (e) {
+        alert('Error al buscar dirección');
+    }
+}
+
+function usarUbicacionActual() {
+    if (!navigator.geolocation) {
+        alert('Tu navegador no soporta geolocalización');
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(
+        pos => {
+            const { latitude, longitude } = pos.coords;
+            mapaCheckout.setView([latitude, longitude], 15);
+            colocarMarcador(latitude, longitude);
+            buscarDireccion(latitude, longitude);
+        },
+        () => alert('No pudimos obtener tu ubicación. Permití el acceso o escribí la dirección manualmente.')
+    );
+}
+
+function enviarWhatsAppCheckout() {
+    const nombre = document.getElementById('checkoutName').value.trim();
+    const direccion = document.getElementById('checkoutAddress').value.trim();
+    if (!nombre) {
+        document.getElementById('checkoutName').focus();
+        document.getElementById('checkoutName').style.borderColor = '#e74c3c';
+        return;
+    }
+    document.getElementById('checkoutName').style.borderColor = '';
+
+    let mapsLink = '';
+    if (coordsCheckout) {
+        mapsLink = `https://www.google.com/maps?q=${coordsCheckout.lat},${coordsCheckout.lng}`;
+    }
+
     const lineas = carrito.map(i => {
         const icono = i.categoria === 'gatos' ? '🐱' : '🐶';
         return `${icono} ${i.nombre} x${i.cant} — $${(i.precio * i.cant).toLocaleString('es-AR')}`;
     });
     const total = carrito.reduce((s, i) => s + i.precio * i.cant, 0);
-    const mensaje = `${WHATSAPP_MSG_PREFIX}${lineas.join('%0A')}%0A━━━━━━━━━━━━━━━━━━━%0A💰 Total: $${total.toLocaleString('es-AR')}%0A%0A📍 Dirección: [completar]%0A💬 Nombre: [completar]`;
+
+    let mensaje = `${WHATSAPP_MSG_PREFIX}👤 Nombre: ${nombre}%0A`;
+    mensaje += `📍 Dirección: ${direccion}%0A`;
+    if (mapsLink) mensaje += `🗺️ Mapa: ${mapsLink}%0A`;
+    mensaje += `%0A━━━━━  PEDIDO  ━━━━━%0A`;
+    mensaje += lineas.join('%0A');
+    mensaje += `%0A━━━━━━━━━━━━━━━━━━━%0A💰 Total: $${total.toLocaleString('es-AR')}`;
+
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`, '_blank');
+    cerrarCheckout();
 }
 
 function setupUI() {
@@ -229,10 +339,28 @@ function setupUI() {
         e.preventDefault();
         abrirCarrito();
     });
+    document.getElementById('cartFab')?.addEventListener('click', () => {
+        if (carrito.length > 0) abrirCarrito();
+    });
     document.getElementById('cartClose')?.addEventListener('click', cerrarCarrito);
     document.getElementById('cartOverlay')?.addEventListener('click', cerrarCarrito);
-    document.getElementById('cartSend')?.addEventListener('click', enviarWhatsApp);
-    document.getElementById('checkoutFloatSend')?.addEventListener('click', enviarWhatsApp);
+    document.getElementById('cartSend')?.addEventListener('click', abrirCheckout);
+    document.getElementById('checkoutModalClose')?.addEventListener('click', cerrarCheckout);
+    document.getElementById('checkoutModalOverlay')?.addEventListener('click', cerrarCheckout);
+    document.getElementById('checkoutSubmit')?.addEventListener('click', enviarWhatsAppCheckout);
+    document.getElementById('checkoutUseLocation')?.addEventListener('click', usarUbicacionActual);
+
+    const searchInput = document.getElementById('checkoutMapSearch');
+    if (searchInput) {
+        let timeout;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => buscarEnMapa(searchInput.value), 500);
+        });
+        searchInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter') buscarEnMapa(searchInput.value);
+        });
+    }
 
     document.querySelectorAll('.filtro-btn').forEach(btn => {
         btn.addEventListener('click', () => {
