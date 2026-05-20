@@ -394,6 +394,72 @@ a { text-decoration: none; color: inherit; }
 
 .destacados { padding: 50px 0; }
 
+.checkout-float {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--white);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+    z-index: 300;
+    padding: 12px 20px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transform: translateY(100%);
+    transition: transform .3s ease;
+}
+.checkout-float.visible {
+    display: flex;
+    transform: translateY(0);
+}
+.checkout-float-total {
+    font-size: .95rem;
+    color: var(--gray);
+    line-height: 1.3;
+}
+.checkout-float-total strong {
+    font-size: 1.3rem;
+    color: var(--orange);
+    display: block;
+}
+.checkout-float .btn-whatsapp {
+    margin: 0;
+    padding: 12px 24px;
+    font-size: .9rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.checkout-float-count {
+    font-size: .75rem;
+    color: var(--gray);
+}
+
+@media (min-width: 768px) {
+    .checkout-float {
+        width: auto;
+        left: auto;
+        right: 20px;
+        bottom: 20px;
+        border-radius: var(--radius-md);
+        padding: 16px 24px;
+        gap: 16px;
+        box-shadow: var(--shadow);
+        flex-direction: column;
+        text-align: center;
+        max-width: 260px;
+    }
+    .checkout-float-total strong {
+        display: inline;
+        font-size: 1.1rem;
+    }
+    .checkout-float .btn-whatsapp {
+        width: 100%;
+        padding: 12px 20px;
+    }
+}
+
 .filtros {
     display: flex;
     flex-wrap: wrap;
