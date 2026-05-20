@@ -129,19 +129,19 @@ a { text-decoration: none; color: inherit; }
     font-size: .95rem;
     cursor: pointer;
     margin: 5px;
-    transition: background .25s, color .25s, transform .2s, box-shadow .2s;
+    transition: background .25s, color .25s, box-shadow .25s, transform .2s;
 }
 
 .btn-primary {
     background: var(--white);
     color: var(--orange);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 .btn-primary:hover {
     background: var(--orange);
     color: var(--white);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255,127,42,0.3);
+    box-shadow: 0 8px 25px rgba(255,127,42,0.25);
 }
 .btn-primary:active {
     transform: translateY(0);
@@ -151,13 +151,13 @@ a { text-decoration: none; color: inherit; }
 .btn-whatsapp {
     background: #25D366;
     color: white;
-    box-shadow: 0 2px 12px rgba(37,211,102,0.2);
+    box-shadow: 0 2px 8px rgba(37,211,102,0.2);
 }
 .btn-whatsapp:hover {
     background: #1da851;
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(37,211,102,0.35);
+    box-shadow: 0 8px 25px rgba(37,211,102,0.3);
 }
 .btn-whatsapp:active {
     transform: translateY(0);
@@ -203,7 +203,16 @@ a { text-decoration: none; color: inherit; }
     font-size: 3.5rem;
     display: block;
     margin-bottom: 10px;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+.producto-img span {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+.contacto-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 .categoria-card h3 { font-size: 1.5rem; }
 .categoria-card p { opacity: .9; }
