@@ -111,61 +111,47 @@ a { text-decoration: none; color: inherit; }
 }
 .hero-content p { font-size: 1.1rem; opacity: .9; margin-bottom: 25px; }
 
-/* ===== PET SILHOUETTE ANIMATIONS ===== */
+/* ===== PET SILHOUETTES (emoji + CSS filter) ===== */
 .pet-scene {
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 1;
 }
-.pet-silhouette {
+.pet-emoji {
     position: absolute;
-    bottom: 15px;
-    width: 140px;
-    height: 100px;
+    bottom: 10px;
+    font-size: 160px;
+    line-height: 1;
+    filter: brightness(0) invert(1);
+    opacity: 0.1;
     will-change: transform;
 }
-.pet-silhouette svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
 .pet-dog {
-    animation: walkDog 18s linear infinite;
+    animation: walkDog 20s linear infinite;
+    font-size: 170px;
 }
 .pet-cat {
-    animation: walkCat 14s linear infinite;
-    width: 110px;
-    height: 80px;
-    bottom: 20px;
+    animation: walkCat 15s linear infinite;
+    font-size: 130px;
+    bottom: 18px;
 }
 
 @keyframes walkDog {
-    0%   { transform: translateX(calc(100vw + 60px)) translateY(0) rotate(0deg); }
-    25%  { transform: translateX(calc(75vw - 50%)) translateY(-4px) rotate(1deg); }
-    50%  { transform: translateX(calc(50vw - 50%)) translateY(0) rotate(0deg); }
-    75%  { transform: translateX(calc(25vw - 50%)) translateY(-4px) rotate(-1deg); }
-    100% { transform: translateX(calc(-60px - 100%)) translateY(0) rotate(0deg); }
+    0%   { transform: translateX(calc(100vw + 80px)) translateY(0) rotate(0deg); }
+    20%  { transform: translateX(calc(80vw - 50%)) translateY(-5px) rotate(0.8deg); }
+    40%  { transform: translateX(calc(60vw - 50%)) translateY(0) rotate(0deg); }
+    60%  { transform: translateX(calc(40vw - 50%)) translateY(-5px) rotate(-0.8deg); }
+    80%  { transform: translateX(calc(20vw - 50%)) translateY(0) rotate(0deg); }
+    100% { transform: translateX(calc(-80px - 100%)) translateY(-5px) rotate(0.8deg); }
 }
 @keyframes walkCat {
-    0%   { transform: translateX(calc(100vw + 80px)) translateY(0); }
-    30%  { transform: translateX(calc(70vw - 50%)) translateY(-3px); }
-    60%  { transform: translateX(calc(40vw - 50%)) translateY(0); }
-    90%  { transform: translateX(calc(10vw - 50%)) translateY(-3px); }
-    100% { transform: translateX(calc(-80px - 100%)) translateY(0); }
+    0%   { transform: translateX(calc(100vw + 60px)) translateY(0); }
+    25%  { transform: translateX(calc(75vw - 50%)) translateY(-4px) rotate(0.5deg); }
+    50%  { transform: translateX(calc(50vw - 50%)) translateY(0); }
+    75%  { transform: translateX(calc(25vw - 50%)) translateY(-4px) rotate(-0.5deg); }
+    100% { transform: translateX(calc(-60px - 100%)) translateY(0); }
 }
-
-@keyframes wagTail {
-    0%, 100% { transform: rotate(-5deg); }
-    50%      { transform: rotate(10deg); }
-}
-@keyframes bobHead {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-2px); }
-}
-.pet-dog .tail { transform-origin: 20px 48px; animation: wagTail 0.6s ease-in-out infinite; }
-.pet-dog .head { animation: bobHead 0.8s ease-in-out infinite; }
-.pet-cat .tail { transform-origin: 25px 42px; animation: wagTail 0.5s ease-in-out infinite; }
 
 .btn-primary, .btn-whatsapp {
     display: inline-block;
