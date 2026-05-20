@@ -117,11 +117,12 @@ class ProductosAPI {
                 id: i,
                 nombre: item.nombre,
                 categoria: (item.categoria || '').toLowerCase(),
-                precio: parseInt(item.precio_final) || parseInt(item.precio) || 0,
+                precio: parseInt(item.precio) || 0,
                 precio_proveedor: parseInt(item.precio_proveedor) || 0,
                 margen: parseInt(item.margen) || 35,
                 imagen: item.imagen || '',
                 destacado: (item.destacado || '').toUpperCase() === 'SI',
+                stock: parseInt(item.stock) === 0 ? 0 : (parseInt(item.stock) || 0),
                 marca: (item.nombre || '').split(' ')[0]
             });
         }
