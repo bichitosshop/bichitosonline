@@ -91,6 +91,30 @@ class ProductosAPI {
     }
 
     /**
+     * Parse a single CSV line respecting quoted fields
+     * @param {string} line - CSV line
+     * @returns {Array} Array of field values
+     */
+    _parseCSVLine(line) {
+        const fields = [];
+        let current = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+            const ch = line[i];
+            if (ch === '"') {
+                inQuotes = !inQuotes;
+            } else if (ch === ',' && !inQuotes) {
+                fields.push(current);
+                current = '';
+            } else {
+                current += ch;
+            }
+        }
+        fields.push(current);
+        return fields;
+    }
+
+    /**
      * Parse CSV text into product objects
      * @param {string} csvText - CSV text to parse
      * @returns {Array} Array of product objects
@@ -98,14 +122,14 @@ class ProductosAPI {
     parseCSV(csvText) {
         const lines = csvText.split('\n').filter(line => line.trim());
         if (lines.length < 2) return this.getFallbackProducts();
-        
-        const headers = lines[0].split(',').map(header => header.trim().toLowerCase());
+
+        const headers = this._parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
         const results = [];
-        
+
         for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',').map(value => value.trim());
+            const values = this._parseCSVLine(lines[i]).map(v => v.trim());
             if (values.length < 2) continue;
-            
+
             const item = {};
             headers.forEach((header, index) => {
                 item[header] = values[index] || '';
