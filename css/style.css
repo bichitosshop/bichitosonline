@@ -43,6 +43,16 @@ a { text-decoration: none; color: inherit; }
     font-weight: 800;
     color: var(--orange);
     letter-spacing: -0.5px;
+    order: 0;
+}
+.nav {
+    order: 1;
+}
+.cart-icon {
+    order: 2;
+}
+.menu-toggle {
+    order: 3;
 }
 .nav { display: flex; gap: 20px; align-items: center; }
 .nav a {
