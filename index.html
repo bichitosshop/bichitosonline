@@ -4,23 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BICHITOS SHOP — Alimentos para mascotas</title>
+    <meta name="description" content="Alimentos premium para perros y gatos en Mendoza. Calidad que se nota.">
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
+    <a href="#main" class="skip-link">Saltar al contenido principal</a>
+
     <header class="header">
         <div class="container header-flex">
-            <a href="index.html" class="logo">🐾 BICHITOS SHOP</a>
-            <nav class="nav" id="nav">
-                <a href="index.html">Inicio</a>
+            <a href="index.html" class="logo" aria-label="Bichitos Shop — Inicio">🐾 BICHITOS SHOP</a>
+            <nav class="nav" id="nav" aria-label="Navegación principal">
+                <a href="index.html" aria-current="page">Inicio</a>
                 <a href="productos.html">Productos</a>
                 <a href="contacto.html">Contacto</a>
             </nav>
-            <a href="#" class="cart-icon" id="cartToggle">🛒 <span id="cartCount">0</span></a>
-            <button class="menu-toggle" id="menuToggle">☰</button>
+            <a href="#" class="cart-icon" id="cartToggle" aria-label="Abrir carrito de compras">🛒 <span id="cartCount" aria-live="polite">0</span></a>
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false">☰</button>
         </div>
     </header>
 
+<main id="main">
 <section class="hero">
     <div class="container hero-content">
         <h1>Todo lo que tu <span class="highlight">bichito</span> necesita</h1>
@@ -30,17 +34,17 @@
     </div>
 </section>
 
-<section class="categorias">
+<section class="categorias" aria-labelledby="categorias-title">
     <div class="container">
-        <h2 class="section-title">Comprá por categoría</h2>
+        <h2 id="categorias-title" class="section-title">Comprá por categoría</h2>
         <div class="categoria-grid">
             <a href="productos.html?categoria=perros" class="categoria-card card-perros">
-                <span class="categoria-icon">🐶</span>
+                <span class="categoria-icon" aria-hidden="true">🐶</span>
                 <h3>Perros</h3>
                 <p>Alimentos balanceados</p>
             </a>
             <a href="productos.html?categoria=gatos" class="categoria-card card-gatos">
-                <span class="categoria-icon">🐱</span>
+                <span class="categoria-icon" aria-hidden="true">🐱</span>
                 <h3>Gatos</h3>
                 <p>Alimentos balanceados</p>
             </a>
@@ -48,18 +52,19 @@
     </div>
 </section>
 
-<section class="destacados" id="destacados">
+<section class="destacados" id="destacados" aria-labelledby="destacados-title">
     <div class="container">
-        <h2 class="section-title">⭐ Productos destacados</h2>
-        <div class="productos-grid" id="destacadosGrid"></div>
+        <h2 id="destacados-title" class="section-title">⭐ Productos destacados</h2>
+        <div class="productos-grid" id="destacadosGrid" aria-live="polite"></div>
     </div>
 </section>
+</main>
 
-<div class="cart-overlay" id="cartOverlay"></div>
-<div class="cart-panel" id="cartPanel">
+<div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
+<div class="cart-panel" id="cartPanel" role="dialog" aria-label="Carrito de compras" aria-modal="true">
     <div class="cart-header">
         <h3>🛒 Tu carrito</h3>
-        <button id="cartClose">✕</button>
+        <button id="cartClose" aria-label="Cerrar carrito">✕</button>
     </div>
     <div class="cart-items" id="cartItems">
         <p class="cart-empty">El carrito está vacío</p>
@@ -79,6 +84,7 @@
     <div class="container footer-bottom"><p>&copy; 2026 BICHITOS SHOP</p></div>
 </footer>
 
+<script src="js/api-service.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>

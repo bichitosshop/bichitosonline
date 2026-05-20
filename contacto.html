@@ -4,43 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contacto — BICHITOS SHOP</title>
+    <meta name="description" content="Contactanos por WhatsApp o visitanos en Mendoza. Hacé tu pedido de alimentos para mascotas.">
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<header class="header">
-    <div class="header-flex">
-        <a href="index.html" class="logo">🐾 BICHITOS SHOP</a>
-        <nav class="nav" id="nav">
-            <a href="index.html">Inicio</a>
-            <a href="productos.html">Productos</a>
-            <a href="contacto.html" class="active">Contacto</a>
-            <a href="#" class="cart-icon" id="cartToggle">🛒 <span id="cartCount">0</span></a>
-        </nav>
-        <button class="menu-toggle" id="menuToggle">☰</button>
-    </div>
-</header>
+    <a href="#main" class="skip-link">Saltar al contenido principal</a>
 
+    <header class="header">
+        <div class="container header-flex">
+            <a href="index.html" class="logo" aria-label="Bichitos Shop — Inicio">🐾 BICHITOS SHOP</a>
+            <nav class="nav" id="nav" aria-label="Navegación principal">
+                <a href="index.html">Inicio</a>
+                <a href="productos.html">Productos</a>
+                <a href="contacto.html" class="active" aria-current="page">Contacto</a>
+            </nav>
+            <a href="#" class="cart-icon" id="cartToggle" aria-label="Abrir carrito de compras">🛒 <span id="cartCount" aria-live="polite">0</span></a>
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false">☰</button>
+        </div>
+    </header>
+
+<main id="main">
 <section class="page-header">
     <div class="container"><h1>Contactanos</h1></div>
 </section>
 
-<section class="contacto-page">
+<section class="contacto-page" aria-labelledby="contacto-title">
     <div class="container contacto-grid">
         <div class="contacto-info">
+            <h2 id="contacto-title" class="section-title">Información de contacto</h2>
             <div class="contacto-card">
-                <span class="contacto-icon">💬</span>
+                <span class="contacto-icon" aria-hidden="true">💬</span>
                 <h3>WhatsApp</h3>
                 <p>Hacé tu pedido directamente</p>
                 <a href="https://wa.me/5492615081413" target="_blank" class="btn-whatsapp">💬 Escribinos ahora</a>
             </div>
             <div class="contacto-card">
-                <span class="contacto-icon">📍</span>
+                <span class="contacto-icon" aria-hidden="true">📍</span>
                 <h3>Ubicación</h3>
                 <p>Mendoza, Argentina</p>
             </div>
             <div class="contacto-card">
-                <span class="contacto-icon">🕐</span>
+                <span class="contacto-icon" aria-hidden="true">🕐</span>
                 <h3>Horarios</h3>
                 <p>Lun a Sáb: 9:00 – 20:00</p>
             </div>
@@ -52,10 +57,11 @@
         </div>
     </div>
 </section>
+</main>
 
-<div class="cart-overlay" id="cartOverlay"></div>
-<div class="cart-panel" id="cartPanel">
-    <div class="cart-header"><h3>🛒 Tu carrito</h3><button id="cartClose">✕</button></div>
+<div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
+<div class="cart-panel" id="cartPanel" role="dialog" aria-label="Carrito de compras" aria-modal="true">
+    <div class="cart-header"><h3>🛒 Tu carrito</h3><button id="cartClose" aria-label="Cerrar carrito">✕</button></div>
     <div class="cart-items" id="cartItems"><p class="cart-empty">El carrito está vacío</p></div>
     <div class="cart-footer">
         <div class="cart-total"><span>Total:</span><span id="cartTotal">$0</span></div>
@@ -72,6 +78,7 @@
     <div class="container footer-bottom"><p>&copy; 2026 BICHITOS SHOP</p></div>
 </footer>
 
+<script src="js/api-service.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>

@@ -1,0 +1,483 @@
+openapi: "3.1.0"
+info:
+  title: Bichitos Shop Product API
+  version: "1.0.0"
+  description: API para gestionar productos de la tienda de alimentos para mascotas Bichitos Shop
+  contact:
+    name: Bichitos Shop
+    url: https://bichitosshop.github.io/bichitosonline
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.bichitosshop.com
+    description: Servidor de producción
+  - url: http://localhost:3000
+    description: Servidor de desarrollo
+tags:
+  - name: productos
+    description: Operaciones relacionadas con productos
+  - name: categorias
+    description: Operaciones relacionadas con categorías de productos
+  - name: carrito
+    description: Operaciones relacionadas con el carrito de compras
+paths:
+  /productos:
+    get:
+      summary: Obtener lista de productos
+      tags: [productos]
+      parameters:
+        - name: categoria
+          in: query
+          description: Filtrar por categoría (perros, gatos, todas)
+          required: false
+          schema:
+            type: string
+            enum: [perros, gatos, todas]
+            default: todas
+        - name: buscar
+          in: query
+          description: Término de búsqueda en nombre de producto
+          required: false
+          schema:
+            type: string
+        - name: destacado
+          in: query
+          description: Filtrar solo productos destacados
+          required: false
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          description: Número máximo de productos a devolver
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: Número de productos a omitir (para paginación)
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Lista de productos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [productos, total, limit, offset]
+                properties:
+                  productos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Producto'
+                  total:
+                    type: integer
+                    description: Número total de productos que coinciden con los filtros
+                  limit:
+                    type: integer
+                    description: Límite aplicado en la consulta
+                  offset:
+                    type: integer
+                    description: Offset aplicado en la consulta
+        '400':
+          description: Parámetros de consulta inválidos
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /productos/{id}:
+    get:
+      summary: Obtener un producto por su ID
+      tags: [productos]
+      parameters:
+        - name: id
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+        '404':
+          description: Producto no encontrado
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /categorias:
+    get:
+      summary: Obtener lista de categorías disponibles
+      tags: [categorias]
+      responses:
+        '200':
+          description: Lista de categorías
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [categorias]
+                properties:
+                  categorias:
+                    type: array
+                    items:
+                      type: string
+                    example: [perros, gatos]
+        '500':
+          description: Error interno del servidor
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /carrito:
+    get:
+      summary: Obtener el carrito actual
+      tags: [carrito]
+      responses:
+        '200':
+          description: Contenido del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, total, cantidadTotal]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItem'
+                  total:
+                    type: number
+                    format: float
+                    description: Precio total del carrito
+                  cantidadTotal:
+                    type: integer
+                    description: Cantidad total de productos en el carrito
+        '500':
+          description: Error interno del servidor
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+    post:
+      summary: Agregar un producto al carrito
+      tags: [carrito]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId, cantidad]
+              properties:
+                productId:
+                  type: integer
+                  description: ID del producto a agregar
+                  minimum: 1
+                cantidad:
+                  type: integer
+                  description: Cantidad a agregar
+                  minimum: 1
+                  default: 1
+      responses:
+        '200':
+          description: Producto agregado al carrito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Solicitud inválida (producto no encontrado o cantidad inválida)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: Producto no encontrado
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+    delete:
+      summary: Vaciar el carrito
+      tags: [carrito]
+      responses:
+        '200':
+          description: Carrito vaciado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [mensaje]
+                properties:
+                  mensaje:
+                    type: string
+                    example: "Carrito vaciado exitosamente"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /carrito/{itemId}:
+    delete:
+      summary: Remover un ítem específico del carrito
+      tags: [carrito]
+      parameters:
+        - name: itemId
+          in: path
+          description: ID del ítem en el carrito (posición en el array)
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        '200':
+          description: Ítem removido del carrito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '404':
+          description: Ítem no encontrado en el carrito
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+    patch:
+      summary: Actualizar la cantidad de un ítem en el carrito
+      tags: [carrito]
+      parameters:
+        - name: itemId
+          in: path
+          description: ID del ítem en el carrito (posición en el array)
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [cantidad]
+              properties:
+                cantidad:
+                  type: integer
+                  description: Nueva cantidad del ítem
+                  minimum: 0
+      responses:
+        '200':
+          description: Cantidad actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartResponse'
+        '400':
+          description: Cantidad inválida
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '404':
+          description: Ítem no encontrado en el carrito
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  schemas:
+    Producto:
+      type: object
+      required: [id, nombre, categoria, precio]
+      properties:
+        id:
+          type: integer
+          description: Identificador único del producto
+          example: 1
+        nombre:
+          type: string
+          description: Nombre del producto
+          example: "Estampa Plus perro RAZAS PEQUEÑAS x 8 Kg"
+        categoria:
+          type: string
+          description: Categoría del producto
+          enum: [perros, gatos]
+          example: perros
+        precio:
+          type: number
+          format: float
+          description: Precio final del producto (con margen aplicado)
+          example: 29180
+        precio_proveedor:
+          type: number
+          format: float
+          description: Precio del producto al proveedor (sin margen)
+          example: 21615
+        margen:
+          type: integer
+          description: Porcentaje de margen aplicado
+          example: 35
+        imagen:
+          type: string
+          format: uri
+          description: URL de la imagen del producto (opcional)
+          example: "https://ejemplo.com/imagenes/estampa-plus-pequeno.jpg"
+        destacado:
+          type: boolean
+          description: Indica si el producto está destacado
+          example: true
+        marca:
+          type: string
+          description: Marca del producto
+          example: "Estampa"
+    CartItem:
+      type: object
+      required: [productId, nombre, precio, cantidad, subtotal]
+      properties:
+        productId:
+          type: integer
+          description: ID del producto
+          example: 1
+        nombre:
+          type: string
+          description: Nombre del producto
+          example: "Estampa Plus perro RAZAS PEQUEÑAS x 8 Kg"
+        precio:
+          type: number
+          format: float
+          description: Precio unitario del producto
+          example: 29180
+        cantidad:
+          type: integer
+          description: Cantidad del producto en el carrito
+          example: 2
+        subtotal:
+          type: number
+          format: float
+          description: Subtotal para este ítem (precio × cantidad)
+          example: 58360
+    CartResponse:
+      type: object
+      required: [success, mensaje]
+      properties:
+        success:
+          type: boolean
+          description: Indica si la operación fue exitosa
+          example: true
+        mensaje:
+          type: string
+          description: Mensaje descriptivo de la operación
+          example: "Producto agregado al carrito"
+        carrito:
+          type: object
+          description: Estado actual del carrito (opcional)
+          $ref: '#/components/schemas/CartState'
+    CartState:
+      type: object
+      required: [items, total, cantidadTotal]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        total:
+          type: number
+          format: float
+          description: Precio total del carrito
+        cantidadTotal:
+          type: integer
+          description: Cantidad total de productos en el carrito
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI de identificación del tipo de problema
+          example: "https://api.bichitosshop.com/problems/validation-error"
+        title:
+          type: string
+          description: Resumen breve y legible por humanos del tipo de problema
+          example: "Error de validación"
+        status:
+          type: integer
+          description: Código de estado HTTP generado por el servidor
+          example: 400
+        detail:
+          type: string
+          description: Explicación legible por humanos específica a esta ocurrencia del problema
+          example: "El parámetro 'cantidad' debe ser un número entero positivo"
+        instance:
+          type: string
+          format: uri
+          description: URI de identificación específica de esta ocurrencia del problema
+          example: "/carrito/add"
+        errores:
+          type: array
+          description: Campos específicos que causaron el error (opcional)
+          items:
+            type: object
+            required: [campo, mensaje]
+            properties:
+              campo:
+                type: string
+                description: Nombre del campo que causó el error
+                example: "cantidad"
+              mensaje:
+                type: string
+                description: Mensaje de error específico para el campo
+                example: "Debe ser un número entero positivo"
+  securitySchemes:
+    # API actualmente no requiere autenticación para operaciones de lectura
+    # Se puede agregar en el futuro para operaciones de administración
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security: []
+# No se requiere autenticación para las operaciones públicas de la tienda

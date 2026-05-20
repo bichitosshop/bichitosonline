@@ -4,44 +4,50 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Productos — BICHITOS SHOP</title>
+    <meta name="description" content="Catálogo de alimentos premium para perros y gatos en Mendoza.">
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<header class="header">
-    <div class="header-flex">
-        <a href="index.html" class="logo">🐾 BICHITOS SHOP</a>
-        <nav class="nav" id="nav">
-            <a href="index.html">Inicio</a>
-            <a href="productos.html" class="active">Productos</a>
-            <a href="contacto.html">Contacto</a>
-            <a href="#" class="cart-icon" id="cartToggle">🛒 <span id="cartCount">0</span></a>
-        </nav>
-        <button class="menu-toggle" id="menuToggle">☰</button>
-    </div>
-</header>
+    <a href="#main" class="skip-link">Saltar al contenido principal</a>
 
+    <header class="header">
+        <div class="container header-flex">
+            <a href="index.html" class="logo" aria-label="Bichitos Shop — Inicio">🐾 BICHITOS SHOP</a>
+            <nav class="nav" id="nav" aria-label="Navegación principal">
+                <a href="index.html">Inicio</a>
+                <a href="productos.html" class="active" aria-current="page">Productos</a>
+                <a href="contacto.html">Contacto</a>
+            </nav>
+            <a href="#" class="cart-icon" id="cartToggle" aria-label="Abrir carrito de compras">🛒 <span id="cartCount" aria-live="polite">0</span></a>
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false">☰</button>
+        </div>
+    </header>
+
+<main id="main">
 <section class="page-header">
     <div class="container"><h1>Nuestros productos</h1></div>
 </section>
 
-<section class="productos-page">
+<section class="productos-page" aria-labelledby="productos-title">
     <div class="container">
+        <h2 id="productos-title" class="section-title">Catálogo completo</h2>
         <div class="filtros">
-            <div class="filtros-botones">
-                <button class="filtro-btn active" data-categoria="todas">🐾 Todas</button>
-                <button class="filtro-btn" data-categoria="perros">🐶 Perros</button>
-                <button class="filtro-btn" data-categoria="gatos">🐱 Gatos</button>
+            <div class="filtros-botones" role="group" aria-label="Filtrar por categoría">
+                <button class="filtro-btn active" data-categoria="todas" aria-pressed="true">🐾 Todas</button>
+                <button class="filtro-btn" data-categoria="perros" aria-pressed="false">🐶 Perros</button>
+                <button class="filtro-btn" data-categoria="gatos" aria-pressed="false">🐱 Gatos</button>
             </div>
-            <input type="text" class="buscador" id="buscador" placeholder="🔍 Buscar producto..." />
+            <input type="text" class="buscador" id="buscador" placeholder="🔍 Buscar producto..." aria-label="Buscar productos" />
         </div>
-        <div class="productos-grid" id="productosGrid"></div>
+        <div class="productos-grid" id="productosGrid" aria-live="polite"></div>
     </div>
 </section>
+</main>
 
-<div class="cart-overlay" id="cartOverlay"></div>
-<div class="cart-panel" id="cartPanel">
-    <div class="cart-header"><h3>🛒 Tu carrito</h3><button id="cartClose">✕</button></div>
+<div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
+<div class="cart-panel" id="cartPanel" role="dialog" aria-label="Carrito de compras" aria-modal="true">
+    <div class="cart-header"><h3>🛒 Tu carrito</h3><button id="cartClose" aria-label="Cerrar carrito">✕</button></div>
     <div class="cart-items" id="cartItems"><p class="cart-empty">El carrito está vacío</p></div>
     <div class="cart-footer">
         <div class="cart-total"><span>Total:</span><span id="cartTotal">$0</span></div>
@@ -58,6 +64,7 @@
     <div class="container footer-bottom"><p>&copy; 2026 BICHITOS SHOP</p></div>
 </footer>
 
+<script src="js/api-service.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>
