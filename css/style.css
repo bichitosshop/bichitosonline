@@ -469,6 +469,9 @@ a { text-decoration: none; color: inherit; }
     position: relative;
     overflow: hidden;
 }
+.producto-img {
+    position: relative;
+}
 .producto-img span {
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.12));
     transition: transform var(--norm);
@@ -479,6 +482,66 @@ a { text-decoration: none; color: inherit; }
 }
 .producto-img.perros { background: linear-gradient(135deg, #fff3e6, #ffe0c0); }
 .producto-img.gatos { background: linear-gradient(135deg, #e0f7f5, #c0efea); }
+
+.prod-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    z-index: 2;
+    box-shadow: var(--shadow-sm);
+    animation: popIn 0.4s var(--bounce) both;
+}
+.badge-destacado {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #333;
+}
+.badge-oferta {
+    background: linear-gradient(135deg, #FF4444, #FF6B6B);
+    color: white;
+}
+.badge-pocos {
+    background: linear-gradient(135deg, #FF7F2A, #FF9F5A);
+    color: white;
+}
+.badge-agotado {
+    background: linear-gradient(135deg, #666, #888);
+    color: white;
+}
+
+.btn-add-cart {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--orange), #ff9f5a);
+    color: white;
+    font-weight: 800;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: transform var(--fast), box-shadow var(--fast);
+    box-shadow: 0 4px 15px var(--orange-glow);
+    margin-bottom: 4px;
+}
+.btn-add-cart:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px var(--orange-glow);
+}
+.btn-add-cart:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.badge-added {
+    font-size: .7rem;
+    color: var(--teal);
+    font-weight: 700;
+    margin-left: 6px;
+    animation: popIn 0.3s var(--bounce);
+}
 
 .producto-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
 .producto-marca {

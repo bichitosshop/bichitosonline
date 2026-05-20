@@ -74,17 +74,29 @@ function renderDestacados() {
     grid.innerHTML = destacados.map(p => crearCard(p)).join('');
 }
 
+function badgeStock(p) {
+    if (p.stock === 0) return '<span class="prod-badge badge-agotado">🔴 Agotado</span>';
+    if (p.stock && p.stock <= 5) return '<span class="prod-badge badge-pocos">🔥 Quedan pocos</span>';
+    if (p.destacado) return '<span class="prod-badge badge-destacado">⭐ Más vendido</span>';
+    if (p.oferta) return '<span class="prod-badge badge-oferta">🔥 Oferta</span>';
+    return '';
+}
+
 function crearCard(p) {
     const icono = p.categoria === 'gatos' ? '🐱' : '🐶';
     const enCarrito = carrito.find(i => i.id === p.id);
     const cant = enCarrito ? enCarrito.cant : 0;
     const subtotal = enCarrito ? p.precio * enCarrito.cant : 0;
+    const badge = badgeStock(p);
     const imgHtml = p.imagen
         ? `<img src="${p.imagen}" alt="${p.nombre}" loading="lazy" width="400" height="400" style="width:100%;height:100%;object-fit:cover;" />`
         : `<span class="producto-img-fallback" aria-hidden="true">${icono}</span>`;
     return `
         <div class="producto-card${cant > 0 ? ' en-carrito' : ''}">
-            <div class="producto-img ${p.categoria}">${imgHtml}</div>
+            <div class="producto-img ${p.categoria}">
+                ${badge}
+                ${imgHtml}
+            </div>
             <div class="producto-body">
                 <div class="producto-marca">${p.marca || ''}</div>
                 <div class="producto-nombre">${p.nombre}</div>
@@ -94,7 +106,8 @@ function crearCard(p) {
                     <span class="qty-cant" aria-live="polite">${cant}</span>
                     <button class="qty-btn" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">+</button>
                 </div>
-                ${cant > 0 ? `<div class="producto-subtotal">🛒 $${subtotal.toLocaleString('es-AR')}</div>` : ''}
+                ${cant === 0 ? `<button class="btn-add-cart" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">🛒 Agregar</button>` : ''}
+                ${cant > 0 ? `<div class="producto-subtotal">🛒 $${subtotal.toLocaleString('es-AR')} ${cant === 1 ? '<span class="badge-added">✅ Agregado</span>' : ''}</div>` : ''}
             </div>
         </div>
     `;
@@ -149,7 +162,7 @@ function renderCarrito() {
 }
 
 document.addEventListener('click', function(e) {
-    const qtyBtn = e.target.closest('.qty-btn, .qty-cart');
+    const qtyBtn = e.target.closest('.qty-btn, .qty-cart, .btn-add-cart');
     if (qtyBtn) {
         const id = parseInt(qtyBtn.dataset.id);
         if (qtyBtn.dataset.accion === 'sumar') {
