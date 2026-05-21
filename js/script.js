@@ -470,30 +470,15 @@ function initCarousel() {
     const track = document.getElementById('carouselTrack');
     if (!track) return;
     const slides = Array.from(track.children);
-    const dotsWrap = document.getElementById('carouselDots');
-    const prevBtn = document.getElementById('carouselPrev');
-    const nextBtn = document.getElementById('carouselNext');
     let current = 0;
     let timer = null;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('role', 'tab');
-        dot.setAttribute('aria-label', `Ir al slide ${i + 1}`);
-        dot.addEventListener('click', () => goTo(i));
-        dotsWrap.appendChild(dot);
-    });
-    const dots = Array.from(dotsWrap.children);
-
     function goTo(idx) {
         current = (idx + slides.length) % slides.length;
         track.style.transform = `translateX(-${current * 100}%)`;
-        dots.forEach((d, i) => d.classList.toggle('active', i === current));
     }
     function next() { goTo(current + 1); }
-    function prev() { goTo(current - 1); }
     function start() {
         if (reduceMotion) return;
         stop();
@@ -501,20 +486,15 @@ function initCarousel() {
     }
     function stop() { if (timer) clearInterval(timer); }
 
-    nextBtn?.addEventListener('click', () => { next(); start(); });
-    prevBtn?.addEventListener('click', () => { prev(); start(); });
-
     const carousel = track.closest('.hero-carousel');
     carousel.addEventListener('mouseenter', stop);
     carousel.addEventListener('mouseleave', start);
 
-    // Touch swipe
     let startX = 0;
     carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; stop(); }, { passive: true });
     carousel.addEventListener('touchend', e => {
         const dx = e.changedTouches[0].clientX - startX;
-        if (dx < -50) next();
-        else if (dx > 50) prev();
+        if (Math.abs(dx) > 50) { goTo(dx > 0 ? current - 1 : current + 1); }
         start();
     }, { passive: true });
 
