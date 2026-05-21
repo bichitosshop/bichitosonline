@@ -369,35 +369,14 @@ li { list-style: none; }
     align-items: center;
     overflow: hidden;
 }
-.carousel-slide::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 65% 35%, rgba(255,255,255,0.1), transparent 70%);
-    pointer-events: none;
-}
-.carousel-slide::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    background: linear-gradient(to bottom, transparent, var(--cream));
-    pointer-events: none;
-}
-/* Fondos reales del hero (placeholder hasta tener banners propios) */
 .carousel-slide.slide-bg-1 {
-    background: linear-gradient(95deg, rgba(15,42,64,.94) 0%, rgba(27,59,90,.72) 45%, rgba(27,59,90,.30) 100%),
-        url('https://i.ibb.co/fYqNpSTX/BANNER-SLIDE1.jpg') center/cover no-repeat;
+    background: url('https://i.ibb.co/fYqNpSTX/BANNER-SLIDE1.jpg') center/cover no-repeat;
 }
 .carousel-slide.slide-bg-2 {
-    background: linear-gradient(95deg, rgba(214,74,28,.94) 0%, rgba(255,107,53,.74) 45%, rgba(255,107,53,.34) 100%),
-        url('https://i.ibb.co/60YjqRWt/BANNER-SLIDE2.jpg') center/cover no-repeat;
+    background: url('https://i.ibb.co/60YjqRWt/BANNER-SLIDE2.jpg') center/cover no-repeat;
 }
 .carousel-slide.slide-bg-3 {
-    background: linear-gradient(95deg, rgba(31,150,140,.94) 0%, rgba(46,196,182,.74) 45%, rgba(46,196,182,.32) 100%),
-        url('https://i.ibb.co/DHFZ0tQv/BANNER-SLIDE3.jpg') center/cover no-repeat;
+    background: url('https://i.ibb.co/DHFZ0tQv/BANNER-SLIDE3.jpg') center/cover no-repeat;
 }
 
 .slide-content {
