@@ -30,20 +30,14 @@
     <div class="container hero-content">
         <div class="hero-text">
             <h1>Todo lo que tu <span class="highlight">bichito</span> necesita</h1>
-            <p>Alimentos premium para perros y gatos — calidad que se nota 🐶🐱</p>
+            <p>Alimentos premium para perros y gatos — calidad que se nota</p> 
             <div class="hero-buttons">
-                <a href="productos.html" class="btn-primary">🦴 Ver productos</a>
-                <a href="https://wa.me/5492615081413" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>
+                <a href="productos.html" class="btn-primary">Ver productos</a>
+                <a href="https://wa.me/5492615081413" target="_blank" class="btn-whatsapp">WhatsApp</a>
             </div>
         </div>
         <div class="hero-visual" aria-hidden="true">
-            <div class="hero-visual-bg">
-                <span class="hero-emoji" style="top:10%;left:10%;font-size:3.5rem;animation-delay:0s">🐶</span>
-                <span class="hero-emoji" style="top:5%;right:15%;font-size:2.5rem;animation-delay:0.5s">🐱</span>
-                <span class="hero-emoji" style="bottom:15%;left:5%;font-size:3rem;animation-delay:1s">🦴</span>
-                <span class="hero-emoji" style="bottom:10%;right:10%;font-size:2.8rem;animation-delay:1.5s">🐾</span>
-                <span class="hero-emoji" style="top:50%;left:50%;transform:translate(-50%,-50%);font-size:5rem;animation:pulse 3s ease-in-out infinite">🍖</span>
-            </div>
+            <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=600&h=500&fit=crop&auto=format" alt="" class="hero-banner-img" loading="eager" />
         </div>
     </div>
 </section>
@@ -52,15 +46,19 @@
     <div class="container">
         <h2 id="categorias-title" class="section-title">Comprá por categoría</h2>
         <div class="categoria-grid">
-            <a href="productos.html?categoria=perros" class="categoria-card card-perros">
-                <span class="categoria-icon" aria-hidden="true">🐶</span>
-                <h3>Perros</h3>
-                <p>Alimentos balanceados</p>
+            <a href="productos.html?categoria=perros" class="categoria-card" style="background-image:url('https://images.unsplash.com/photo-1544568100-847a948585b9?w=600&h=400&fit=crop&auto=format')">
+                <div class="categoria-overlay"></div>
+                <div class="categoria-content">
+                    <h3>Perros</h3>
+                    <p>Alimentos balanceados</p>
+                </div>
             </a>
-            <a href="productos.html?categoria=gatos" class="categoria-card card-gatos">
-                <span class="categoria-icon" aria-hidden="true">🐱</span>
-                <h3>Gatos</h3>
-                <p>Alimentos balanceados</p>
+            <a href="productos.html?categoria=gatos" class="categoria-card" style="background-image:url('https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600&h=400&fit=crop&auto=format')">
+                <div class="categoria-overlay"></div>
+                <div class="categoria-content">
+                    <h3>Gatos</h3>
+                    <p>Alimentos balanceados</p>
+                </div>
             </a>
         </div>
     </div>
@@ -68,7 +66,7 @@
 
 <section class="destacados" id="destacados" aria-labelledby="destacados-title">
     <div class="container">
-        <h2 id="destacados-title" class="section-title">⭐ Productos destacados</h2>
+        <h2 id="destacados-title" class="section-title">Productos destacados</h2>
         <div class="productos-grid" id="destacadosGrid" aria-live="polite"></div>
     </div>
 </section>
@@ -107,7 +105,7 @@
     <div class="checkout-modal-overlay" id="checkoutModalOverlay"></div>
     <div class="checkout-modal-content">
         <div class="checkout-modal-header">
-            <h3>📋 Completá tu pedido</h3>
+            <h3>Completá tu pedido</h3>
             <button id="checkoutModalClose" aria-label="Cerrar">✕</button>
         </div>
         <div class="checkout-form">

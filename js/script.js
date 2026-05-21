@@ -63,18 +63,20 @@ function renderProductos() {
         grid.innerHTML = '<p class="no-search-msg">No se encontraron productos 😔</p>';
         return;
     }
-    grid.innerHTML = filtrados.map(p => crearCard(p)).join('');
+    const grupos = window.productosAPI.groupByVariants(filtrados);
+    grid.innerHTML = grupos.map(g => crearCardGrupo(g)).join('');
 }
 
 function renderDestacados() {
     const grid = document.getElementById('destacadosGrid');
     if (!grid) return;
-    const destacados = productos.filter(p => p.destacado).slice(0, 8);
+    const destacados = productos.filter(p => p.destacado).slice(0, 12);
     if (destacados.length === 0) {
         grid.innerHTML = '<p class="placeholder-msg">Próximamente...</p>';
         return;
     }
-    grid.innerHTML = destacados.map(p => crearCard(p)).join('');
+    const grupos = window.productosAPI.groupByVariants(destacados);
+    grid.innerHTML = grupos.map(g => crearCardGrupo(g)).join('');
 }
 
 function badgeStock(p) {
@@ -85,35 +87,77 @@ function badgeStock(p) {
     return '';
 }
 
-function crearCard(p) {
-    const icono = p.categoria === 'gatos' ? '🐱' : '🐶';
-    const enCarrito = carrito.find(i => i.id === p.id);
-    const cant = enCarrito ? enCarrito.cant : 0;
-    const subtotal = enCarrito ? p.precio * enCarrito.cant : 0;
-    const badge = badgeStock(p);
-    const imgHtml = p.imagen
-        ? `<img src="${p.imagen}" alt="${p.nombre}" loading="lazy" width="400" height="400" style="width:100%;height:100%;object-fit:cover;" />`
-        : `<span class="producto-img-fallback" aria-hidden="true">${icono}</span>`;
-    return `
-        <div class="producto-card${cant > 0 ? ' en-carrito' : ''}">
+function crearCardGrupo(grupo) {
+    const v = grupo.variantes;
+    const activeIdx = { val: 0 };
+
+    function html(p, idx) {
+        const enCarrito = carrito.find(i => i.id === p.id);
+        const cant = enCarrito ? enCarrito.cant : 0;
+        const subtotal = enCarrito ? p.precio * enCarrito.cant : 0;
+        const badge = badgeStock(p);
+        const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
+        const imgHtml = p.imagen
+            ? `<img src="${p.imagen}" alt="${p.nombre}" loading="lazy" width="400" height="400" style="width:100%;height:100%;object-fit:cover;" />`
+            : `<img src="images/icons/${iconoCat}.svg" alt="" class="producto-img-fallback" aria-hidden="true" />`;
+        const isSingle = v.length === 1;
+        const kgPills = v.map((varp, vi) =>
+            `<button class="kg-pill${vi === idx ? ' active' : ''}" data-base="${grupo._base}" data-varidx="${vi}" aria-label="${varp._peso || varp.nombre}">${varp._peso || (vi + 1)}</button>`
+        ).join('');
+        const defaultName = isSingle ? p.nombre : grupo._base;
+
+        return `
+        <div class="producto-card${cant > 0 ? ' en-carrito' : ''}" data-base="${grupo._base}">
             <div class="producto-img ${p.categoria}">
                 ${badge}
                 ${imgHtml}
             </div>
             <div class="producto-body">
                 <div class="producto-marca">${p.marca || ''}</div>
-                <div class="producto-nombre">${p.nombre}</div>
+                <div class="producto-nombre">${defaultName}</div>
+                ${!isSingle ? `<div class="kg-selector">${kgPills}</div>` : ''}
                 <div class="producto-precio">$${p.precio.toLocaleString('es-AR')}</div>
                 <div class="qty-selector">
                     <button class="qty-btn" data-id="${p.id}" data-accion="restar" aria-label="Quitar ${p.nombre}">−</button>
                     <span class="qty-cant" aria-live="polite">${cant}</span>
                     <button class="qty-btn" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">+</button>
                 </div>
-                ${cant === 0 ? `<button class="btn-add-cart" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">🛒 Agregar</button>` : ''}
-                ${cant > 0 ? `<div class="producto-subtotal">🛒 $${subtotal.toLocaleString('es-AR')}</div>` : ''}
+                ${cant === 0 ? `<button class="btn-add-cart" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">Agregar</button>` : ''}
+                ${cant > 0 ? `<div class="producto-subtotal">$${subtotal.toLocaleString('es-AR')}</div>` : ''}
             </div>
-        </div>
-    `;
+        </div>`;
+    }
+
+    const template = document.createElement('template');
+    template.innerHTML = html(v[0], 0);
+    const card = template.content.firstElementChild;
+
+    card.addEventListener('click', function(e) {
+        const pill = e.target.closest('.kg-pill');
+        if (!pill) return;
+        const idx = parseInt(pill.dataset.varidx);
+        if (idx === activeIdx.val) return;
+        activeIdx.val = idx;
+        const newP = v[idx];
+        card.querySelector('.producto-img').className = `producto-img ${newP.categoria}`;
+        card.querySelector('.prod-badge')?.remove();
+        const imgWrap = card.querySelector('.producto-img');
+        if (newP.imagen) {
+            const oldImg = imgWrap.querySelector('img');
+            if (oldImg) oldImg.src = newP.imagen;
+        }
+        const badgeEl = document.createElement('template');
+        badgeEl.innerHTML = badgeStock(newP);
+        if (badgeEl.content.firstChild) {
+            imgWrap.insertBefore(badgeEl.content.firstChild, imgWrap.firstChild);
+        }
+        card.querySelector('.producto-precio').textContent = '$' + newP.precio.toLocaleString('es-AR');
+        card.querySelectorAll('.kg-pill').forEach(el => el.classList.toggle('active', parseInt(el.dataset.varidx) === idx));
+        const qtyBtns = card.querySelectorAll('.qty-btn, .btn-add-cart');
+        qtyBtns.forEach(el => el.dataset.id = newP.id);
+    });
+
+    return card.outerHTML;
 }
 
 function renderCarrito() {

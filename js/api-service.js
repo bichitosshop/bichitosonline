@@ -47,13 +47,41 @@ class ProductosAPI {
     }
 
     /**
-     * Get product by ID
-     * @param {number} id - Product ID
-     * @returns {Promise<Object>} Promise resolving to product object
+     * Group products by base name for KG selector display
+     * @param {Array} products - Flat product list
+     * @returns {Array} Groups with variantes array
      */
-    async getProductById(id) {
-        const products = await this.fetchProducts();
-        return products.find(product => product.id === id) || null;
+    groupByVariants(products) {
+        const groups = {};
+        for (const p of products) {
+            if (!groups[p._base]) groups[p._base] = [];
+            groups[p._base].push(p);
+        }
+        return Object.values(groups).map(group => {
+            group.sort((a, b) => {
+                const wa = parseFloat(a._peso) || 0;
+                const wb = parseFloat(b._peso) || 0;
+                return wa - wb;
+            });
+            return { variantes: group, _base: group[0]._base };
+        });
+    }
+
+    /**
+     * Enrich products with image URLs and variant info
+     * @param {Array} products - Product array
+     * @returns {Array} Enriched products
+     */
+    enrichWithImages(products) {
+        return products.map(p => {
+            if (!p.imagen) {
+                p.imagen = buscarImagenProducto(p.nombre);
+            }
+            const match = p.nombre.match(/^(.*?)\s*x\s+(\d+[,.]?\d*\s*[kK][gG].*)$/);
+            p._base = match ? match[1].trim() : p.nombre;
+            p._peso = match ? match[2].trim() : '';
+            return p;
+        });
     }
 
     /**
