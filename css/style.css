@@ -352,7 +352,7 @@ li { list-style: none; }
 .hero-carousel {
     position: relative;
     overflow: hidden;
-    height: 160px;
+    height: 130px;
 }
 @media (min-width: 768px) {
     .hero-carousel { height: 400px; }
