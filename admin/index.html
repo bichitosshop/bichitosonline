@@ -452,9 +452,37 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: center; justify-content: center;
   font-size: 2rem;
   flex-shrink: 0;
+  cursor: pointer;
+  border: 2px dashed rgba(27,59,90,0.15);
+  transition: border-color .2s, background .2s;
 }
-.img-url-info { flex: 1; font-size: .8rem; color: var(--gray); line-height: 1.5; }
+.img-preview-placeholder:hover { border-color: var(--orange); background: #fff3ee; }
+.img-preview-side { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.img-url-info { font-size: .78rem; color: var(--gray); line-height: 1.4; }
 .img-url-info a { color: var(--orange); font-weight: 600; }
+.btn-upload-img {
+  display: flex; align-items: center; gap: 7px;
+  background: linear-gradient(135deg, var(--teal), #5dd8cc);
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: .82rem; font-weight: 800;
+  transition: opacity .15s;
+  width: fit-content;
+}
+.btn-upload-img:active { opacity: .8; }
+.btn-upload-img.loading { opacity: .6; pointer-events: none; }
+.img-warn {
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: .78rem;
+  font-weight: 600;
+  line-height: 1.4;
+  display: none;
+}
+.img-warn.visible { display: block; }
 
 /* Campos del formulario */
 .field-group { display: flex; flex-direction: column; gap: 4px; }
@@ -654,11 +682,19 @@ a { color: inherit; text-decoration: none; }
     <p>Ingresá tu token de GitHub para conectar el panel con tu tienda. Se guarda solo en este dispositivo.</p>
 
     <div class="setup-step">
-      <label class="setup-label" for="tokenInput">Token de GitHub</label>
+      <label class="setup-label" for="tokenInput">Token de GitHub <span style="color:var(--orange)">*</span></label>
       <input class="setup-input" type="password" id="tokenInput" placeholder="ghp_..." autocomplete="off" />
       <div class="setup-hint">
         Creá un token en <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens</a> con permiso <strong>repo</strong>.
-        Solo vos y los admins que autoricés van a tenerlo.
+      </div>
+    </div>
+
+    <div class="setup-step">
+      <label class="setup-label" for="imgbbInput">API Key de ImgBB <span style="color:var(--gray);font-weight:400">(para subir fotos directo)</span></label>
+      <input class="setup-input" type="text" id="imgbbInput" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+      <div class="setup-hint">
+        Gratis en <a href="https://api.imgbb.com" target="_blank">api.imgbb.com</a> → "Get API key".
+        Con esto podés subir fotos directo desde el celular sin pasar por ImgBB manualmente.
       </div>
     </div>
 
@@ -736,17 +772,24 @@ a { color: inherit; text-decoration: none; }
       <input type="hidden" id="fId" />
 
       <!-- Imagen -->
+      <input type="file" id="fileInput" accept="image/*" style="display:none" />
       <div class="img-preview-wrap">
-        <div class="img-preview-placeholder" id="imgPlaceholder">🐾</div>
+        <div class="img-preview-placeholder" id="imgPlaceholder" title="Tocar para subir foto">📷</div>
         <img class="img-preview" id="imgPreview" src="" alt="" hidden />
-        <div class="img-url-info">
-          <strong>Foto del producto</strong><br>
-          Subí tu imagen a <a href="https://imgbb.com" target="_blank">imgbb.com</a>, copiá el enlace directo y pegalo abajo.
+        <div class="img-preview-side">
+          <button class="btn-upload-img" id="btnUpload">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Subir foto
+          </button>
+          <div class="img-url-info">O pegá el link directo abajo<br><span style="opacity:.7">(<strong>i.ibb.co/…</strong>, no ibb.co/…)</span></div>
         </div>
+      </div>
+      <div class="img-warn" id="imgWarn">
+        ⚠️ Ese link es la <strong>página</strong> de ImgBB, no la imagen. Usá el botón "Subir foto" arriba, o en ImgBB copiá el <strong>Enlace directo</strong> (empieza con <strong>i.ibb.co</strong>).
       </div>
 
       <div class="field-group">
-        <label class="field-label" for="fImagen">URL de la imagen (ImgBB)</label>
+        <label class="field-label" for="fImagen">URL de la imagen</label>
         <input class="field-input" type="url" id="fImagen" placeholder="https://i.ibb.co/..." />
       </div>
 
@@ -890,11 +933,12 @@ const GITHUB_REPO   = 'bichitosonline';
 const GITHUB_BRANCH = 'main';
 const FILE_PATH     = 'productos.json';
 
-let token       = '';
-let productos   = [];
-let fileSha     = '';
+let token         = '';
+let imgbbKey      = '';
+let productos     = [];
+let fileSha       = '';
 let hayPendientes = false;
-let editingId   = null;
+let editingId     = null;
 let confirmCallback = null;
 
 // ===== UTILIDADES =====
@@ -1122,17 +1166,20 @@ function cerrarModal() {
 }
 
 function actualizarPreviewImagen(url) {
-  const img = $('imgPreview');
-  const ph  = $('imgPlaceholder');
+  const img  = $('imgPreview');
+  const ph   = $('imgPlaceholder');
+  const warn = $('imgWarn');
 
-  // Limpiar handlers anteriores
   img.onload  = null;
   img.onerror = null;
 
   const urlLimpia = (url || '').trim();
 
-  if (urlLimpia && (urlLimpia.startsWith('http://') || urlLimpia.startsWith('https://'))) {
-    // Estado: cargando
+  // Detectar link de página ImgBB (ibb.co) vs link directo (i.ibb.co)
+  const esUrlPaginaImgBB = /^https?:\/\/ibb\.co\//.test(urlLimpia);
+  warn.classList.toggle('visible', esUrlPaginaImgBB);
+
+  if (urlLimpia && !esUrlPaginaImgBB && (urlLimpia.startsWith('http://') || urlLimpia.startsWith('https://'))) {
     ph.style.display = 'flex';
     ph.textContent   = '⏳';
     img.hidden = true;
@@ -1145,14 +1192,58 @@ function actualizarPreviewImagen(url) {
       img.hidden = true;
       ph.style.display = 'flex';
       ph.textContent = '❌';
-      setTimeout(() => { ph.textContent = '🐾'; }, 2000);
+      setTimeout(() => { ph.textContent = '📷'; }, 2000);
     };
     img.src = urlLimpia;
   } else {
     img.hidden = true;
     img.src = '';
     ph.style.display = 'flex';
-    ph.textContent = '🐾';
+    if (!esUrlPaginaImgBB) ph.textContent = '📷';
+  }
+}
+
+// ===== SUBIR IMAGEN A IMGBB =====
+async function subirImagenImgBB(file) {
+  if (!imgbbKey) {
+    toast('Para subir fotos necesitás configurar tu API key de ImgBB. Salí y volvé a entrar para configurarla.', 'error', 5000);
+    return;
+  }
+  const btn = $('btnUpload');
+  btn.classList.add('loading');
+  btn.querySelector('span') && (btn.querySelector('span').textContent = 'Subiendo...');
+  const labelOriginal = btn.innerHTML;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin .7s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0"/></svg> Subiendo...';
+
+  try {
+    const reader = new FileReader();
+    const base64 = await new Promise((res, rej) => {
+      reader.onload = e => res(e.target.result.split(',')[1]);
+      reader.onerror = rej;
+      reader.readAsDataURL(file);
+    });
+    const form = new FormData();
+    form.append('key', imgbbKey);
+    form.append('image', base64);
+    form.append('name', file.name.replace(/\.[^.]+$/, ''));
+
+    const resp = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: form });
+    const data = await resp.json();
+
+    if (data.success) {
+      const directUrl = data.data.display_url || data.data.url;
+      $('fImagen').value = directUrl;
+      actualizarPreviewImagen(directUrl);
+      toast('Foto subida correctamente', 'success');
+    } else {
+      throw new Error(data.error?.message || 'Error al subir');
+    }
+  } catch (err) {
+    toast('No se pudo subir la foto: ' + err.message, 'error', 4000);
+    ph.textContent = '📷';
+  } finally {
+    btn.classList.remove('loading');
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Subir foto';
   }
 }
 
@@ -1211,8 +1302,9 @@ async function validarToken(tk) {
 }
 
 async function intentarLogin() {
-  const tk = $('tokenInput').value.trim();
-  if (!tk) { toast('Ingresá tu token', 'error'); return; }
+  const tk   = $('tokenInput').value.trim();
+  const ikey = $('imgbbInput').value.trim();
+  if (!tk) { toast('Ingresá tu token de GitHub', 'error'); return; }
   const btn = $('btnSetup');
   btn.textContent = 'Verificando...';
   btn.style.opacity = '.7';
@@ -1223,8 +1315,10 @@ async function intentarLogin() {
     $('setupError').style.display = 'block';
     return;
   }
-  token = tk;
+  token    = tk;
+  imgbbKey = ikey;
   localStorage.setItem('bichitos_admin_token', tk);
+  if (ikey) localStorage.setItem('bichitos_imgbb_key', ikey);
   $('setup').hidden = true;
   $('app').hidden = false;
   cargarDesdeGitHub();
@@ -1233,12 +1327,17 @@ async function intentarLogin() {
 // ===== EVENTS =====
 document.addEventListener('DOMContentLoaded', () => {
   // Auto-login si hay token guardado
-  const saved = localStorage.getItem('bichitos_admin_token');
+  const saved    = localStorage.getItem('bichitos_admin_token');
+  const savedKey = localStorage.getItem('bichitos_imgbb_key');
   if (saved) {
-    token = saved;
+    token    = saved;
+    imgbbKey = savedKey || '';
     $('setup').hidden = true;
     $('app').hidden = false;
     cargarDesdeGitHub();
+  } else {
+    // Pre-llenar si ya existen
+    if (savedKey) $('imgbbInput').value = savedKey;
   }
 
   // Setup
@@ -1304,6 +1403,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Preview imagen en tiempo real
   $('fImagen').addEventListener('input', e => actualizarPreviewImagen(e.target.value.trim()));
+
+  // Botón subir foto → abre file picker
+  $('btnUpload').addEventListener('click', () => $('fileInput').click());
+  $('imgPlaceholder').addEventListener('click', () => $('fileInput').click());
+  $('fileInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) subirImagenImgBB(file);
+    e.target.value = ''; // reset para poder subir el mismo archivo dos veces
+  });
 
   // Agotado toggle sincroniza stock
   $('tAgotado').addEventListener('change', e => {
