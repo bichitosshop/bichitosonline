@@ -19,31 +19,39 @@ class ProductosAPI {
             return this.productsCache;
         }
 
+        // 1. Intentar productos.json (fuente principal, editada desde el admin)
         try {
-            // Try to fetch from Google Sheets if URL is configured
+            const jsonUrl = typeof PRODUCTOS_JSON_PATH !== 'undefined'
+                ? PRODUCTOS_JSON_PATH
+                : 'productos.json';
+            const res = await fetch(`${jsonUrl}?v=${Date.now()}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    const products = this.enrichWithImages(data);
+                    this.productsCache = products;
+                    this.cacheTimestamp = Date.now();
+                    return products;
+                }
+            }
+        } catch (_) { /* continuar al siguiente fallback */ }
+
+        // 2. Intentar Google Sheets CSV
+        try {
             if (typeof SHEET_CSV_URL !== 'undefined' && SHEET_CSV_URL) {
                 const response = await fetch(`${SHEET_CSV_URL}?v=${Date.now()}`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const csvText = await response.text();
                 const products = this.enrichWithImages(this.parseCSV(csvText));
-
-                // Update cache
                 this.productsCache = products;
                 this.cacheTimestamp = Date.now();
-
                 return products;
-            } else {
-                // Fallback to local data
-                throw new Error('Using fallback data');
             }
-        } catch (error) {
-            console.warn('Failed to fetch from API, using fallback data:', error);
-            return this.enrichWithImages(this.getFallbackProducts());
-        }
+        } catch (_) { /* continuar al fallback hardcodeado */ }
+
+        // 3. Fallback hardcodeado (siempre funciona)
+        console.warn('Usando datos de fallback hardcodeados');
+        return this.enrichWithImages(this.getFallbackProducts());
     }
 
     /**
@@ -65,6 +73,21 @@ class ProductosAPI {
             });
             return { variantes: group, _base: group[0]._base };
         });
+    }
+
+    /**
+     * Detecta la etapa de vida a partir del nombre del producto
+     */
+    _detectarEtapa(nombre) {
+        const n = (nombre || '').toLowerCase();
+        if (/cachorro|cach\b|puppy/.test(n)) return 'cachorro';
+        if (/gatito|kitten/.test(n)) return 'kitten';
+        if (/senior|mayor/.test(n)) return 'senior';
+        if (/raza peque|mordida peque|\bmp\b|pequeñas/.test(n)) return 'pequeñas';
+        if (/urinario/.test(n)) return 'urinario';
+        if (/castrado/.test(n)) return 'castrado';
+        if (/especial/.test(n)) return 'especiales';
+        return 'adulto';
     }
 
     /**
@@ -165,16 +188,16 @@ class ProductosAPI {
             results.push({
                 id: i,
                 nombre: item.nombre,
+                marca: item.marca || (item.nombre || '').split(' ')[0],
                 categoria: (item.categoria || '').toLowerCase(),
+                etapa: (item.etapa || '').toLowerCase() || this._detectarEtapa(item.nombre),
                 precio: parseInt(item.precio) || 0,
-                precio_proveedor: parseInt(item.precio_proveedor) || 0,
-                margen: parseInt(item.margen) || 35,
                 imagen: item.imagen || '',
+                descripcion: item.descripcion || '',
                 destacado: (item.destacado || '').toUpperCase() === 'SI',
                 stock: parseInt(item.stock) === 0 ? 0 : (parseInt(item.stock) || 0),
-                oferta: (item.es_oferta || '').toUpperCase() === 'SI',
-                envio_gratis: (item.envio_gratis || '').toUpperCase() === 'SI',
-                marca: (item.nombre || '').split(' ')[0]
+                oferta: (item.es_oferta || item.oferta || '').toUpperCase() === 'SI',
+                envio_gratis: (item.envio_gratis || '').toUpperCase() === 'SI'
             });
         }
         

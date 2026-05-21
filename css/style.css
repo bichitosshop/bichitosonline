@@ -889,6 +889,43 @@ li { list-style: none; }
     border: 1px solid rgba(0,0,0,0.05);
 }
 .filtros-botones { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Chips de etapa de vida */
+.etapa-chips {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+.etapa-chips::-webkit-scrollbar { display: none; }
+.etapa-chips.hidden { display: none; }
+.etapa-btn {
+    background: var(--cream-dark);
+    border: 1.5px solid rgba(46,196,182,0.25);
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--fast);
+    font-size: .8rem;
+    color: var(--gray);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.etapa-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal-dark);
+    transform: translateY(-1px);
+}
+.etapa-btn.active {
+    background: linear-gradient(135deg, var(--teal), #5dd8cc);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 3px 12px var(--teal-glow);
+}
 .filtro-btn {
     background: var(--cream);
     border: 2px solid rgba(0,0,0,0.08);

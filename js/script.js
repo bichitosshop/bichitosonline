@@ -71,13 +71,23 @@ function renderAll() {
     guardarCarritoStorage();
 }
 
-// Aplica filtros que vienen por query string (categoria / marca)
+// Aplica filtros que vienen por query string (categoria / etapa / marca)
 function aplicarFiltrosURL() {
     const params = new URLSearchParams(window.location.search);
     const cat = params.get('categoria');
     if (cat) {
         document.querySelectorAll('.filtro-btn').forEach(b => {
             const isMatch = b.dataset.categoria === cat;
+            b.classList.toggle('active', isMatch);
+            b.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+        });
+        // Mostrar chips de etapa según categoría
+        actualizarEtapaChips(cat);
+    }
+    const etapa = params.get('etapa');
+    if (etapa) {
+        document.querySelectorAll('.etapa-btn').forEach(b => {
+            const isMatch = b.dataset.etapa === etapa;
             b.classList.toggle('active', isMatch);
             b.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
         });
@@ -89,14 +99,57 @@ function aplicarFiltrosURL() {
     }
 }
 
+function actualizarEtapaChips(cat) {
+    const wrap = document.getElementById('etapaChips');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    const etapasPerros = [
+        { val: '', label: 'Todas las edades' },
+        { val: 'adulto',   label: 'Adulto' },
+        { val: 'cachorro', label: 'Cachorro' },
+        { val: 'senior',   label: 'Senior' },
+        { val: 'pequeñas', label: 'Razas Pequeñas' },
+        { val: 'especiales', label: 'Especiales' },
+    ];
+    const etapasGatos = [
+        { val: '', label: 'Todos' },
+        { val: 'adulto',   label: 'Adulto' },
+        { val: 'kitten',   label: 'Kitten' },
+        { val: 'senior',   label: 'Senior' },
+        { val: 'urinario', label: 'Urinario' },
+        { val: 'castrado', label: 'Castrado' },
+    ];
+    const etapas = cat === 'gatos' ? etapasGatos : (cat === 'perros' ? etapasPerros : []);
+    if (etapas.length === 0) { wrap.classList.add('hidden'); return; }
+    wrap.classList.remove('hidden');
+    const activeEtapa = new URLSearchParams(window.location.search).get('etapa') || '';
+    etapas.forEach(e => {
+        const btn = document.createElement('button');
+        btn.className = 'etapa-btn' + (e.val === activeEtapa ? ' active' : '');
+        btn.dataset.etapa = e.val;
+        btn.textContent = e.label;
+        btn.setAttribute('aria-pressed', e.val === activeEtapa ? 'true' : 'false');
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.etapa-btn').forEach(b => {
+                b.classList.remove('active'); b.setAttribute('aria-pressed', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
+            renderProductos();
+        });
+        wrap.appendChild(btn);
+    });
+}
+
 function renderProductos() {
     const grid = document.getElementById('productosGrid');
     if (!grid) return;
 
-    const params = new URLSearchParams(window.location.search);
-    let catFilter = params.get('categoria') || 'todas';
     const activeBtn = document.querySelector('.filtro-btn.active');
-    if (activeBtn) catFilter = activeBtn.dataset.categoria;
+    let catFilter = activeBtn ? activeBtn.dataset.categoria : 'todas';
+
+    const activeEtapaBtn = document.querySelector('.etapa-btn.active');
+    const etapaFilter = activeEtapaBtn ? activeEtapaBtn.dataset.etapa : '';
 
     const searchTerm = (document.getElementById('buscador')?.value || '').toLowerCase();
     const marcaFilter = (document.getElementById('filtroMarca')?.value || '').toLowerCase();
@@ -104,11 +157,12 @@ function renderProductos() {
 
     let filtrados = productos.filter(p => {
         const matchCat = catFilter === 'todas' || p.categoria === catFilter;
+        const matchEtapa = !etapaFilter || p.etapa === etapaFilter;
         const matchSearch = !searchTerm
             || p.nombre.toLowerCase().includes(searchTerm)
             || (p.marca || '').toLowerCase().includes(searchTerm);
         const matchMarca = !marcaFilter || (p.marca || '').toLowerCase().includes(marcaFilter);
-        return matchCat && matchSearch && matchMarca;
+        return matchCat && matchEtapa && matchSearch && matchMarca;
     });
 
     if (orden === 'precio-asc') filtrados.sort((a, b) => a.precio - b.precio);
@@ -648,6 +702,8 @@ function setupUI() {
             });
             btn.classList.add('active');
             btn.setAttribute('aria-pressed', 'true');
+            // Mostrar/ocultar chips de etapa según categoría
+            actualizarEtapaChips(btn.dataset.categoria);
             renderProductos();
         });
     });
