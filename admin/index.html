@@ -1122,15 +1122,37 @@ function cerrarModal() {
 }
 
 function actualizarPreviewImagen(url) {
-  const img  = $('imgPreview');
-  const ph   = $('imgPlaceholder');
-  if (url && url.startsWith('http')) {
-    img.src = url;
-    img.hidden = false;
-    ph.style.display = 'none';
+  const img = $('imgPreview');
+  const ph  = $('imgPlaceholder');
+
+  // Limpiar handlers anteriores
+  img.onload  = null;
+  img.onerror = null;
+
+  const urlLimpia = (url || '').trim();
+
+  if (urlLimpia && (urlLimpia.startsWith('http://') || urlLimpia.startsWith('https://'))) {
+    // Estado: cargando
+    ph.style.display = 'flex';
+    ph.textContent   = '⏳';
+    img.hidden = true;
+
+    img.onload = () => {
+      img.hidden = false;
+      ph.style.display = 'none';
+    };
+    img.onerror = () => {
+      img.hidden = true;
+      ph.style.display = 'flex';
+      ph.textContent = '❌';
+      setTimeout(() => { ph.textContent = '🐾'; }, 2000);
+    };
+    img.src = urlLimpia;
   } else {
     img.hidden = true;
+    img.src = '';
     ph.style.display = 'flex';
+    ph.textContent = '🐾';
   }
 }
 
