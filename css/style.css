@@ -354,6 +354,17 @@ li { list-style: none; }
     overflow: hidden;
     height: 130px;
 }
+.hero-carousel::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--orange), var(--yellow), var(--orange), transparent);
+    border-radius: 2px;
+    z-index: 2;
+}
 @media (min-width: 768px) {
     .hero-carousel { height: 400px; }
 }
@@ -553,9 +564,10 @@ li { list-style: none; }
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     cursor: pointer;
     transition: transform var(--norm);
+    align-self: start;
 }
 .categoria-casita:hover { transform: translateY(-8px); }
 .casita-shape {
@@ -592,16 +604,15 @@ li { list-style: none; }
     transform: scale(1.08);
 }
 .casita-label {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: var(--gray-dark);
     letter-spacing: -0.3px;
 }
 .casita-sub {
-    font-size: .82rem;
+    font-size: .75rem;
     color: var(--gray);
     font-weight: 500;
-    margin-top: -8px;
 }
 
 /* ===== MARCAS SLIDER ===== */
