@@ -29,12 +29,12 @@ class ProductosAPI {
                 }
                 
                 const csvText = await response.text();
-                const products = this.parseCSV(csvText);
-                
+                const products = this.enrichWithImages(this.parseCSV(csvText));
+
                 // Update cache
                 this.productsCache = products;
                 this.cacheTimestamp = Date.now();
-                
+
                 return products;
             } else {
                 // Fallback to local data
@@ -42,7 +42,7 @@ class ProductosAPI {
             }
         } catch (error) {
             console.warn('Failed to fetch from API, using fallback data:', error);
-            return this.getFallbackProducts();
+            return this.enrichWithImages(this.getFallbackProducts());
         }
     }
 
@@ -74,9 +74,6 @@ class ProductosAPI {
      */
     enrichWithImages(products) {
         return products.map(p => {
-            if (!p.imagen) {
-                p.imagen = buscarImagenProducto(p.nombre);
-            }
             const match = p.nombre.match(/^(.*?)\s*x\s+(\d+[,.]?\d*\s*[kK][gG].*)$/);
             p._base = match ? match[1].trim() : p.nombre;
             p._peso = match ? match[2].trim() : '';
@@ -175,6 +172,8 @@ class ProductosAPI {
                 imagen: item.imagen || '',
                 destacado: (item.destacado || '').toUpperCase() === 'SI',
                 stock: parseInt(item.stock) === 0 ? 0 : (parseInt(item.stock) || 0),
+                oferta: (item.es_oferta || '').toUpperCase() === 'SI',
+                envio_gratis: (item.envio_gratis || '').toUpperCase() === 'SI',
                 marca: (item.nombre || '').split(' ')[0]
             });
         }
