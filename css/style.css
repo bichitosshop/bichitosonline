@@ -252,21 +252,7 @@ a { text-decoration: none; color: inherit; }
 
 .hero-text { animation: slideUp 0.6s var(--bounce) both; }
 .hero-visual {
-    animation: slideUp 0.6s var(--bounce) 0.15s both;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.hero-banner-img {
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    aspect-ratio: 6/5;
-    object-fit: cover;
+    display: none;
 }
 
 .hero-content h1 {
@@ -368,45 +354,38 @@ a { text-decoration: none; color: inherit; }
     margin: 0 auto;
 }
 .categoria-card {
+    text-align: center;
+    padding: 50px 20px;
     border-radius: var(--radius-lg);
     color: white;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    min-height: 220px;
-    display: flex;
-    align-items: flex-end;
-    background-size: cover;
-    background-position: center;
     transition: transform var(--norm), box-shadow var(--norm);
-    box-shadow: var(--shadow);
 }
 .categoria-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-8px) scale(1.02);
 }
-.categoria-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 40%, rgba(27, 59, 90, 0.85) 100%);
-    pointer-events: none;
+.card-perros {
+    background: linear-gradient(135deg, var(--orange), #ff8f55);
+    box-shadow: 0 8px 30px var(--orange-glow);
 }
-.categoria-content {
-    position: relative;
-    z-index: 2;
-    padding: 24px;
-    width: 100%;
+.card-gatos {
+    background: linear-gradient(135deg, var(--teal), #5dd9ce);
+    box-shadow: 0 8px 30px var(--teal-glow);
 }
-.categoria-content h3 {
-    font-size: 1.5rem;
-    font-weight: 900;
-    margin-bottom: 4px;
+.categoria-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    transition: transform var(--norm);
 }
-.categoria-content p {
-    font-size: .9rem;
-    opacity: .85;
-    font-weight: 500;
+.categoria-card:hover .categoria-icon {
+    transform: scale(1.2) rotate(-8deg);
 }
+.categoria-card h3 { font-size: 1.6rem; font-weight: 900; }
+.categoria-card p { opacity: .85; font-size: 1rem; font-weight: 500; }
 
 /* ===== PRODUCT CARDS ===== */
 .productos-grid {
@@ -1232,9 +1211,9 @@ a { text-decoration: none; color: inherit; }
 @media (min-width: 768px) {
     .menu-toggle { display: none !important; }
     .nav { display: flex !important; position: static; width: auto; background: transparent; flex-direction: row; padding: 0; box-shadow: none; }
-    .hero-content { grid-template-columns: 1fr 1fr; }
-    .hero-text { text-align: left; }
-    .hero-buttons { justify-content: flex-start; }
+    .hero-content { grid-template-columns: 1fr; }
+    .hero-text { text-align: center; }
+    .hero-buttons { justify-content: center; }
     .contacto-grid { grid-template-columns: 1fr 1fr; }
     .filtros { flex-direction: row; align-items: center; }
     .buscador { max-width: 350px; }
@@ -1258,7 +1237,7 @@ a { text-decoration: none; color: inherit; }
     .hero-text { text-align: center; }
     .hero-content p { margin-left: auto; margin-right: auto; }
     .hero-buttons { justify-content: center; }
-    .hero-banner-img { max-width: 80%; margin: 0 auto; }
+    .hero-visual { display: none; }
     .contacto-grid { grid-template-columns: 1fr; }
     .filtros { flex-direction: column; align-items: stretch; }
     .buscador { max-width: none; }

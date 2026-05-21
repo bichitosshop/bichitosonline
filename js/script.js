@@ -89,7 +89,6 @@ function badgeStock(p) {
 
 function crearCardGrupo(grupo) {
     const v = grupo.variantes;
-    const activeIdx = { val: 0 };
 
     function html(p, idx) {
         const enCarrito = carrito.find(i => i.id === p.id);
@@ -108,11 +107,11 @@ function crearCardGrupo(grupo) {
 
         return `
         <div class="producto-card${cant > 0 ? ' en-carrito' : ''}" data-base="${grupo._base}">
-            <div class="producto-img ${p.categoria}">
+            <div class="producto-img ${p.categoria}" data-base="${grupo._base}">
                 ${badge}
                 ${imgHtml}
             </div>
-            <div class="producto-body">
+            <div class="producto-body" data-base="${grupo._base}">
                 <div class="producto-marca">${p.marca || ''}</div>
                 <div class="producto-nombre">${defaultName}</div>
                 ${!isSingle ? `<div class="kg-selector">${kgPills}</div>` : ''}
@@ -128,36 +127,7 @@ function crearCardGrupo(grupo) {
         </div>`;
     }
 
-    const template = document.createElement('template');
-    template.innerHTML = html(v[0], 0);
-    const card = template.content.firstElementChild;
-
-    card.addEventListener('click', function(e) {
-        const pill = e.target.closest('.kg-pill');
-        if (!pill) return;
-        const idx = parseInt(pill.dataset.varidx);
-        if (idx === activeIdx.val) return;
-        activeIdx.val = idx;
-        const newP = v[idx];
-        card.querySelector('.producto-img').className = `producto-img ${newP.categoria}`;
-        card.querySelector('.prod-badge')?.remove();
-        const imgWrap = card.querySelector('.producto-img');
-        if (newP.imagen) {
-            const oldImg = imgWrap.querySelector('img');
-            if (oldImg) oldImg.src = newP.imagen;
-        }
-        const badgeEl = document.createElement('template');
-        badgeEl.innerHTML = badgeStock(newP);
-        if (badgeEl.content.firstChild) {
-            imgWrap.insertBefore(badgeEl.content.firstChild, imgWrap.firstChild);
-        }
-        card.querySelector('.producto-precio').textContent = '$' + newP.precio.toLocaleString('es-AR');
-        card.querySelectorAll('.kg-pill').forEach(el => el.classList.toggle('active', parseInt(el.dataset.varidx) === idx));
-        const qtyBtns = card.querySelectorAll('.qty-btn, .btn-add-cart');
-        qtyBtns.forEach(el => el.dataset.id = newP.id);
-    });
-
-    return card.outerHTML;
+    return html(v[0], 0);
 }
 
 function renderCarrito() {
@@ -200,6 +170,33 @@ function renderCarrito() {
 }
 
 document.addEventListener('click', function(e) {
+    const pill = e.target.closest('.kg-pill');
+    if (pill) {
+        const base = pill.dataset.base;
+        const idx = parseInt(pill.dataset.varidx);
+        const grupos = window.productosAPI.groupByVariants(productos);
+        const grupo = grupos.find(g => g._base === base);
+        if (!grupo) return;
+        const newP = grupo.variantes[idx];
+        if (!newP) return;
+        const card = pill.closest('.producto-card');
+        if (!card) return;
+        if (card.dataset._activeIdx === idx) return;
+        card.dataset._activeIdx = idx;
+        const imgWrap = card.querySelector('.producto-img');
+        imgWrap.className = `producto-img ${newP.categoria}`;
+        card.querySelectorAll('.prod-badge').forEach(el => el.remove());
+        const img = imgWrap.querySelector('img');
+        if (img && newP.imagen) img.src = newP.imagen;
+        const badgeHtml = badgeStock(newP);
+        if (badgeHtml) {
+            imgWrap.insertAdjacentHTML('afterbegin', badgeHtml);
+        }
+        card.querySelector('.producto-precio').textContent = '$' + newP.precio.toLocaleString('es-AR');
+        card.querySelectorAll('.kg-pill').forEach(el => el.classList.toggle('active', parseInt(el.dataset.varidx) === idx));
+        card.querySelectorAll('.qty-btn, .btn-add-cart').forEach(el => el.dataset.id = newP.id);
+        return;
+    }
     const qtyBtn = e.target.closest('.qty-btn, .qty-cart, .btn-add-cart');
     if (qtyBtn) {
         const id = parseInt(qtyBtn.dataset.id);
