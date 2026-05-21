@@ -354,17 +354,7 @@ li { list-style: none; }
     overflow: hidden;
     height: 130px;
 }
-.hero-carousel::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    width: 80%;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, var(--orange), var(--yellow), var(--orange), transparent);
-    border-radius: 2px;
-    z-index: 2;
-}
+
 @media (min-width: 768px) {
     .hero-carousel { height: 400px; }
 }
@@ -552,7 +542,23 @@ li { list-style: none; }
 }
 
 /* ===== CATEGORIAS CASITA ===== */
-.categorias { padding: 20px 0 40px; }
+.categorias {
+    padding: 20px 0 40px;
+    position: relative;
+}
+.categorias::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 15%;
+    width: 70%;
+    height: 12px;
+    background: linear-gradient(90deg, transparent 0%, var(--orange) 20%, var(--yellow) 50%, var(--orange) 80%, transparent 100%);
+    border-radius: 6px;
+    filter: blur(6px);
+    opacity: 0.6;
+    z-index: 0;
+}
 .categoria-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
