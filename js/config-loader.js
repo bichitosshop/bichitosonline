@@ -148,8 +148,15 @@ function aplicarElementos() {
         // Actualizar texto del elemento (solo si no hay imagen)
         if (!hasImage && cfg.text !== undefined) {
             document.querySelectorAll(`[data-edit-id="${id}"]`).forEach(el => {
-                if (el.children.length === 0) el.textContent = cfg.text;
-                else el.setAttribute('data-display-text', cfg.text);
+                if (el.children.length === 0) {
+                    el.textContent = cfg.text;
+                } else {
+                    // Tiene hijos (ej: link con ícono SVG): cambiar solo el primer
+                    // nodo de texto, preservando los elementos hijos.
+                    let tn = Array.from(el.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
+                    if (tn) tn.textContent = cfg.text;
+                    else el.insertBefore(document.createTextNode(cfg.text), el.firstChild);
+                }
             });
         }
         // Estilos base
