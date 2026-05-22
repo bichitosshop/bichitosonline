@@ -73,21 +73,56 @@
     "productImageHeight": "400"
   },
   "titleLine": {
-    "stops": ["#FF6B35", "#f1c40f", "#2EC4B6"],
+    "stops": [
+      "#FF6B35",
+      "#f1c40f",
+      "#2EC4B6"
+    ],
     "direction": 90,
     "height": 4,
     "width": 80,
     "blur": 0
   },
   "logoImage": "",
-  "elements": {},
+  "elements": {
+    "logo-bichitos": {
+      "image": "https://bichitosshop.github.io/bichitosonline/images/editor/elem_logo-bichitos_1779451835205.jpg",
+      "styles": {
+        "fontSize": 60
+      }
+    }
+  },
   "brands": [
-    { "name": "Estampa",  "logo": "", "link": "productos.html?marca=estampa" },
-    { "name": "Jaspe",    "logo": "", "link": "productos.html?marca=jaspe" },
-    { "name": "Vagoneta", "logo": "", "link": "productos.html?marca=vagoneta" },
-    { "name": "Liwué",    "logo": "", "link": "productos.html?marca=liw%C3%BC" },
-    { "name": "Dr Perrot","logo": "", "link": "productos.html?marca=dr+perrot" },
-    { "name": "Valiant",  "logo": "", "link": "productos.html?marca=valiant" }
+    {
+      "name": "Estampa",
+      "logo": "",
+      "link": "productos.html?marca=estampa"
+    },
+    {
+      "name": "Jaspe",
+      "logo": "",
+      "link": "productos.html?marca=jaspe"
+    },
+    {
+      "name": "Vagoneta",
+      "logo": "",
+      "link": "productos.html?marca=vagoneta"
+    },
+    {
+      "name": "Liwué",
+      "logo": "",
+      "link": "productos.html?marca=liw%C3%BC"
+    },
+    {
+      "name": "Dr Perrot",
+      "logo": "",
+      "link": "productos.html?marca=dr+perrot"
+    },
+    {
+      "name": "Valiant",
+      "logo": "",
+      "link": "productos.html?marca=valiant"
+    }
   ],
   "store": {
     "name": "BICHITOS SHOP",
