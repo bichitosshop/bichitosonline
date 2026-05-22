@@ -90,6 +90,11 @@
       "styles": {
         "fontSize": 60
       }
+    },
+    "title-marcas": {
+      "styles": {
+        "color": "#00364a"
+      }
     }
   },
   "brands": [
