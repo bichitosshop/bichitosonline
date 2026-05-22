@@ -1,0 +1,54 @@
+{
+  "version": "1.0",
+  "theme": {
+    "colorPrimary": "#1B3B5A",
+    "colorAccent": "#FF6B35",
+    "colorTeal": "#2EC4B6",
+    "colorBackground": "#FFFDF7",
+    "borderRadius": "12",
+    "fontFamily": "Inter"
+  },
+  "banners": [
+    {
+      "id": "b1",
+      "active": true,
+      "image": "https://i.ibb.co/fYqNpSTX/BANNER-SLIDE1.jpg",
+      "title": "",
+      "subtitle": "",
+      "ctaText": "",
+      "ctaLink": "productos.html"
+    },
+    {
+      "id": "b2",
+      "active": true,
+      "image": "https://i.ibb.co/60YjqRWt/BANNER-SLIDE2.jpg",
+      "title": "",
+      "subtitle": "",
+      "ctaText": "",
+      "ctaLink": "productos.html"
+    },
+    {
+      "id": "b3",
+      "active": true,
+      "image": "https://i.ibb.co/DHFZ0tQv/BANNER-SLIDE3.jpg",
+      "title": "",
+      "subtitle": "",
+      "ctaText": "",
+      "ctaLink": "productos.html"
+    }
+  ],
+  "sections": {
+    "categorias": true,
+    "marcas": true,
+    "destacados": true
+  },
+  "store": {
+    "name": "BICHITOS SHOP",
+    "whatsapp": "5492615081413",
+    "city": "Gran Mendoza",
+    "scheduleWeekdays": "Lun a Sáb: 9:00 – 20:00",
+    "scheduleWeekend": "Dom: cerrado",
+    "footerTagline": "Alimentos y accesorios premium para mascotas en Mendoza",
+    "copyright": "2026 BICHITOS SHOP — Mendoza, Argentina"
+  }
+}

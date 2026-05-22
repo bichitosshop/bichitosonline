@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Editor Visual — BICHITOS SHOP</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --blue:#1B3B5A; --orange:#FF6B35; --teal:#2EC4B6; --cream:#FFFDF7;
+  --panel:#ffffff; --panel-border:#e8edf2; --sidebar-w:360px;
+  --topbar-h:56px; --radius:10px; --font:'Inter',-apple-system,sans-serif;
+  --gray:#64748b; --gray-light:#f1f5f9; --danger:#ef4444; --success:#22c55e;
+}
+html, body { height:100%; font-family:var(--font); background:#f0f4f8; color:#1e293b; font-size:14px; }
+button { font-family:inherit; cursor:pointer; border:none; }
+input, select, textarea { font-family:inherit; }
+a { text-decoration:none; color:inherit; }
+
+/* ===== TOPBAR ===== */
+.topbar {
+  position:fixed; top:0; left:0; right:0; height:var(--topbar-h);
+  background:var(--blue); color:#fff; display:flex; align-items:center;
+  padding:0 20px; gap:16px; z-index:1000; box-shadow:0 2px 12px rgba(0,0,0,0.2);
+}
+.topbar-logo { font-weight:900; font-size:1.1rem; letter-spacing:-0.5px; }
+.topbar-logo span { color:var(--orange); }
+.topbar-spacer { flex:1; }
+.topbar-device { display:flex; gap:4px; background:rgba(255,255,255,0.12); border-radius:8px; padding:3px; }
+.device-btn {
+  padding:5px 12px; border-radius:6px; font-size:0.75rem; font-weight:600;
+  color:rgba(255,255,255,0.7); background:transparent; transition:all 0.2s;
+}
+.device-btn.active { background:#fff; color:var(--blue); }
+.btn-undo {
+  padding:7px 14px; background:rgba(255,255,255,0.12); color:#fff;
+  border-radius:7px; font-size:0.8rem; font-weight:600;
+  display:flex; align-items:center; gap:6px; transition:background 0.2s;
+}
+.btn-undo:hover { background:rgba(255,255,255,0.22); }
+.btn-undo:disabled { opacity:0.35; cursor:not-allowed; }
+.btn-save {
+  padding:8px 22px; background:var(--orange); color:#fff;
+  border-radius:8px; font-weight:700; font-size:0.85rem;
+  transition:all 0.2s; display:flex; align-items:center; gap:6px;
+}
+.btn-save:hover { background:#e55a2b; transform:translateY(-1px); }
+.btn-save:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.btn-preview-link {
+  padding:7px 14px; background:rgba(255,255,255,0.12); color:#fff;
+  border-radius:7px; font-size:0.8rem; font-weight:600; display:flex; align-items:center; gap:6px;
+}
+.btn-preview-link:hover { background:rgba(255,255,255,0.22); }
+
+/* ===== LAYOUT ===== */
+.editor-layout {
+  display:flex; position:fixed; top:var(--topbar-h); left:0; right:0; bottom:0;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width:var(--sidebar-w); background:var(--panel); border-right:1px solid var(--panel-border);
+  display:flex; flex-direction:column; overflow:hidden; flex-shrink:0;
+}
+.sidebar-tabs {
+  display:flex; border-bottom:1px solid var(--panel-border); background:#f8fafc;
+}
+.sidebar-tab {
+  flex:1; padding:12px 4px; font-size:0.72rem; font-weight:700;
+  color:var(--gray); background:transparent; text-align:center;
+  border-bottom:2px solid transparent; transition:all 0.2s; letter-spacing:0.3px;
+}
+.sidebar-tab.active { color:var(--orange); border-bottom-color:var(--orange); background:#fff; }
+.sidebar-body { flex:1; overflow-y:auto; padding:20px; }
+.sidebar-body::-webkit-scrollbar { width:4px; }
+.sidebar-body::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:4px; }
+
+/* ===== PANELS ===== */
+.panel { display:none; flex-direction:column; gap:20px; }
+.panel.active { display:flex; }
+
+/* ===== FIELD GROUPS ===== */
+.field-group { background:#f8fafc; border:1px solid var(--panel-border); border-radius:var(--radius); padding:16px; }
+.field-group-title { font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--gray); margin-bottom:14px; }
+.field-row { margin-bottom:12px; }
+.field-row:last-child { margin-bottom:0; }
+.field-label { font-size:0.78rem; font-weight:600; color:#374151; margin-bottom:5px; display:block; }
+.field-input {
+  width:100%; padding:8px 12px; border:1.5px solid #e2e8f0;
+  border-radius:7px; font-size:0.85rem; color:#1e293b;
+  transition:border-color 0.2s; background:#fff;
+}
+.field-input:focus { outline:none; border-color:var(--orange); }
+.field-select {
+  width:100%; padding:8px 12px; border:1.5px solid #e2e8f0;
+  border-radius:7px; font-size:0.85rem; color:#1e293b; background:#fff;
+  transition:border-color 0.2s;
+}
+.field-select:focus { outline:none; border-color:var(--orange); }
+
+/* Color picker */
+.color-row { display:flex; align-items:center; gap:10px; }
+.color-swatch {
+  width:38px; height:38px; border-radius:8px; border:2px solid #e2e8f0;
+  cursor:pointer; flex-shrink:0; overflow:hidden; position:relative;
+}
+.color-swatch input[type="color"] {
+  position:absolute; inset:-4px; width:calc(100%+8px); height:calc(100%+8px);
+  opacity:0; cursor:pointer; border:none;
+}
+.color-hex { flex:1; }
+
+/* Range slider */
+.range-row { display:flex; align-items:center; gap:10px; }
+.range-input { flex:1; accent-color:var(--orange); }
+.range-val { font-size:0.8rem; font-weight:700; color:var(--orange); min-width:32px; text-align:right; }
+
+/* Toggle switch */
+.toggle-row { display:flex; align-items:center; justify-content:space-between; }
+.toggle-label-text { font-size:0.82rem; font-weight:600; color:#374151; }
+.toggle-switch { position:relative; width:40px; height:22px; }
+.toggle-switch input { opacity:0; width:0; height:0; position:absolute; }
+.toggle-track {
+  position:absolute; inset:0; background:#cbd5e1; border-radius:99px;
+  cursor:pointer; transition:background 0.2s;
+}
+.toggle-track::before {
+  content:''; position:absolute; top:3px; left:3px;
+  width:16px; height:16px; background:#fff; border-radius:50%;
+  transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-switch input:checked + .toggle-track { background:var(--teal); }
+.toggle-switch input:checked + .toggle-track::before { transform:translateX(18px); }
+
+/* Presets grid */
+.presets-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.preset-btn {
+  padding:10px; border-radius:8px; border:2px solid transparent;
+  cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column;
+  align-items:center; gap:4px; background:#f8fafc;
+}
+.preset-btn.active { border-color:var(--orange); }
+.preset-swatch { display:flex; gap:3px; }
+.preset-dot { width:12px; height:12px; border-radius:50%; }
+.preset-name { font-size:0.7rem; font-weight:700; color:var(--gray); }
+
+/* ===== BANNERS ===== */
+.banner-list { display:flex; flex-direction:column; gap:10px; }
+.banner-item {
+  background:#fff; border:1.5px solid var(--panel-border); border-radius:var(--radius);
+  overflow:hidden; transition:border-color 0.2s;
+}
+.banner-item.expanded { border-color:var(--orange); }
+.banner-header {
+  padding:12px 14px; display:flex; align-items:center; gap:10px; cursor:pointer;
+  user-select:none;
+}
+.banner-thumb {
+  width:56px; height:34px; border-radius:6px; object-fit:cover;
+  background:#f0f4f8; flex-shrink:0; border:1px solid #e2e8f0;
+}
+.banner-name { flex:1; font-size:0.82rem; font-weight:700; color:#1e293b; }
+.banner-toggle-btn {
+  font-size:0.72rem; padding:3px 8px; border-radius:5px;
+  font-weight:700; background:var(--gray-light); color:var(--gray);
+}
+.banner-body { padding:0 14px 14px; display:none; flex-direction:column; gap:10px; }
+.banner-item.expanded .banner-body { display:flex; }
+.banner-img-preview {
+  width:100%; height:90px; object-fit:cover; border-radius:8px;
+  border:1px solid #e2e8f0; display:block; background:#f0f4f8;
+}
+.banner-img-preview.error { display:flex; align-items:center; justify-content:center; font-size:1.5rem; }
+.banner-actions { display:flex; gap:8px; }
+.btn-sm {
+  flex:1; padding:7px; border-radius:7px; font-size:0.75rem; font-weight:700;
+  background:var(--gray-light); color:var(--gray); transition:all 0.15s;
+}
+.btn-sm:hover { background:#e2e8f0; }
+.btn-sm.danger { background:#fee2e2; color:var(--danger); }
+.btn-sm.danger:hover { background:#fecaca; }
+.btn-add-banner {
+  padding:10px; border:2px dashed #cbd5e1; border-radius:var(--radius);
+  color:var(--gray); font-size:0.82rem; font-weight:600; width:100%;
+  transition:all 0.2s; background:transparent;
+}
+.btn-add-banner:hover { border-color:var(--orange); color:var(--orange); background:rgba(255,107,53,0.04); }
+
+/* ===== PREVIEW IFRAME ===== */
+.preview-area {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  justify-content:flex-start; background:#dde3ec; overflow:auto; padding:20px;
+}
+.preview-wrapper {
+  background:#fff; box-shadow:0 8px 40px rgba(0,0,0,0.18);
+  border-radius:12px; overflow:hidden; transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+  flex-shrink:0;
+}
+.preview-wrapper.desktop { width:100%; max-width:1200px; height:calc(100vh - var(--topbar-h) - 40px); }
+.preview-wrapper.tablet  { width:768px;  height:calc(100vh - var(--topbar-h) - 40px); }
+.preview-wrapper.mobile  { width:390px;  height:720px; border-radius:36px; border:6px solid #1e293b; }
+.preview-iframe { width:100%; height:100%; border:none; display:block; }
+
+/* ===== TOAST ===== */
+.toast {
+  position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:#1e293b; color:#fff; padding:11px 22px; border-radius:99px;
+  font-size:0.84rem; font-weight:600; z-index:9999; transition:transform 0.3s;
+  pointer-events:none; white-space:nowrap;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.success { background:var(--success); }
+.toast.error { background:var(--danger); }
+
+/* ===== UPLOAD AREA ===== */
+.upload-area {
+  border:2px dashed #cbd5e1; border-radius:8px; padding:14px;
+  text-align:center; cursor:pointer; transition:all 0.2s; background:#f8fafc;
+}
+.upload-area:hover { border-color:var(--orange); background:rgba(255,107,53,0.03); }
+.upload-area input { display:none; }
+.upload-area p { font-size:0.78rem; color:var(--gray); margin-top:4px; }
+
+/* ===== LOADING ===== */
+.loading-overlay {
+  position:fixed; inset:0; background:rgba(255,255,255,0.8);
+  display:none; align-items:center; justify-content:center; z-index:9000;
+  backdrop-filter:blur(4px);
+}
+.loading-overlay.show { display:flex; }
+.spinner-ring {
+  width:40px; height:40px; border:4px solid #e2e8f0;
+  border-top-color:var(--orange); border-radius:50%; animation:spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ===== EXPORT/IMPORT ===== */
+.export-row { display:flex; gap:8px; }
+.btn-export {
+  flex:1; padding:9px; border-radius:8px; font-size:0.78rem; font-weight:700;
+  background:var(--gray-light); color:var(--gray); transition:all 0.2s;
+}
+.btn-export:hover { background:#e2e8f0; }
+
+/* ===== NO AUTH STATE ===== */
+.no-auth {
+  position:fixed; inset:0; background:#f0f4f8;
+  display:flex; align-items:center; justify-content:center; z-index:8000;
+}
+.no-auth-box {
+  background:#fff; border-radius:16px; padding:40px; max-width:400px; width:90%;
+  box-shadow:0 8px 40px rgba(0,0,0,0.12); text-align:center;
+}
+.no-auth-box h2 { font-size:1.3rem; font-weight:900; color:var(--blue); margin-bottom:8px; }
+.no-auth-box p { color:var(--gray); font-size:0.85rem; margin-bottom:24px; line-height:1.5; }
+.no-auth-input {
+  width:100%; padding:12px 16px; border:2px solid #e2e8f0; border-radius:10px;
+  font-size:0.9rem; margin-bottom:12px; transition:border-color 0.2s;
+}
+.no-auth-input:focus { outline:none; border-color:var(--orange); }
+.no-auth-btn {
+  width:100%; padding:13px; background:var(--orange); color:#fff;
+  border-radius:10px; font-weight:800; font-size:0.95rem; transition:all 0.2s;
+}
+.no-auth-btn:hover { background:#e55a2b; }
+
+/* ===== SECTION ITEMS ===== */
+.section-item {
+  background:#fff; border:1.5px solid var(--panel-border);
+  border-radius:var(--radius); padding:14px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.section-icon { font-size:1.1rem; flex-shrink:0; }
+.section-info { flex:1; }
+.section-info-name { font-size:0.85rem; font-weight:700; color:#1e293b; }
+.section-info-desc { font-size:0.72rem; color:var(--gray); margin-top:2px; }
+
+/* ===== STORE SECTION ===== */
+.store-field-group { display:flex; flex-direction:column; gap:10px; }
+
+/* ===== RESPONSIVE HIDE ===== */
+@media (max-width: 900px) {
+  .sidebar { width:300px; }
+}
+@media (max-width: 600px) {
+  .editor-layout { flex-direction:column; }
+  .sidebar { width:100%; height:50%; }
+  .preview-area { min-height:50%; }
+  .preview-wrapper.desktop { width:100%; height:100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- NO AUTH SCREEN -->
+<div class="no-auth" id="noAuth">
+  <div class="no-auth-box">
+    <div style="font-size:2rem;margin-bottom:12px;">🎨</div>
+    <h2>Editor Visual</h2>
+    <p>Ingresá tu token de GitHub para acceder al editor y guardar cambios en el sitio.</p>
+    <input type="password" class="no-auth-input" id="authToken" placeholder="ghp_..." autocomplete="off" />
+    <button class="no-auth-btn" id="authBtn">Entrar al editor</button>
+    <p style="margin-top:14px;font-size:0.72rem;color:#94a3b8;">
+      Token guardado solo en este dispositivo.<br>
+      <a href="index.html" style="color:var(--orange);font-weight:700;">Volver al panel de productos</a>
+    </p>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo"><span>BICHITOS</span> SHOP · Editor Visual</div>
+  <div class="topbar-spacer"></div>
+  <div class="topbar-device">
+    <button class="device-btn active" data-device="desktop">Escritorio</button>
+    <button class="device-btn" data-device="tablet">Tablet</button>
+    <button class="device-btn" data-device="mobile">Celular</button>
+  </div>
+  <button class="btn-undo" id="btnUndo" disabled title="Deshacer último cambio">
+    ↩ Deshacer
+  </button>
+  <a class="btn-preview-link" href="../index.html" target="_blank">Ver sitio ↗</a>
+  <button class="btn-save" id="btnSave">Guardar cambios</button>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="editor-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" data-tab="disenio">Diseño</button>
+      <button class="sidebar-tab" data-tab="banners">Banners</button>
+      <button class="sidebar-tab" data-tab="secciones">Secciones</button>
+      <button class="sidebar-tab" data-tab="tienda">Tienda</button>
+    </div>
+
+    <div class="sidebar-body">
+
+      <!-- PANEL: DISEÑO -->
+      <div class="panel active" id="panel-disenio">
+
+        <!-- Presets -->
+        <div class="field-group">
+          <div class="field-group-title">Temas predefinidos</div>
+          <div class="presets-grid" id="presetsGrid"></div>
+        </div>
+
+        <!-- Colores -->
+        <div class="field-group">
+          <div class="field-group-title">Colores</div>
+          <div class="field-row">
+            <label class="field-label">Color principal (header, footer)</label>
+            <div class="color-row">
+              <label class="color-swatch" id="swatch-colorPrimary">
+                <input type="color" id="pick-colorPrimary" />
+              </label>
+              <input type="text" class="field-input color-hex" id="hex-colorPrimary" maxlength="7" placeholder="#1B3B5A" />
+            </div>
+          </div>
+          <div class="field-row">
+            <label class="field-label">Color acento (botones, CTA)</label>
+            <div class="color-row">
+              <label class="color-swatch" id="swatch-colorAccent">
+                <input type="color" id="pick-colorAccent" />
+              </label>
+              <input type="text" class="field-input color-hex" id="hex-colorAccent" maxlength="7" placeholder="#FF6B35" />
+            </div>
+          </div>
+          <div class="field-row">
+            <label class="field-label">Color teal (chips, badges)</label>
+            <div class="color-row">
+              <label class="color-swatch" id="swatch-colorTeal">
+                <input type="color" id="pick-colorTeal" />
+              </label>
+              <input type="text" class="field-input color-hex" id="hex-colorTeal" maxlength="7" placeholder="#2EC4B6" />
+            </div>
+          </div>
+          <div class="field-row">
+            <label class="field-label">Color de fondo</label>
+            <div class="color-row">
+              <label class="color-swatch" id="swatch-colorBackground">
+                <input type="color" id="pick-colorBackground" />
+              </label>
+              <input type="text" class="field-input color-hex" id="hex-colorBackground" maxlength="7" placeholder="#FFFDF7" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Tipografía y bordes -->
+        <div class="field-group">
+          <div class="field-group-title">Tipografía y bordes</div>
+          <div class="field-row">
+            <label class="field-label">Fuente</label>
+            <select class="field-select" id="sel-fontFamily">
+              <option value="Inter">Inter (actual)</option>
+              <option value="Poppins">Poppins</option>
+              <option value="Nunito">Nunito</option>
+              <option value="Montserrat">Montserrat</option>
+              <option value="DM Sans">DM Sans</option>
+            </select>
+          </div>
+          <div class="field-row">
+            <label class="field-label">Redondez de bordes</label>
+            <div class="range-row">
+              <input type="range" class="range-input" id="range-borderRadius" min="0" max="32" step="2" value="12" />
+              <span class="range-val" id="rangeVal-borderRadius">12px</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export/Import -->
+        <div class="field-group">
+          <div class="field-group-title">Exportar / Importar config</div>
+          <div class="export-row">
+            <button class="btn-export" id="btnExport">Exportar JSON</button>
+            <label class="btn-export" style="cursor:pointer;text-align:center;">
+              Importar JSON
+              <input type="file" accept=".json" id="importFile" style="display:none;" />
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PANEL: BANNERS -->
+      <div class="panel" id="panel-banners">
+        <div class="banner-list" id="bannerList"></div>
+        <button class="btn-add-banner" id="btnAddBanner">+ Agregar banner</button>
+      </div>
+
+      <!-- PANEL: SECCIONES -->
+      <div class="panel" id="panel-secciones">
+        <div class="field-group">
+          <div class="field-group-title">Mostrar / Ocultar secciones</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="section-item">
+              <span class="section-icon">🏠</span>
+              <div class="section-info">
+                <div class="section-info-name">Categorías (casitas)</div>
+                <div class="section-info-desc">Perros y Gatos con forma de casita</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-categorias" checked />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="section-item">
+              <span class="section-icon">🏷️</span>
+              <div class="section-info">
+                <div class="section-info-name">Marcas (banda)</div>
+                <div class="section-info-desc">Slider infinito de marcas</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-marcas" checked />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="section-item">
+              <span class="section-icon">⭐</span>
+              <div class="section-info">
+                <div class="section-info-name">Destacados</div>
+                <div class="section-info-desc">Grilla de productos destacados</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-destacados" checked />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL: TIENDA -->
+      <div class="panel" id="panel-tienda">
+        <div class="field-group">
+          <div class="field-group-title">Información de la tienda</div>
+          <div class="field-row">
+            <label class="field-label">Nombre de la tienda</label>
+            <input type="text" class="field-input" id="store-name" placeholder="BICHITOS SHOP" />
+          </div>
+          <div class="field-row">
+            <label class="field-label">Número de WhatsApp (con código país)</label>
+            <input type="text" class="field-input" id="store-whatsapp" placeholder="5492615081413" />
+          </div>
+          <div class="field-row">
+            <label class="field-label">Ciudad</label>
+            <input type="text" class="field-input" id="store-city" placeholder="Gran Mendoza" />
+          </div>
+          <div class="field-row">
+            <label class="field-label">Horario (Lun-Sáb)</label>
+            <input type="text" class="field-input" id="store-weekdays" placeholder="Lun a Sáb: 9:00 – 20:00" />
+          </div>
+          <div class="field-row">
+            <label class="field-label">Horario (fin de semana)</label>
+            <input type="text" class="field-input" id="store-weekend" placeholder="Dom: cerrado" />
+          </div>
+          <div class="field-row">
+            <label class="field-label">Descripción del footer</label>
+            <input type="text" class="field-input" id="store-tagline" placeholder="Alimentos premium para mascotas en Mendoza" />
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sidebar-body -->
+  </aside>
+
+  <!-- PREVIEW -->
+  <div class="preview-area" id="previewArea">
+    <div class="preview-wrapper desktop" id="previewWrapper">
+      <iframe class="preview-iframe" id="previewFrame" src="../index.html" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+    </div>
+  </div>
+
+</div><!-- /editor-layout -->
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div style="text-align:center;">
+    <div class="spinner-ring"></div>
+    <p style="margin-top:14px;font-weight:600;color:#475569;" id="loadingMsg">Guardando...</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================
+// BICHITOS SHOP — Editor Visual
+// ============================================
+
+const GITHUB_OWNER  = 'bichitosshop';
+const GITHUB_REPO   = 'bichitosonline';
+const GITHUB_BRANCH = 'main';
+const CONFIG_PATH   = 'site-config.json';
+const IMAGES_PATH   = 'images/editor';
+
+// ── State ─────────────────────────────────────────────────────────────
+let token = '';
+let config = null;
+let history = [];   // undo stack (up to 20 states)
+let saving = false;
+
+// ── PRESETS ──────────────────────────────────────────────────────────
+const PRESETS = [
+  { name: 'Original',   colorPrimary:'#1B3B5A', colorAccent:'#FF6B35', colorTeal:'#2EC4B6', colorBackground:'#FFFDF7' },
+  { name: 'Nocturno',   colorPrimary:'#0f172a', colorAccent:'#f59e0b', colorTeal:'#06b6d4', colorBackground:'#1e293b' },
+  { name: 'Rosa',       colorPrimary:'#6b21a8', colorAccent:'#ec4899', colorTeal:'#a855f7', colorBackground:'#fdf4ff' },
+  { name: 'Bosque',     colorPrimary:'#14532d', colorAccent:'#16a34a', colorTeal:'#4ade80', colorBackground:'#f0fdf4' },
+];
+
+// ── AUTH ──────────────────────────────────────────────────────────────
+function checkAuth() {
+  token = localStorage.getItem('bichitos_admin_token') || '';
+  if (token) {
+    document.getElementById('noAuth').style.display = 'none';
+    initEditor();
+  }
+}
+
+document.getElementById('authBtn').addEventListener('click', () => {
+  const val = document.getElementById('authToken').value.trim();
+  if (!val) return;
+  token = val;
+  localStorage.setItem('bichitos_admin_token', token);
+  document.getElementById('noAuth').style.display = 'none';
+  initEditor();
+});
+document.getElementById('authToken').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('authBtn').click();
+});
+
+// ── GITHUB API ────────────────────────────────────────────────────────
+async function ghGet(path) {
+  const r = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}?ref=${GITHUB_BRANCH}`, {
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
+  });
+  if (!r.ok) throw new Error('GitHub GET failed: ' + r.status);
+  return r.json();
+}
+
+async function ghPut(path, content, sha, message) {
+  const body = { message, content: btoa(unescape(encodeURIComponent(content))), branch: GITHUB_BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    throw new Error(err.message || 'GitHub PUT failed: ' + r.status);
+  }
+  return r.json();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+async function initEditor() {
+  showLoading('Cargando configuración...');
+  try {
+    const data = await ghGet(CONFIG_PATH);
+    config = JSON.parse(decodeURIComponent(escape(atob(data.content.replace(/\n/g, '')))));
+  } catch {
+    config = getDefaultConfig();
+    toast('Usando configuración por defecto', 'error');
+  }
+  hideLoading();
+  buildPresets();
+  bindColorPickers();
+  bindSliders();
+  bindFontSelector();
+  bindSectionToggles();
+  bindStoreFields();
+  bindBannerPanel();
+  bindExportImport();
+  bindDeviceButtons();
+  bindUndo();
+  loadFormValues();
+  refreshPreview();
+}
+
+function getDefaultConfig() {
+  return {
+    version: '1.0',
+    theme: { colorPrimary:'#1B3B5A', colorAccent:'#FF6B35', colorTeal:'#2EC4B6', colorBackground:'#FFFDF7', borderRadius:'12', fontFamily:'Inter' },
+    banners: [
+      { id:'b1', active:true, image:'https://i.ibb.co/fYqNpSTX/BANNER-SLIDE1.jpg', title:'', subtitle:'', ctaText:'', ctaLink:'productos.html' },
+      { id:'b2', active:true, image:'https://i.ibb.co/60YjqRWt/BANNER-SLIDE2.jpg', title:'', subtitle:'', ctaText:'', ctaLink:'productos.html' },
+      { id:'b3', active:true, image:'https://i.ibb.co/DHFZ0tQv/BANNER-SLIDE3.jpg', title:'', subtitle:'', ctaText:'', ctaLink:'productos.html' },
+    ],
+    sections: { categorias:true, marcas:true, destacados:true },
+    store: { name:'BICHITOS SHOP', whatsapp:'5492615081413', city:'Gran Mendoza', scheduleWeekdays:'Lun a Sáb: 9:00 – 20:00', scheduleWeekend:'Dom: cerrado', footerTagline:'Alimentos y accesorios premium para mascotas en Mendoza', copyright:'2026 BICHITOS SHOP — Mendoza, Argentina' }
+  };
+}
+
+// ── PRESETS ──────────────────────────────────────────────────────────
+function buildPresets() {
+  const grid = document.getElementById('presetsGrid');
+  grid.innerHTML = PRESETS.map((p, i) => `
+    <button class="preset-btn${matchesPreset(p) ? ' active' : ''}" data-preset="${i}">
+      <div class="preset-swatch">
+        <div class="preset-dot" style="background:${p.colorPrimary}"></div>
+        <div class="preset-dot" style="background:${p.colorAccent}"></div>
+        <div class="preset-dot" style="background:${p.colorTeal}"></div>
+      </div>
+      <span class="preset-name">${p.name}</span>
+    </button>
+  `).join('');
+  grid.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = PRESETS[+btn.dataset.preset];
+      pushHistory();
+      config.theme.colorPrimary   = p.colorPrimary;
+      config.theme.colorAccent    = p.colorAccent;
+      config.theme.colorTeal      = p.colorTeal;
+      config.theme.colorBackground = p.colorBackground;
+      loadFormValues();
+      refreshPreview();
+      grid.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+}
+
+function matchesPreset(p) {
+  return config?.theme?.colorPrimary === p.colorPrimary &&
+         config?.theme?.colorAccent  === p.colorAccent;
+}
+
+// ── COLOR PICKERS ─────────────────────────────────────────────────────
+const COLOR_FIELDS = ['colorPrimary','colorAccent','colorTeal','colorBackground'];
+
+function bindColorPickers() {
+  COLOR_FIELDS.forEach(field => {
+    const picker = document.getElementById('pick-' + field);
+    const hex    = document.getElementById('hex-' + field);
+    const swatch = document.getElementById('swatch-' + field);
+
+    picker.addEventListener('input', () => {
+      hex.value = picker.value;
+      updateSwatch(field, picker.value);
+      pushHistoryDebounced();
+      config.theme[field] = picker.value;
+      refreshPreview();
+    });
+
+    hex.addEventListener('input', () => {
+      const val = hex.value.trim();
+      if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+        picker.value = val;
+        updateSwatch(field, val);
+        pushHistoryDebounced();
+        config.theme[field] = val;
+        refreshPreview();
+      }
+    });
+  });
+}
+
+function updateSwatch(field, color) {
+  const sw = document.getElementById('swatch-' + field);
+  if (sw) sw.style.background = color;
+}
+
+// ── SLIDERS ───────────────────────────────────────────────────────────
+function bindSliders() {
+  const range = document.getElementById('range-borderRadius');
+  const val   = document.getElementById('rangeVal-borderRadius');
+  range.addEventListener('input', () => {
+    val.textContent = range.value + 'px';
+    pushHistoryDebounced();
+    config.theme.borderRadius = range.value;
+    refreshPreview();
+  });
+}
+
+// ── FONT ──────────────────────────────────────────────────────────────
+function bindFontSelector() {
+  document.getElementById('sel-fontFamily').addEventListener('change', e => {
+    pushHistory();
+    config.theme.fontFamily = e.target.value;
+    refreshPreview();
+  });
+}
+
+// ── SECTION TOGGLES ───────────────────────────────────────────────────
+function bindSectionToggles() {
+  ['categorias','marcas','destacados'].forEach(sec => {
+    document.getElementById('toggle-' + sec).addEventListener('change', e => {
+      pushHistory();
+      config.sections[sec] = e.target.checked;
+      refreshPreview();
+    });
+  });
+}
+
+// ── STORE FIELDS ──────────────────────────────────────────────────────
+function bindStoreFields() {
+  const map = {
+    'store-name':'name', 'store-whatsapp':'whatsapp', 'store-city':'city',
+    'store-weekdays':'scheduleWeekdays', 'store-weekend':'scheduleWeekend',
+    'store-tagline':'footerTagline'
+  };
+  Object.entries(map).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      pushHistoryDebounced();
+      config.store[key] = el.value;
+      refreshPreview();
+    });
+  });
+}
+
+// ── LOAD FORM VALUES ──────────────────────────────────────────────────
+function loadFormValues() {
+  // Colors
+  COLOR_FIELDS.forEach(field => {
+    const v = config.theme[field] || '';
+    const picker = document.getElementById('pick-' + field);
+    const hex    = document.getElementById('hex-' + field);
+    picker.value = v;
+    hex.value    = v;
+    updateSwatch(field, v);
+  });
+  // Border radius
+  const br = config.theme.borderRadius || '12';
+  document.getElementById('range-borderRadius').value = br;
+  document.getElementById('rangeVal-borderRadius').textContent = br + 'px';
+  // Font
+  document.getElementById('sel-fontFamily').value = config.theme.fontFamily || 'Inter';
+  // Sections
+  ['categorias','marcas','destacados'].forEach(sec => {
+    document.getElementById('toggle-' + sec).checked = config.sections[sec] !== false;
+  });
+  // Store
+  const s = config.store || {};
+  document.getElementById('store-name').value     = s.name || '';
+  document.getElementById('store-whatsapp').value = s.whatsapp || '';
+  document.getElementById('store-city').value     = s.city || '';
+  document.getElementById('store-weekdays').value = s.scheduleWeekdays || '';
+  document.getElementById('store-weekend').value  = s.scheduleWeekend || '';
+  document.getElementById('store-tagline').value  = s.footerTagline || '';
+  // Banners
+  renderBannerList();
+}
+
+// ── BANNER PANEL ──────────────────────────────────────────────────────
+function bindBannerPanel() {
+  document.getElementById('btnAddBanner').addEventListener('click', () => {
+    pushHistory();
+    const id = 'b' + Date.now();
+    config.banners.push({ id, active:true, image:'', title:'', subtitle:'', ctaText:'', ctaLink:'productos.html' });
+    renderBannerList();
+    refreshPreview();
+  });
+}
+
+function renderBannerList() {
+  const list = document.getElementById('bannerList');
+  list.innerHTML = '';
+  config.banners.forEach((b, idx) => {
+    const item = document.createElement('div');
+    item.className = 'banner-item';
+    item.dataset.idx = idx;
+
+    const thumbSrc = b.image || '';
+    item.innerHTML = `
+      <div class="banner-header">
+        <img class="banner-thumb" src="${thumbSrc || ''}" alt=""
+          onerror="this.style.background='#f0f4f8';this.removeAttribute('src')" />
+        <span class="banner-name">Banner ${idx + 1}${b.title ? ' — ' + b.title : ''}</span>
+        <button class="banner-toggle-btn" data-active="${b.active}">${b.active ? 'Activo' : 'Oculto'}</button>
+      </div>
+      <div class="banner-body">
+        <div class="field-row">
+          <label class="field-label">Imagen (URL directa)</label>
+          <input type="text" class="field-input banner-img-url" value="${b.image || ''}" placeholder="https://i.ibb.co/..." />
+        </div>
+        <label class="upload-area">
+          <input type="file" accept="image/*" class="banner-file-input" />
+          <div style="font-size:1.2rem;">📁</div>
+          <p>O subir desde el dispositivo</p>
+        </label>
+        <img class="banner-img-preview" src="${b.image || ''}" alt=""
+          onerror="this.style.opacity='0.2'" style="${b.image ? '' : 'opacity:0.2'}" />
+        <div class="field-row">
+          <label class="field-label">Título (opcional)</label>
+          <input type="text" class="field-input banner-title" value="${b.title || ''}" placeholder="Ej: Nuevas llegadas" />
+        </div>
+        <div class="field-row">
+          <label class="field-label">Subtítulo (opcional)</label>
+          <input type="text" class="field-input banner-subtitle" value="${b.subtitle || ''}" placeholder="Ej: Descuentos de temporada" />
+        </div>
+        <div class="field-row">
+          <label class="field-label">Link del botón</label>
+          <input type="text" class="field-input banner-link" value="${b.ctaLink || 'productos.html'}" placeholder="productos.html" />
+        </div>
+        <div class="banner-actions">
+          ${idx > 0 ? `<button class="btn-sm btn-up">↑ Subir</button>` : ''}
+          ${idx < config.banners.length - 1 ? `<button class="btn-sm btn-down">↓ Bajar</button>` : ''}
+          <button class="btn-sm danger btn-del">Eliminar</button>
+        </div>
+      </div>`;
+
+    // Toggle header expand
+    item.querySelector('.banner-header').addEventListener('click', e => {
+      if (e.target.classList.contains('banner-toggle-btn')) return;
+      item.classList.toggle('expanded');
+    });
+
+    // Active toggle
+    item.querySelector('.banner-toggle-btn').addEventListener('click', () => {
+      pushHistory();
+      b.active = !b.active;
+      renderBannerList();
+      refreshPreview();
+    });
+
+    // URL input
+    item.querySelector('.banner-img-url').addEventListener('input', e => {
+      pushHistoryDebounced();
+      b.image = e.target.value.trim();
+      const prev = item.querySelector('.banner-img-preview');
+      prev.src = b.image;
+      prev.style.opacity = '1';
+      item.querySelector('.banner-thumb').src = b.image;
+      refreshPreview();
+    });
+
+    // File upload
+    item.querySelector('.banner-file-input').addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      showLoading('Subiendo imagen...');
+      try {
+        const url = await subirImagen(file, 'banner_' + b.id);
+        b.image = url;
+        item.querySelector('.banner-img-url').value = url;
+        item.querySelector('.banner-img-preview').src = url;
+        item.querySelector('.banner-img-preview').style.opacity = '1';
+        item.querySelector('.banner-thumb').src = url;
+        pushHistory();
+        refreshPreview();
+        toast('Imagen subida', 'success');
+      } catch (err) {
+        toast('Error subiendo imagen: ' + err.message, 'error');
+      } finally {
+        hideLoading();
+      }
+    });
+
+    // Title
+    item.querySelector('.banner-title').addEventListener('input', e => {
+      pushHistoryDebounced();
+      b.title = e.target.value;
+    });
+    // Subtitle
+    item.querySelector('.banner-subtitle').addEventListener('input', e => {
+      pushHistoryDebounced();
+      b.subtitle = e.target.value;
+    });
+    // Link
+    item.querySelector('.banner-link').addEventListener('input', e => {
+      pushHistoryDebounced();
+      b.ctaLink = e.target.value;
+      refreshPreview();
+    });
+
+    // Move up
+    item.querySelector('.btn-up')?.addEventListener('click', () => {
+      pushHistory();
+      [config.banners[idx-1], config.banners[idx]] = [config.banners[idx], config.banners[idx-1]];
+      renderBannerList();
+      refreshPreview();
+    });
+    // Move down
+    item.querySelector('.btn-down')?.addEventListener('click', () => {
+      pushHistory();
+      [config.banners[idx+1], config.banners[idx]] = [config.banners[idx], config.banners[idx+1]];
+      renderBannerList();
+      refreshPreview();
+    });
+    // Delete
+    item.querySelector('.btn-del').addEventListener('click', () => {
+      if (!confirm('¿Eliminar este banner?')) return;
+      pushHistory();
+      config.banners.splice(idx, 1);
+      renderBannerList();
+      refreshPreview();
+    });
+
+    list.appendChild(item);
+  });
+}
+
+// ── IMAGE UPLOAD TO GITHUB ────────────────────────────────────────────
+function comprimirImagen(file, maxPx = 1200, calidad = 0.85) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxPx || height > maxPx) {
+          const ratio = Math.min(maxPx / width, maxPx / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Compresión falló')), 'image/jpeg', calidad);
+      };
+      img.onerror = () => reject(new Error('Imagen inválida'));
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function subirImagen(file, nombre) {
+  const blob = await comprimirImagen(file);
+  const arrayBuffer = await blob.arrayBuffer();
+  const bytes = new Uint8Array(arrayBuffer);
+  let binary = '';
+  bytes.forEach(b => binary += String.fromCharCode(b));
+  const base64 = btoa(binary);
+  const filename = `${nombre}_${Date.now()}.jpg`;
+  const path = `${IMAGES_PATH}/${filename}`;
+  await ghPut(path, atob(base64), null, `Editor: subir imagen ${filename}`);
+  return `https://${GITHUB_OWNER}.github.io/${GITHUB_REPO}/${path}`;
+}
+
+// ── SAVE ──────────────────────────────────────────────────────────────
+document.getElementById('btnSave').addEventListener('click', guardar);
+
+async function guardar() {
+  if (saving) return;
+  saving = true;
+  const btn = document.getElementById('btnSave');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+  showLoading('Guardando en GitHub...');
+  try {
+    let sha = null;
+    try {
+      const existing = await ghGet(CONFIG_PATH);
+      sha = existing.sha;
+    } catch {}
+    const json = JSON.stringify(config, null, 2);
+    await ghPut(CONFIG_PATH, json, sha, `Editor: actualizar configuración (${new Date().toLocaleString('es-AR')})`);
+    toast('Cambios guardados. El sitio se actualiza en ~30s.', 'success');
+  } catch (err) {
+    toast('Error al guardar: ' + err.message, 'error');
+  } finally {
+    saving = false;
+    btn.disabled = false;
+    btn.textContent = 'Guardar cambios';
+    hideLoading();
+  }
+}
+
+// ── PREVIEW ───────────────────────────────────────────────────────────
+let previewTimeout = null;
+function refreshPreview() {
+  clearTimeout(previewTimeout);
+  previewTimeout = setTimeout(() => {
+    const frame = document.getElementById('previewFrame');
+    try {
+      frame.contentWindow.postMessage({ type: 'BICHITOS_CONFIG', config }, '*');
+    } catch {}
+  }, 150);
+}
+
+// ── DEVICE BUTTONS ────────────────────────────────────────────────────
+function bindDeviceButtons() {
+  document.querySelectorAll('.device-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const wrapper = document.getElementById('previewWrapper');
+      wrapper.className = 'preview-wrapper ' + btn.dataset.device;
+    });
+  });
+}
+
+// ── UNDO ──────────────────────────────────────────────────────────────
+function pushHistory() {
+  history.push(JSON.stringify(config));
+  if (history.length > 20) history.shift();
+  document.getElementById('btnUndo').disabled = false;
+}
+
+let historyDebounceTimer = null;
+function pushHistoryDebounced() {
+  clearTimeout(historyDebounceTimer);
+  historyDebounceTimer = setTimeout(pushHistory, 600);
+}
+
+function bindUndo() {
+  document.getElementById('btnUndo').addEventListener('click', () => {
+    if (history.length === 0) return;
+    config = JSON.parse(history.pop());
+    if (history.length === 0) document.getElementById('btnUndo').disabled = true;
+    loadFormValues();
+    refreshPreview();
+    toast('Cambio deshecho');
+  });
+}
+
+// ── EXPORT / IMPORT ───────────────────────────────────────────────────
+function bindExportImport() {
+  document.getElementById('btnExport').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'site-config.json';
+    a.click();
+    toast('Config exportada');
+  });
+
+  document.getElementById('importFile').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        pushHistory();
+        config = imported;
+        loadFormValues();
+        refreshPreview();
+        toast('Config importada', 'success');
+      } catch {
+        toast('Archivo JSON inválido', 'error');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+}
+
+// ── SIDEBAR TABS ──────────────────────────────────────────────────────
+document.querySelectorAll('.sidebar-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// ── TOAST ─────────────────────────────────────────────────────────────
+let toastTimer = null;
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+// ── LOADING ───────────────────────────────────────────────────────────
+function showLoading(msg = 'Cargando...') {
+  document.getElementById('loadingMsg').textContent = msg;
+  document.getElementById('loadingOverlay').classList.add('show');
+}
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('show');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────
+checkAuth();
+
+// Escuchar mensajes del iframe para aplicar config en tiempo real
+window.addEventListener('message', e => {
+  if (e.data?.type === 'BICHITOS_READY') refreshPreview();
+});
+</script>
+</body>
+</html>
