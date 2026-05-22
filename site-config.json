@@ -83,7 +83,7 @@
     "width": 80,
     "blur": 0
   },
-  "logoImage": "",
+  "logoImage": "https://bichitosshop.github.io/bichitosonline/images/editor/logo_1779451879907.jpg",
   "elements": {
     "logo-bichitos": {
       "image": "https://bichitosshop.github.io/bichitosonline/images/editor/elem_logo-bichitos_1779451835205.jpg",
@@ -125,7 +125,7 @@
     }
   ],
   "store": {
-    "name": "BICHITOS SHOP",
+    "name": "BICHITOS SHOP ",
     "whatsapp": "5492615081413",
     "city": "Gran Mendoza",
     "scheduleWeekdays": "Lun a Sáb: 9:00 – 20:00",
