@@ -1,7 +1,7 @@
 // ============================================
-// BICHITOS SHOP — Config Loader v2
-// Lee site-config.json y aplica tema, tipografía, botones,
-// tamaños, secciones y banners al sitio en tiempo real.
+// BICHITOS SHOP — Config Loader v3
+// Aplica tema, tipografía, botones, elementos,
+// título-línea, marcas y modo edición visual.
 // ============================================
 
 window.siteConfig = null;
@@ -22,65 +22,48 @@ function aplicarConfig() {
     aplicarTema();
     aplicarBotones();
     aplicarTamanios();
+    aplicarTitleLine();
+    aplicarElementos();
     aplicarSecciones();
     aplicarOrdenSecciones();
     aplicarStore();
     aplicarBanners();
+    aplicarBrands();
 }
 
-// ── Tema: variables CSS + fuente dinámica ──────────────────────────────
+// ── Tema ──────────────────────────────────────────────────────────────
 function aplicarTema() {
     const cfg = window.siteConfig?.theme;
     if (!cfg) return;
     const root = document.documentElement;
-
     if (cfg.colorPrimary)    root.style.setProperty('--blue',   cfg.colorPrimary);
     if (cfg.colorAccent)     root.style.setProperty('--orange', cfg.colorAccent);
     if (cfg.colorTeal)       root.style.setProperty('--teal',   cfg.colorTeal);
     if (cfg.colorBackground) root.style.setProperty('--cream',  cfg.colorBackground);
     if (cfg.borderRadius)    root.style.setProperty('--radius-sm', cfg.borderRadius + 'px');
-
     if (cfg.fontFamily) {
-        // Cargar Google Font dinámicamente
-        let link = document.getElementById('cfg-google-font');
-        if (!link) {
-            link = document.createElement('link');
-            link.id = 'cfg-google-font';
-            link.rel = 'stylesheet';
-            document.head.appendChild(link);
-        }
-        const fam = cfg.fontFamily.replace(/ /g, '+');
-        link.href = `https://fonts.googleapis.com/css2?family=${fam}:wght@400;500;600;700;800;900&display=swap`;
+        ensureFont(cfg.fontFamily);
         root.style.setProperty('--font', `'${cfg.fontFamily}', -apple-system, BlinkMacSystemFont, sans-serif`);
     }
 }
 
-// ── Botones: inyecta CSS + actualiza textos ────────────────────────────
+// ── Botones ───────────────────────────────────────────────────────────
 function aplicarBotones() {
     const btns = window.siteConfig?.buttons;
     document.getElementById('cfg-btn-styles')?.remove();
     if (!btns) return;
-
     const css = [];
 
-    // Botón "Agregar"
     if (btns.addToCart) {
         const b = btns.addToCart;
         const props = [];
-        if (b.bg)         props.push(`background: ${b.bg} !important`);
-        if (b.color)      props.push(`color: ${b.color} !important`);
+        if (b.bg)       props.push(`background: ${b.bg} !important`);
+        if (b.color)    props.push(`color: ${b.color} !important`);
         if (b.radius !== undefined) props.push(`border-radius: ${b.radius}px !important`);
-        if (b.paddingV)   props.push(`padding-top: ${b.paddingV}px !important; padding-bottom: ${b.paddingV}px !important`);
+        if (b.paddingV) props.push(`padding-top: ${b.paddingV}px !important; padding-bottom: ${b.paddingV}px !important`);
         if (props.length) css.push(`.btn-add-cart { ${props.join('; ')} }`);
-        // Actualizar texto en botones ya renderizados
-        if (b.text) {
-            document.querySelectorAll('.btn-add-cart .btn-text').forEach(el => {
-                el.textContent = b.text;
-            });
-        }
+        if (b.text) document.querySelectorAll('.btn-add-cart .btn-text').forEach(el => { el.textContent = b.text; });
     }
-
-    // Botón "Enviar pedido por WhatsApp" (carrito)
     if (btns.cartSend) {
         const b = btns.cartSend;
         const props = [];
@@ -88,12 +71,8 @@ function aplicarBotones() {
         if (b.color)  props.push(`color: ${b.color} !important`);
         if (b.radius !== undefined) props.push(`border-radius: ${b.radius}px !important`);
         if (props.length) css.push(`.btn-cart-send { ${props.join('; ')} }`);
-        if (b.text) {
-            document.querySelectorAll('.btn-cart-send').forEach(el => { el.textContent = b.text; });
-        }
+        if (b.text) document.querySelectorAll('.btn-cart-send').forEach(el => { el.textContent = b.text; });
     }
-
-    // Botón Checkout
     if (btns.checkout) {
         const b = btns.checkout;
         const props = [];
@@ -104,83 +83,153 @@ function aplicarBotones() {
         const el = document.getElementById('checkoutSubmit');
         if (el && b.text) el.textContent = b.text;
     }
-
-    if (css.length > 0) {
-        const style = document.createElement('style');
-        style.id = 'cfg-btn-styles';
-        style.textContent = css.join('\n');
-        document.head.appendChild(style);
+    if (css.length) {
+        const s = document.createElement('style');
+        s.id = 'cfg-btn-styles';
+        s.textContent = css.join('\n');
+        document.head.appendChild(s);
     }
 }
 
-// ── Tamaños: hero height, product image height ─────────────────────────
+// ── Tamaños ───────────────────────────────────────────────────────────
 function aplicarTamanios() {
     const sizes = window.siteConfig?.sizes;
     document.getElementById('cfg-size-styles')?.remove();
     if (!sizes) return;
-
     const css = [];
-
     if (sizes.heroHeight) {
         const h = parseInt(sizes.heroHeight);
-        const hMid = Math.round(h * 0.72);
-        const hSm  = Math.round(h * 0.25);
         css.push(`@media (min-width: 1024px) { .hero-carousel { height: ${h}px !important; } }`);
-        css.push(`@media (min-width: 768px) and (max-width: 1023px) { .hero-carousel { height: ${hMid}px !important; } }`);
-        css.push(`@media (max-width: 767px) { .hero-carousel { height: ${hSm}px !important; } }`);
+        css.push(`@media (min-width: 768px) and (max-width: 1023px) { .hero-carousel { height: ${Math.round(h*.72)}px !important; } }`);
+        css.push(`@media (max-width: 767px) { .hero-carousel { height: ${Math.round(h*.25)}px !important; } }`);
     }
-
     if (sizes.productImageHeight) {
         css.push(`.producto-img { height: ${sizes.productImageHeight}px !important; aspect-ratio: unset !important; }`);
     }
-
-    if (css.length > 0) {
-        const style = document.createElement('style');
-        style.id = 'cfg-size-styles';
-        style.textContent = css.join('\n');
-        document.head.appendChild(style);
+    if (css.length) {
+        const s = document.createElement('style');
+        s.id = 'cfg-size-styles';
+        s.textContent = css.join('\n');
+        document.head.appendChild(s);
     }
+}
+
+// ── Línea decorativa de títulos ───────────────────────────────────────
+function aplicarTitleLine() {
+    const tl = window.siteConfig?.titleLine;
+    document.getElementById('cfg-title-line')?.remove();
+    const stops = tl?.stops?.length ? tl.stops : ['#FF6B35', '#f1c40f', '#2EC4B6'];
+    const dir   = tl?.direction ?? 90;
+    const h     = tl?.height ?? 4;
+    const w     = tl?.width  ?? 80;
+    const blur  = tl?.blur   ?? 0;
+    const grad  = `linear-gradient(${dir}deg, ${stops.join(', ')})`;
+    const s = document.createElement('style');
+    s.id = 'cfg-title-line';
+    s.textContent = `.section-title::after { background: ${grad} !important; height: ${h}px !important; width: ${w}px !important; ${blur > 0 ? `filter: blur(${blur}px) !important;` : ''} }`;
+    document.head.appendChild(s);
+}
+
+// ── Estilos por elemento ──────────────────────────────────────────────
+function aplicarElementos() {
+    const elements = window.siteConfig?.elements;
+    document.getElementById('cfg-element-styles')?.remove();
+    if (!elements || !Object.keys(elements).length) return;
+
+    const css = [];
+    const BP = { desktop:'(min-width: 1024px)', tablet:'(min-width: 768px) and (max-width: 1023px)', mobile:'(max-width: 767px)' };
+
+    Object.entries(elements).forEach(([id, cfg]) => {
+        if (!cfg) return;
+        // Actualizar texto del elemento
+        if (cfg.text !== undefined) {
+            document.querySelectorAll(`[data-edit-id="${id}"]`).forEach(el => {
+                if (el.children.length === 0) el.textContent = cfg.text;
+                else el.setAttribute('data-display-text', cfg.text);
+            });
+        }
+        // Estilos base
+        const base = propsToCSS(cfg.styles || {});
+        if (base) css.push(`[data-edit-id="${id}"] { ${base} }`);
+        // Estilos responsive
+        if (cfg.responsive) {
+            Object.entries(cfg.responsive).forEach(([bp, styles]) => {
+                const mq = BP[bp]; if (!mq) return;
+                const props = propsToCSS(styles);
+                if (props) css.push(`@media ${mq} { [data-edit-id="${id}"] { ${props} } }`);
+            });
+        }
+        // Font para ese elemento
+        if (cfg.styles?.fontFamily) ensureFont(cfg.styles.fontFamily);
+        // Posición para FABs (position:fixed elements)
+        if (cfg.position) {
+            const p = cfg.position;
+            const fabProps = [];
+            if (p.bottom !== undefined) { fabProps.push(`bottom: ${p.bottom}px`); fabProps.push(`top: auto`); }
+            if (p.top    !== undefined) { fabProps.push(`top: ${p.top}px`);       fabProps.push(`bottom: auto`); }
+            if (p.right  !== undefined) { fabProps.push(`right: ${p.right}px`);   fabProps.push(`left: auto`); }
+            if (p.left   !== undefined) { fabProps.push(`left: ${p.left}px`);     fabProps.push(`right: auto`); }
+            if (fabProps.length) css.push(`[data-edit-id="${id}"] { ${fabProps.join(';')} !important; }`);
+        }
+        // Tamaño para FABs
+        if (cfg.size) {
+            css.push(`[data-edit-id="${id}"] { width: ${cfg.size}px !important; height: ${cfg.size}px !important; font-size: ${Math.round(cfg.size * 0.42)}px !important; }`);
+        }
+    });
+
+    if (css.length) {
+        const s = document.createElement('style');
+        s.id = 'cfg-element-styles';
+        s.textContent = css.join('\n');
+        document.head.appendChild(s);
+    }
+}
+
+function propsToCSS(styles) {
+    if (!styles) return '';
+    const p = [];
+    if (styles.color)         p.push(`color: ${styles.color} !important`);
+    if (styles.fontSize)      p.push(`font-size: ${styles.fontSize}px !important`);
+    if (styles.fontFamily)    p.push(`font-family: '${styles.fontFamily}', sans-serif !important`);
+    if (styles.textAlign)     p.push(`text-align: ${styles.textAlign} !important`);
+    if (styles.fontWeight)    p.push(`font-weight: ${styles.fontWeight} !important`);
+    if (styles.letterSpacing) p.push(`letter-spacing: ${styles.letterSpacing}px !important`);
+    if (styles.background)    p.push(`background: ${styles.background} !important`);
+    if (styles.opacity !== undefined) p.push(`opacity: ${styles.opacity} !important`);
+    return p.join('; ');
 }
 
 // ── Secciones: mostrar/ocultar ─────────────────────────────────────────
 function aplicarSecciones() {
     const sec = window.siteConfig?.sections;
     if (!sec) return;
-    const toggle = (selector, visible) => {
-        const el = document.querySelector(selector);
-        if (el) el.style.display = visible ? '' : 'none';
-    };
+    const toggle = (sel, vis) => { const el = document.querySelector(sel); if (el) el.style.display = vis ? '' : 'none'; };
     toggle('.categorias',     sec.categorias    !== false);
     toggle('.marcas-section', sec.marcas        !== false);
     toggle('.destacados',     sec.destacados    !== false);
 }
 
-// ── Orden de secciones: reordena el DOM ────────────────────────────────
+// ── Orden de secciones ────────────────────────────────────────────────
 function aplicarOrdenSecciones() {
     const order = window.siteConfig?.sectionsOrder;
     const main  = document.getElementById('main');
-    if (!order || !main || order.length === 0) return;
-
+    if (!order || !main) return;
     const map = {
         categorias: main.querySelector('.categorias'),
         marcas:     main.querySelector('.marcas-section'),
         destacados: main.querySelector('.destacados'),
     };
-    // appendChild mueve nodos existentes — perfecto para reordenar
-    order.forEach(key => { if (map[key]) main.appendChild(map[key]); });
+    order.forEach(k => { if (map[k]) main.appendChild(map[k]); });
 }
 
-// ── Store info: footer, WhatsApp ───────────────────────────────────────
+// ── Store info ────────────────────────────────────────────────────────
 function aplicarStore() {
     const s = window.siteConfig?.store;
     if (!s) return;
-
     const tagline = document.querySelector('.footer-grid > div:first-child p');
     if (tagline && s.footerTagline) tagline.textContent = s.footerTagline;
-
     const copy = document.querySelector('.footer-bottom p');
     if (copy && s.copyright) copy.textContent = '© ' + s.copyright;
-
     if (s.whatsapp) {
         document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
             a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + s.whatsapp);
@@ -188,32 +237,167 @@ function aplicarStore() {
     }
 }
 
-// ── Banners: reconstruye el carrusel ──────────────────────────────────
+// ── Banners ───────────────────────────────────────────────────────────
 function aplicarBanners() {
     const banners = window.siteConfig?.banners;
     const track   = document.getElementById('carouselTrack');
-    if (!track || !banners || banners.length === 0) return;
-
+    if (!track || !banners?.length) return;
     const activos = banners.filter(b => b.active !== false);
-    if (activos.length === 0) return;
-
+    if (!activos.length) return;
     track.innerHTML = activos.map(b =>
         `<div class="carousel-slide" style="background:url('${b.image}') center/cover no-repeat;" data-banner-id="${b.id}"></div>`
     ).join('');
 }
 
-// ── postMessage: actualización en vivo desde el editor ────────────────
+// ── Brands: chips con logo opcional ──────────────────────────────────
+function aplicarBrands() {
+    const brands = window.siteConfig?.brands;
+    const track  = document.getElementById('marcasTrack');
+    if (!track) return;
+
+    // Solo reconstruir si hay config de marcas
+    if (!brands?.length) return;
+
+    // Inyectar CSS para chips con logo si no existe
+    if (!document.getElementById('cfg-brand-css')) {
+        const s = document.createElement('style');
+        s.id = 'cfg-brand-css';
+        s.textContent = `
+          .marca-chip-link { text-decoration: none; }
+          .marca-chip-logo { display: inline-flex; align-items: center; gap: 6px; }
+          .marca-chip-logo img { height: 22px; width: auto; object-fit: contain; vertical-align: middle; }
+        `;
+        document.head.appendChild(s);
+    }
+
+    function chipHTML(b) {
+        const inner = b.logo
+            ? `<span class="marca-chip marca-chip-logo"><img src="${b.logo}" alt="${b.name}" loading="lazy" onerror="this.style.display='none'" />${b.name}</span>`
+            : `<span class="marca-chip">${b.name}</span>`;
+        return b.link ? `<a class="marca-chip-link" href="${b.link}">${inner}</a>` : inner;
+    }
+
+    const html = brands.map(chipHTML).join('');
+    track.innerHTML = html + html; // duplicar para marquee infinito
+}
+
+// ── Fuente dinámica ───────────────────────────────────────────────────
+function ensureFont(fontFamily) {
+    if (!fontFamily || fontFamily === 'Inter') return;
+    const id = 'cfg-font-' + fontFamily.replace(/\s+/g, '-').toLowerCase();
+    if (document.getElementById(id)) return;
+    const link = document.createElement('link');
+    link.id = id;
+    link.rel = 'stylesheet';
+    link.href = `https://fonts.googleapis.com/css2?family=${fontFamily.replace(/ /g,'+')}:wght@400;500;600;700;800;900&display=swap`;
+    document.head.appendChild(link);
+}
+
+// ── MODO EDICIÓN VISUAL ───────────────────────────────────────────────
+let _editActive = false;
+
+const EDIT_CSS = `
+  body.edit-active [data-edit-id] {
+    outline: 2px dashed rgba(255,107,53,0.45) !important;
+    outline-offset: 3px !important;
+    cursor: pointer !important;
+    transition: outline-color 0.15s !important;
+  }
+  body.edit-active [data-edit-id]:hover {
+    outline: 2.5px solid #FF6B35 !important;
+    background-color: rgba(255,107,53,0.04) !important;
+  }
+  body.edit-active [data-edit-id].edit-sel {
+    outline: 3px solid #FF6B35 !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 0 7px rgba(255,107,53,0.12) !important;
+  }
+  body.edit-active * { user-select: none; }
+`;
+
+function enableEditMode() {
+    _editActive = true;
+    document.body.classList.add('edit-active');
+    if (!document.getElementById('cfg-edit-css')) {
+        const s = document.createElement('style');
+        s.id = 'cfg-edit-css';
+        s.textContent = EDIT_CSS;
+        document.head.appendChild(s);
+    }
+    document.querySelectorAll('[data-edit-id]').forEach(el => {
+        el.addEventListener('click', _editClickHandler, true);
+    });
+}
+
+function disableEditMode() {
+    _editActive = false;
+    document.body.classList.remove('edit-active');
+    document.querySelectorAll('[data-edit-id]').forEach(el => {
+        el.removeEventListener('click', _editClickHandler, true);
+        el.classList.remove('edit-sel');
+    });
+}
+
+function _editClickHandler(e) {
+    if (!_editActive) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const el      = this;
+    const editId  = el.dataset.editId;
+    const editType= el.dataset.editType || 'text';
+
+    document.querySelectorAll('[data-edit-id].edit-sel').forEach(x => x.classList.remove('edit-sel'));
+    el.classList.add('edit-sel');
+
+    const comp = window.getComputedStyle(el);
+    const savedEl = window.siteConfig?.elements?.[editId] || {};
+
+    const info = {
+        editId,
+        type: editType,
+        text: savedEl.text ?? el.textContent.trim(),
+        styles: {
+            color:         savedEl.styles?.color         || _rgbToHex(comp.color) || '',
+            fontSize:      savedEl.styles?.fontSize      || Math.round(parseFloat(comp.fontSize)) || '',
+            fontFamily:    savedEl.styles?.fontFamily    || comp.fontFamily?.split(',')[0]?.trim().replace(/['"]/g,'') || '',
+            textAlign:     savedEl.styles?.textAlign     || comp.textAlign || '',
+            fontWeight:    savedEl.styles?.fontWeight    || comp.fontWeight || '',
+            letterSpacing: savedEl.styles?.letterSpacing ?? parseFloat(comp.letterSpacing) || 0,
+            background:    savedEl.styles?.background    || '',
+        },
+        responsive: savedEl.responsive || {},
+        position: savedEl.position || null,
+        size:     savedEl.size     || null,
+    };
+
+    if (window.parent !== window) {
+        window.parent.postMessage({ type: 'BICHITOS_ELEMENT_SELECTED', info }, '*');
+    }
+}
+
+function _rgbToHex(rgb) {
+    if (!rgb || rgb === 'transparent') return '';
+    if (rgb.startsWith('#')) return rgb;
+    const m = rgb.match(/\d+/g);
+    if (!m || m.length < 3) return '';
+    return '#' + m.slice(0,3).map(n => (+n).toString(16).padStart(2,'0')).join('');
+}
+
+// ── postMessage: editor en vivo ───────────────────────────────────────
 window.addEventListener('message', e => {
     if (e.data?.type === 'BICHITOS_CONFIG') {
         window.siteConfig = e.data.config;
         aplicarConfig();
+    }
+    if (e.data?.type === 'BICHITOS_EDIT_MODE') {
+        if (e.data.active) enableEditMode();
+        else disableEditMode();
     }
 });
 
 // ── Init ──────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
     await cargarSiteConfig();
-    // Avisar al editor que el iframe está listo
     if (window.parent !== window) {
         window.parent.postMessage({ type: 'BICHITOS_READY' }, '*');
     }
