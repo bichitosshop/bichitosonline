@@ -1172,6 +1172,25 @@ function buildElemBody(info) {
     return fg;
   }
 
+  // Imagen (para todos los tipos: botones, FABs, textos)
+  const imageF = makeField('Imagen / ícono (URL)', () => {
+    const w=document.createElement('div');
+    const inp=document.createElement('input');
+    inp.type='text'; inp.className='inp'; inp.value=saved.image||info.image||''; inp.placeholder='https://i.ibb.co/...';
+    const prev=document.createElement('div'); prev.style.cssText='margin-top:7px';
+    const renderPrev=()=>{ prev.innerHTML = inp.value.trim()
+      ? `<img src="${inp.value.trim()}" alt="" style="max-height:46px;max-width:160px;object-fit:contain;border-radius:6px;border:1px solid var(--border);padding:5px;background:#f8fafc" onerror="this.style.display='none'">`
+      : ''; };
+    inp.addEventListener('input',()=>{ updateElem('image',inp.value.trim()); renderPrev(); });
+    const hint=document.createElement('p');
+    hint.style.cssText='font-size:.68rem;color:var(--gray);margin-top:5px;line-height:1.4';
+    hint.textContent='Pegá una URL para reemplazar el ícono/texto por una imagen. Dejá vacío para volver al original.';
+    w.appendChild(inp); w.appendChild(prev); w.appendChild(hint);
+    renderPrev();
+    return w;
+  });
+  body.appendChild(grp(isFab?'Imagen del botón':'Imagen', [imageF]));
+
   // Text field (for text/heading)
   if (!isFab) {
     const textF = makeField('Texto del elemento', () => {

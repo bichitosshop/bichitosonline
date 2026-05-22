@@ -142,8 +142,11 @@ function aplicarElementos() {
 
     Object.entries(elements).forEach(([id, cfg]) => {
         if (!cfg) return;
-        // Actualizar texto del elemento
-        if (cfg.text !== undefined) {
+        const hasImage = !!cfg.image;
+        // Imagen del elemento (reemplaza ícono/texto por <img>)
+        applyElementImage(id, cfg.image);
+        // Actualizar texto del elemento (solo si no hay imagen)
+        if (!hasImage && cfg.text !== undefined) {
             document.querySelectorAll(`[data-edit-id="${id}"]`).forEach(el => {
                 if (el.children.length === 0) el.textContent = cfg.text;
                 else el.setAttribute('data-display-text', cfg.text);
@@ -184,6 +187,52 @@ function aplicarElementos() {
         s.textContent = css.join('\n');
         document.head.appendChild(s);
     }
+}
+
+// Reemplaza el contenido de un elemento (texto/ícono) por una imagen, o lo restaura
+function applyElementImage(id, src) {
+    document.querySelectorAll(`[data-edit-id="${id}"]`).forEach(el => {
+        const isFab = el.dataset.editType === 'fab';
+        let imgEl = el.querySelector(':scope > img.elem-img-custom');
+        if (src) {
+            // Ocultar hijos originales (preservar el badge del carrito y la propia imagen)
+            Array.from(el.children).forEach(child => {
+                if (child.classList.contains('elem-img-custom')) return;
+                if (child.classList.contains('cart-fab-badge')) return;
+                child.dataset.hiddenByImg = '1';
+                child.style.display = 'none';
+            });
+            // Ocultar nodos de texto sueltos (emoji 🛒, "BICHITOS", etc.)
+            el.childNodes.forEach(node => {
+                if (node.nodeType === 3 && node.textContent.trim()) {
+                    if (node._origText === undefined) node._origText = node.textContent;
+                    node.textContent = '';
+                }
+            });
+            if (!imgEl) {
+                imgEl = document.createElement('img');
+                imgEl.className = 'elem-img-custom';
+                imgEl.alt = '';
+                el.insertBefore(imgEl, el.firstChild);
+            }
+            imgEl.src = src;
+            imgEl.style.cssText = isFab
+                ? 'width:62%;height:62%;object-fit:contain;display:block;'
+                : 'max-height:56px;width:auto;max-width:100%;object-fit:contain;display:inline-block;vertical-align:middle;';
+        } else {
+            // Restaurar contenido original
+            Array.from(el.children).forEach(child => {
+                if (child.dataset.hiddenByImg) { child.style.display = ''; delete child.dataset.hiddenByImg; }
+            });
+            el.childNodes.forEach(node => {
+                if (node.nodeType === 3 && node._origText !== undefined) {
+                    node.textContent = node._origText;
+                    delete node._origText;
+                }
+            });
+            if (imgEl) imgEl.remove();
+        }
+    });
 }
 
 function propsToCSS(styles) {
@@ -399,6 +448,7 @@ function _globalEditCapture(e) {
         responsive: savedEl.responsive || {},
         position: savedEl.position || null,
         size:     savedEl.size     || null,
+        image:    savedEl.image    || '',
     };
 
     if (window.parent !== window) {
