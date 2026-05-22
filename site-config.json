@@ -129,6 +129,24 @@
         "letterSpacing": -0.5
       },
       "text": "Encontrá el alimento ideal para tu bichito"
+    },
+    "btn-cart": {
+      "imageSize": 53,
+      "imageOffsetX": -15,
+      "styles": {
+        "fontSize": 29,
+        "color": "#000000",
+        "marginBottom": 0,
+        "marginTop": 0
+      },
+      "size": 50
+    },
+    "btn-whatsapp": {
+      "size": 50,
+      "position": {
+        "bottom": 24,
+        "left": 24
+      }
     }
   },
   "brands": [
@@ -171,5 +189,7 @@
     "scheduleWeekend": "Dom: cerrado",
     "footerTagline": "Alimentos y accesorios premium para mascotas en Mendoza",
     "copyright": "2026 BICHITOS SHOP — Mendoza, Argentina"
-  }
+  },
+  "logoSize": "60",
+  "logoOffsetX": "-8"
 }
