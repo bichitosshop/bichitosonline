@@ -94,6 +94,25 @@
     "title-marcas": {
       "styles": {
         "color": "#00364a"
+      },
+      "text": "Nuestras Marcas"
+    },
+    "title-destacados": {
+      "styles": {
+        "color": "#00364a",
+        "fontFamily": "Montserrat",
+        "fontSize": 25
+      },
+      "text": "Productos Destacados"
+    },
+    "label-perros": {
+      "styles": {
+        "fontSize": 20
+      }
+    },
+    "label-gatos": {
+      "styles": {
+        "fontSize": 20
       }
     }
   },
