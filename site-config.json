@@ -74,13 +74,13 @@
   },
   "titleLine": {
     "stops": [
-      "#FF6B35",
-      "#f1c40f",
-      "#2EC4B6"
+      "#00364a",
+      "#2EC4B6",
+      "#ff9300"
     ],
-    "direction": 90,
+    "direction": 65,
     "height": 4,
-    "width": 80,
+    "width": 190,
     "blur": 0
   },
   "logoImage": "https://bichitosshop.github.io/bichitosonline/images/editor/logo_1779451879907.jpg",
@@ -107,13 +107,28 @@
     },
     "label-perros": {
       "styles": {
-        "fontSize": 20
+        "fontSize": 25
       }
     },
     "label-gatos": {
       "styles": {
-        "fontSize": 20
+        "fontSize": 25
       }
+    },
+    "ph-productos-titulo": {
+      "text": "Nuestros Productos",
+      "styles": {
+        "textAlign": "center",
+        "fontWeight": "700"
+      }
+    },
+    "ph-productos-sub": {
+      "styles": {
+        "color": "#00364a",
+        "fontWeight": "700",
+        "letterSpacing": -0.5
+      },
+      "text": "Encontrá el alimento ideal para tu bichito"
     }
   },
   "brands": [
