@@ -231,6 +231,38 @@ a{text-decoration:none;color:inherit}
 .na-inp:focus{outline:none;border-color:var(--orange)}
 .na-btn{width:100%;padding:11px;background:var(--orange);color:#fff;border-radius:9px;font-weight:800;font-size:.9rem;transition:all .2s}
 .na-btn:hover{background:#e55a2b}
+
+/* ===== MOBILE (vista apilada: preview arriba, controles abajo) ===== */
+@media (max-width: 820px){
+  html,body{font-size:15px}
+  /* Topbar compacta en una sola fila */
+  .tb{padding:0 8px;gap:5px;flex-wrap:nowrap;overflow:hidden}
+  .tb-logo{font-size:0;flex-shrink:0}
+  .tb-logo::after{content:'Editor';font-size:.82rem;font-weight:900;color:#fff}
+  .tb-logo span{display:none}
+  .tb-devices,.tb-btn[href]{display:none}   /* preview ya es full-width; "Ver sitio" se oculta */
+  .tb-spacer{flex:1}
+  /* Layout vertical: preview fijo arriba, controles desplazables abajo */
+  .wrap{flex-direction:column}
+  .preview-area{order:-1;height:46vh;min-height:46vh;flex:none;padding:8px}
+  .prev-wrap.desktop,.prev-wrap.tablet,.prev-wrap.mobile{
+    width:100%!important;max-width:100%!important;height:100%!important;
+    border:none!important;border-radius:10px!important
+  }
+  .sidebar{width:100%;flex:1;min-height:0;border-right:none;border-top:3px solid var(--orange)}
+  .sb-slider{width:200vw}
+  .sb-slider.show-elem{transform:translateX(-100vw)}
+  .sb-pane{width:100vw}
+  .edit-banner{font-size:.7rem;padding:5px}
+  /* controles más grandes para el dedo */
+  .inp,.sel{padding:11px 12px;font-size:.92rem}
+  .sb-tab{padding:13px 2px;font-size:.7rem}
+  .mode-btn{padding:8px 12px;font-size:.82rem}
+  .tb-btn{padding:8px 12px;font-size:.82rem}
+  .bp-btn{padding:9px 4px;font-size:.72rem}
+  .upl{padding:15px}
+  .sw{width:42px;height:42px}
+}
 </style>
 </head>
 <body>
@@ -438,11 +470,12 @@ a{text-decoration:none;color:inherit}
               <div class="fg-h"><div class="fg-t">Logo de la tienda</div></div>
               <div class="fg-b">
                 <div class="field">
-                  <label class="lbl">Imagen del logo (URL)</label>
-                  <input type="text" class="inp" id="logo-image-url" placeholder="https://i.ibb.co/..."/>
-                  <p style="font-size:.7rem;color:var(--gray);margin-top:4px;line-height:1.4">Pegá la URL de tu logo para reemplazar el texto "BICHITOS SHOP". Dejá vacío para volver al texto.</p>
+                  <label class="lbl">Imagen del logo</label>
+                  <input type="text" class="inp" id="logo-image-url" placeholder="Pegá una URL o subí tu logo ↓"/>
+                  <p style="font-size:.7rem;color:var(--gray);margin-top:4px;line-height:1.4">Reemplaza el texto "BICHITOS SHOP" por tu logo. Dejá vacío para volver al texto.</p>
                 </div>
-                <div id="logo-preview-wrap" style="min-height:0;margin-top:2px"></div>
+                <label class="upl" style="margin-top:2px"><input type="file" accept="image/*" id="logo-image-file" style="display:none"/><div style="font-size:1.3rem">📷</div><p>Subir logo o tomar con la cámara</p></label>
+                <div id="logo-preview-wrap" style="min-height:0;margin-top:6px"></div>
               </div>
             </div>
             <div class="fg">
@@ -1097,6 +1130,18 @@ function bindLogoImage() {
     updateLogoPreview();
     refreshPreview();
   });
+  const file = document.getElementById('logo-image-file');
+  file?.addEventListener('change', async e => {
+    const f = e.target.files[0]; if (!f) return;
+    showLd('Subiendo logo...');
+    try {
+      const url = await uploadImage(f, 'logo');
+      inp.value = url; config.logoImage = url;
+      pushH(); updateLogoPreview(); refreshPreview();
+      toast('Logo subido','ok');
+    } catch(err){ toast('Error: '+err.message,'err'); }
+    finally { hideLd(); e.target.value=''; }
+  });
 }
 function updateLogoPreview() {
   const wrap = document.getElementById('logo-preview-wrap');
@@ -1112,14 +1157,89 @@ function updateLogoPreview() {
 function bindEditMode() {
   document.getElementById('modeNav').addEventListener('click', () => setEditMode(false));
   document.getElementById('modeEdit').addEventListener('click', () => setEditMode(true));
+  // Re-aplicar modo edición y config cada vez que el iframe (re)carga
+  document.getElementById('prevFrame').addEventListener('load', () => {
+    refreshPreview();
+    applyEditModeToIframe();
+  });
 }
 function setEditMode(on) {
   editMode = on;
   document.getElementById('modeNav').classList.toggle('active', !on);
   document.getElementById('modeEdit').classList.toggle('active', on);
   document.getElementById('editBanner').classList.toggle('show', on);
-  try { document.getElementById('prevFrame').contentWindow.postMessage({type:'BICHITOS_EDIT_MODE',active:on},'*'); } catch{}
+  applyEditModeToIframe();
   if (!on) hideElemPanel();
+}
+
+// ── Modo edición controlado DIRECTAMENTE sobre el iframe (mismo origen) ──
+// Esto intercepta TODOS los clicks dentro del sitio y bloquea la navegación,
+// sin depender del config-loader cacheado del navegador.
+const IFRAME_EDIT_CSS = `
+  body.bx-edit [data-edit-id]{outline:2px dashed rgba(255,107,53,.5)!important;outline-offset:3px!important;cursor:pointer!important}
+  body.bx-edit [data-edit-id]:hover{outline:2.5px solid #FF6B35!important;background:rgba(255,107,53,.06)!important}
+  body.bx-edit [data-edit-id].bx-sel{outline:3px solid #FF6B35!important;outline-offset:3px!important;box-shadow:0 0 0 6px rgba(255,107,53,.15)!important}
+  body.bx-edit .cart-fab{display:flex!important}
+`;
+function getPrevDoc() {
+  try { const f=document.getElementById('prevFrame'); return f.contentDocument || f.contentWindow.document; }
+  catch { return null; }
+}
+function applyEditModeToIframe() {
+  const doc = getPrevDoc();
+  if (!doc || !doc.body) return;
+  if (!doc.getElementById('bx-edit-css')) {
+    const s=doc.createElement('style'); s.id='bx-edit-css'; s.textContent=IFRAME_EDIT_CSS; doc.head.appendChild(s);
+  }
+  // Re-bind limpio
+  doc.removeEventListener('click', iframeClickCapture, true);
+  if (editMode) {
+    doc.body.classList.add('bx-edit');
+    doc.addEventListener('click', iframeClickCapture, true);
+  } else {
+    doc.body.classList.remove('bx-edit');
+    doc.querySelectorAll('[data-edit-id].bx-sel').forEach(x=>x.classList.remove('bx-sel'));
+  }
+}
+function iframeClickCapture(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  const el = e.target.closest('[data-edit-id]');
+  if (!el) return;
+  const doc = getPrevDoc();
+  doc.querySelectorAll('[data-edit-id].bx-sel').forEach(x=>x.classList.remove('bx-sel'));
+  el.classList.add('bx-sel');
+  showElemPanel(readElemInfo(el));
+}
+function readElemInfo(el) {
+  const win  = el.ownerDocument.defaultView;
+  const comp = win.getComputedStyle(el);
+  const id   = el.dataset.editId;
+  const type = el.dataset.editType || 'text';
+  const saved= config.elements?.[id] || {};
+  const toHex = rgb => {
+    if (!rgb || rgb==='transparent') return '';
+    if (rgb[0]==='#') return rgb;
+    const m = rgb.match(/\d+/g);
+    return (m && m.length>=3) ? '#'+m.slice(0,3).map(n=>(+n).toString(16).padStart(2,'0')).join('') : '';
+  };
+  return {
+    editId:id, type,
+    text:  saved.text ?? el.textContent.trim(),
+    image: saved.image || '',
+    styles: {
+      color:         saved.styles?.color         || toHex(comp.color) || '',
+      fontSize:      saved.styles?.fontSize      || Math.round(parseFloat(comp.fontSize)) || '',
+      fontFamily:    saved.styles?.fontFamily    || (comp.fontFamily||'').split(',')[0].replace(/['"]/g,'').trim() || '',
+      textAlign:     saved.styles?.textAlign     || comp.textAlign || '',
+      fontWeight:    saved.styles?.fontWeight    || comp.fontWeight || '',
+      letterSpacing: saved.styles?.letterSpacing ?? (parseFloat(comp.letterSpacing)||0),
+      background:    saved.styles?.background    || '',
+    },
+    responsive: saved.responsive || {},
+    position:   saved.position   || null,
+    size:       saved.size       || null,
+  };
 }
 
 // ── Element panel ─────────────────────────────────────────────────────
@@ -1135,13 +1255,15 @@ function showElemPanel(info) {
   // Activate breakpoint buttons
   document.querySelectorAll('.bp-btn').forEach(b => b.classList.toggle('active', b.dataset.bp==='all'));
   buildElemBody(info);
+  // En mobile, llevar el foco al panel de controles
+  if (window.innerWidth <= 820) document.querySelector('.sidebar')?.scrollIntoView({behavior:'smooth'});
 }
 function hideElemPanel() {
   document.getElementById('sbTabs').style.display  = '';
   document.getElementById('sbSlider').classList.remove('show-elem');
   curElemId = null;
-  // Deselect in iframe
-  try { document.getElementById('prevFrame').contentWindow.postMessage({type:'BICHITOS_DESELECT'},'*'); } catch{}
+  const doc = getPrevDoc();
+  if (doc) doc.querySelectorAll('[data-edit-id].bx-sel').forEach(x=>x.classList.remove('bx-sel'));
 }
 
 const ELEM_NAMES = {
@@ -1173,19 +1295,37 @@ function buildElemBody(info) {
   }
 
   // Imagen (para todos los tipos: botones, FABs, textos)
-  const imageF = makeField('Imagen / ícono (URL)', () => {
+  const imageF = makeField('Imagen / ícono', () => {
     const w=document.createElement('div');
     const inp=document.createElement('input');
-    inp.type='text'; inp.className='inp'; inp.value=saved.image||info.image||''; inp.placeholder='https://i.ibb.co/...';
+    inp.type='text'; inp.className='inp'; inp.value=saved.image||info.image||''; inp.placeholder='Pegá una URL o subí una foto ↓';
     const prev=document.createElement('div'); prev.style.cssText='margin-top:7px';
     const renderPrev=()=>{ prev.innerHTML = inp.value.trim()
-      ? `<img src="${inp.value.trim()}" alt="" style="max-height:46px;max-width:160px;object-fit:contain;border-radius:6px;border:1px solid var(--border);padding:5px;background:#f8fafc" onerror="this.style.display='none'">`
+      ? `<div style="display:flex;align-items:center;gap:8px"><img src="${inp.value.trim()}" alt="" style="max-height:46px;max-width:120px;object-fit:contain;border-radius:6px;border:1px solid var(--border);padding:5px;background:#f8fafc" onerror="this.style.display='none'"><button type="button" class="bsm d elem-img-clear">Quitar</button></div>`
       : ''; };
+    // Botón subir (cámara/galería en mobile)
+    const upl=document.createElement('label'); upl.className='upl'; upl.style.marginTop='7px';
+    upl.innerHTML='<div style="font-size:1.3rem">📷</div><p>Subir foto o tomar con la cámara</p>';
+    const file=document.createElement('input'); file.type='file'; file.accept='image/*'; file.style.display='none';
+    upl.appendChild(file);
     inp.addEventListener('input',()=>{ updateElem('image',inp.value.trim()); renderPrev(); });
+    file.addEventListener('change', async ev=>{
+      const f=ev.target.files[0]; if(!f) return;
+      showLd('Subiendo imagen...');
+      try{
+        const url=await uploadImage(f,'elem_'+(curElemId||'x'));
+        inp.value=url; updateElem('image',url); renderPrev();
+        toast('Imagen subida','ok');
+      }catch(err){ toast('Error: '+err.message,'err'); }
+      finally{ hideLd(); ev.target.value=''; }
+    });
+    prev.addEventListener('click', ev=>{
+      if(ev.target.classList.contains('elem-img-clear')){ inp.value=''; updateElem('image',''); renderPrev(); }
+    });
     const hint=document.createElement('p');
     hint.style.cssText='font-size:.68rem;color:var(--gray);margin-top:5px;line-height:1.4';
-    hint.textContent='Pegá una URL para reemplazar el ícono/texto por una imagen. Dejá vacío para volver al original.';
-    w.appendChild(inp); w.appendChild(prev); w.appendChild(hint);
+    hint.textContent='Reemplaza el ícono/texto por una imagen. Quitala para volver al original.';
+    w.appendChild(inp); w.appendChild(upl); w.appendChild(prev); w.appendChild(hint);
     renderPrev();
     return w;
   });
@@ -1503,10 +1643,7 @@ function bindExportImport() {
 
 // ── postMessage from iframe ───────────────────────────────────────────
 window.addEventListener('message', e => {
-  if (e.data?.type === 'BICHITOS_READY') refreshPreview();
-  if (e.data?.type === 'BICHITOS_ELEMENT_SELECTED') {
-    if (editMode) showElemPanel(e.data.info);
-  }
+  if (e.data?.type === 'BICHITOS_READY') { refreshPreview(); applyEditModeToIframe(); }
 });
 
 // ── Helpers ───────────────────────────────────────────────────────────

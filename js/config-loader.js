@@ -442,7 +442,7 @@ function _globalEditCapture(e) {
             fontFamily:    savedEl.styles?.fontFamily    || comp.fontFamily?.split(',')[0]?.trim().replace(/['"]/g,'') || '',
             textAlign:     savedEl.styles?.textAlign     || comp.textAlign || '',
             fontWeight:    savedEl.styles?.fontWeight    || comp.fontWeight || '',
-            letterSpacing: savedEl.styles?.letterSpacing ?? parseFloat(comp.letterSpacing) || 0,
+            letterSpacing: savedEl.styles?.letterSpacing ?? (parseFloat(comp.letterSpacing) || 0),
             background:    savedEl.styles?.background    || '',
         },
         responsive: savedEl.responsive || {},
