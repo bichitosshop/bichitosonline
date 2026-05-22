@@ -207,7 +207,7 @@ a{text-decoration:none;color:inherit}
 .prev-frame{width:100%;height:100%;border:none;display:block}
 
 /* ===== EDIT MODE BANNER ===== */
-.edit-banner{position:absolute;top:0;left:0;right:0;background:rgba(255,107,53,.95);color:#fff;font-size:.72rem;font-weight:700;text-align:center;padding:4px;z-index:10;display:none;letter-spacing:.3px}
+.edit-banner{flex-shrink:0;background:rgba(255,107,53,.97);color:#fff;font-size:.72rem;font-weight:700;text-align:center;padding:6px 8px;display:none;letter-spacing:.3px;line-height:1.3}
 .edit-banner.show{display:block}
 
 /* ===== TOAST ===== */
@@ -426,6 +426,17 @@ a{text-decoration:none;color:inherit}
               </div>
             </div>
 
+            <!-- Tarjetas de producto -->
+            <div class="fg">
+              <div class="fg-h"><div class="fg-t">Tarjetas de producto</div></div>
+              <div class="fg-b">
+                <div class="field"><label class="lbl">Tamaño del nombre</label><div class="r-row"><input type="range" class="r-inp" id="range-card-nameSize" min="11" max="28" step="1"/><span class="r-val" id="rv-card-nameSize"></span></div></div>
+                <div class="field"><label class="lbl">Tamaño del precio</label><div class="r-row"><input type="range" class="r-inp" id="range-card-priceSize" min="12" max="40" step="1"/><span class="r-val" id="rv-card-priceSize"></span></div></div>
+                <div class="field"><label class="lbl">Tamaño de la marca</label><div class="r-row"><input type="range" class="r-inp" id="range-card-brandSize" min="8" max="20" step="1"/><span class="r-val" id="rv-card-brandSize"></span></div></div>
+                <div class="field"><label class="lbl">Redondeo de la tarjeta</label><div class="r-row"><input type="range" class="r-inp" id="range-card-radius" min="0" max="40" step="1"/><span class="r-val" id="rv-card-radius"></span></div></div>
+              </div>
+            </div>
+
             <!-- Historial de colores -->
             <div class="fg">
               <div class="fg-h"><div class="fg-t">Historial de configuraciones guardadas</div></div>
@@ -476,6 +487,9 @@ a{text-decoration:none;color:inherit}
                 </div>
                 <label class="upl" style="margin-top:2px"><input type="file" accept="image/*" id="logo-image-file" style="display:none"/><div style="font-size:1.3rem">📷</div><p>Subir logo o tomar con la cámara</p></label>
                 <div id="logo-preview-wrap" style="min-height:0;margin-top:6px"></div>
+                <div class="field" style="margin-top:8px"><label class="lbl">Tamaño del logo (alto)</label><div class="r-row"><input type="range" class="r-inp" id="range-logoSize" min="20" max="140" step="2"/><span class="r-val" id="rv-logoSize"></span></div></div>
+                <div class="field"><label class="lbl">Mover horizontal ←→</label><div class="r-row"><input type="range" class="r-inp" id="range-logoOffsetX" min="-120" max="120" step="1"/><span class="r-val" id="rv-logoOffsetX"></span></div></div>
+                <div class="field"><label class="lbl">Mover vertical ↑↓</label><div class="r-row"><input type="range" class="r-inp" id="range-logoOffsetY" min="-40" max="40" step="1"/><span class="r-val" id="rv-logoOffsetY"></span></div></div>
               </div>
             </div>
             <div class="fg">
@@ -713,9 +727,17 @@ function loadFormValues() {
   setVal('store-weekdays', s.scheduleWeekdays||'');
   setVal('store-weekend',  s.scheduleWeekend||'');
   setVal('store-tagline',  s.footerTagline||'');
-  // Logo imagen
+  // Logo imagen + tamaño/posición
   setVal('logo-image-url', config.logoImage || '');
   updateLogoPreview();
+  setRng('logoSize',    config.logoSize    ?? 36, 'rv-logoSize',    'px');
+  setRng('logoOffsetX', config.logoOffsetX ?? 0,  'rv-logoOffsetX', 'px');
+  setRng('logoOffsetY', config.logoOffsetY ?? 0,  'rv-logoOffsetY', 'px');
+  // Tarjetas de producto
+  setRng('card-nameSize',  config.cards?.nameSize  ?? 15, 'rv-card-nameSize',  'px');
+  setRng('card-priceSize', config.cards?.priceSize ?? 24, 'rv-card-priceSize', 'px');
+  setRng('card-brandSize', config.cards?.brandSize ?? 11, 'rv-card-brandSize', 'px');
+  setRng('card-radius',    config.cards?.radius    ?? 20, 'rv-card-radius',    'px');
   // Banners / Sections / Brands
   renderBannerList();
   buildSections();
@@ -816,6 +838,13 @@ const RANGES = [
   ['btn-checkout-radius',['buttons','checkout','radius'],'rv-btn-checkout-radius','px'],
   ['heroHeight',['sizes','heroHeight'],'rv-heroHeight','px'],
   ['productImageHeight',['sizes','productImageHeight'],'rv-productImageHeight','px'],
+  ['logoSize',['logoSize'],'rv-logoSize','px'],
+  ['logoOffsetX',['logoOffsetX'],'rv-logoOffsetX','px'],
+  ['logoOffsetY',['logoOffsetY'],'rv-logoOffsetY','px'],
+  ['card-nameSize',['cards','nameSize'],'rv-card-nameSize','px'],
+  ['card-priceSize',['cards','priceSize'],'rv-card-priceSize','px'],
+  ['card-brandSize',['cards','brandSize'],'rv-card-brandSize','px'],
+  ['card-radius',['cards','radius'],'rv-card-radius','px'],
 ];
 function bindRanges() {
   RANGES.forEach(([id,path,rvId,suf]) => {
@@ -1328,7 +1357,22 @@ function buildElemBody(info) {
     const hint=document.createElement('p');
     hint.style.cssText='font-size:.68rem;color:var(--gray);margin-top:5px;line-height:1.4';
     hint.textContent='Reemplaza el ícono/texto por una imagen. Quitala para volver al original.';
-    w.appendChild(inp); w.appendChild(upl); w.appendChild(prev); w.appendChild(hint);
+    // Helper para crear un slider
+    const rangeField=(label,min,max,val,onIn)=>{
+      const f=document.createElement('div'); f.className='field'; f.style.marginTop='8px';
+      f.innerHTML=`<label class="lbl">${label}</label>`;
+      const row=document.createElement('div'); row.className='r-row';
+      const i=document.createElement('input'); i.type='range'; i.className='r-inp'; i.min=min; i.max=max; i.step=1; i.value=val;
+      const v=document.createElement('span'); v.className='r-val'; v.textContent=val+'px';
+      i.addEventListener('input',()=>{ v.textContent=i.value+'px'; onIn(+i.value); });
+      row.appendChild(i); row.appendChild(v); f.appendChild(row); return f;
+    };
+    const sizeDefault = saved.imageSize || (isFab ? 40 : 80);
+    w.appendChild(inp); w.appendChild(upl); w.appendChild(prev);
+    w.appendChild(rangeField('Tamaño de la imagen', 16, 400, sizeDefault, v=>updateElem('imageSize',v)));
+    w.appendChild(rangeField('Mover horizontal ←→', -150, 150, saved.imageOffsetX||0, v=>updateElem('imageOffsetX',v)));
+    w.appendChild(rangeField('Mover vertical ↑↓',   -100, 100, saved.imageOffsetY||0, v=>updateElem('imageOffsetY',v)));
+    w.appendChild(hint);
     renderPrev();
     return w;
   });

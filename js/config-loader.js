@@ -30,6 +30,7 @@ function aplicarConfig() {
     aplicarBanners();
     aplicarBrands();
     aplicarLogo();
+    aplicarCards();
 }
 
 // ── Tema ──────────────────────────────────────────────────────────────
@@ -144,7 +145,7 @@ function aplicarElementos() {
         if (!cfg) return;
         const hasImage = !!cfg.image;
         // Imagen del elemento (reemplaza ícono/texto por <img>)
-        applyElementImage(id, cfg.image);
+        applyElementImage(id, cfg.image, cfg);
         // Actualizar texto del elemento (solo si no hay imagen)
         if (!hasImage && cfg.text !== undefined) {
             document.querySelectorAll(`[data-edit-id="${id}"]`).forEach(el => {
@@ -197,7 +198,8 @@ function aplicarElementos() {
 }
 
 // Reemplaza el contenido de un elemento (texto/ícono) por una imagen, o lo restaura
-function applyElementImage(id, src) {
+function applyElementImage(id, src, cfg) {
+    cfg = cfg || {};
     document.querySelectorAll(`[data-edit-id="${id}"]`).forEach(el => {
         const isFab = el.dataset.editType === 'fab';
         let imgEl = el.querySelector(':scope > img.elem-img-custom');
@@ -223,9 +225,16 @@ function applyElementImage(id, src) {
                 el.insertBefore(imgEl, el.firstChild);
             }
             imgEl.src = src;
-            imgEl.style.cssText = isFab
-                ? 'width:62%;height:62%;object-fit:contain;display:block;'
-                : 'max-height:56px;width:auto;max-width:100%;object-fit:contain;display:inline-block;vertical-align:middle;';
+            const ox = cfg.imageOffsetX || 0, oy = cfg.imageOffsetY || 0;
+            const tf = `transform:translate(${ox}px,${oy}px);`;
+            if (cfg.imageSize) {
+                // Tamaño explícito (ancho en px) — anula los defaults
+                imgEl.style.cssText = `width:${cfg.imageSize}px;height:auto;max-width:none;object-fit:contain;display:${isFab?'block':'inline-block'};vertical-align:middle;${tf}`;
+            } else if (isFab) {
+                imgEl.style.cssText = `width:62%;height:62%;object-fit:contain;display:block;${tf}`;
+            } else {
+                imgEl.style.cssText = `max-height:56px;width:auto;max-width:100%;object-fit:contain;display:inline-block;vertical-align:middle;${tf}`;
+            }
         } else {
             // Restaurar contenido original
             Array.from(el.children).forEach(child => {
@@ -350,9 +359,13 @@ function ensureFont(fontFamily) {
     document.head.appendChild(link);
 }
 
-// ── Logo imagen opcional ──────────────────────────────────────────────
+// ── Logo imagen opcional (con tamaño y posición) ──────────────────────
 function aplicarLogo() {
-    const img = window.siteConfig?.logoImage;
+    const cfg  = window.siteConfig || {};
+    const img  = cfg.logoImage;
+    const h    = cfg.logoSize ? parseInt(cfg.logoSize) : 36;   // alto en px
+    const ox   = cfg.logoOffsetX || 0;
+    const oy   = cfg.logoOffsetY || 0;
     document.querySelectorAll('.logo').forEach(logoEl => {
         const bichitosSpan = logoEl.querySelector('.logo-bichitos');
         const shopSpan     = logoEl.querySelector('.logo-shop');
@@ -364,17 +377,34 @@ function aplicarLogo() {
                 imgEl = document.createElement('img');
                 imgEl.className = 'logo-img-custom';
                 imgEl.alt = 'BICHITOS SHOP';
-                imgEl.style.cssText = 'height:36px;width:auto;object-fit:contain;display:block;max-width:180px';
                 logoEl.insertBefore(imgEl, logoEl.firstChild);
             }
             imgEl.src = img;
-            imgEl.style.display = '';
+            imgEl.style.cssText = `height:${h}px;width:auto;object-fit:contain;display:block;max-width:320px;transform:translate(${ox}px,${oy}px)`;
         } else {
             if (bichitosSpan) bichitosSpan.style.display = '';
             if (shopSpan)     shopSpan.style.display     = '';
             if (imgEl)        imgEl.style.display        = 'none';
         }
     });
+}
+
+// ── Tarjetas de producto: tamaños de texto y bordes ───────────────────
+function aplicarCards() {
+    const c = window.siteConfig?.cards;
+    document.getElementById('cfg-card-styles')?.remove();
+    if (!c) return;
+    const css = [];
+    if (c.nameSize)  css.push(`.producto-nombre { font-size: ${c.nameSize}px !important; }`);
+    if (c.priceSize) css.push(`.producto-precio { font-size: ${c.priceSize}px !important; }`);
+    if (c.brandSize) css.push(`.producto-marca  { font-size: ${c.brandSize}px !important; }`);
+    if (c.radius !== undefined && c.radius !== '') css.push(`.producto-card { border-radius: ${c.radius}px !important; }`);
+    if (css.length) {
+        const s = document.createElement('style');
+        s.id = 'cfg-card-styles';
+        s.textContent = css.join('\n');
+        document.head.appendChild(s);
+    }
 }
 
 // ── MODO EDICIÓN VISUAL ───────────────────────────────────────────────
