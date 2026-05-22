@@ -6,7 +6,7 @@
     "colorTeal": "#419daa",
     "colorBackground": "#daebec",
     "borderRadius": "32",
-    "fontFamily": "Inter"
+    "fontFamily": "Montserrat"
   },
   "banners": [
     {
@@ -42,31 +42,35 @@
     "marcas": true,
     "destacados": true
   },
-  "sectionsOrder": ["categorias", "marcas", "destacados"],
+  "sectionsOrder": [
+    "marcas",
+    "categorias",
+    "destacados"
+  ],
   "buttons": {
     "addToCart": {
       "text": "Agregar",
-      "bg": "#FF6B35",
+      "bg": "#2c7b8f",
       "color": "#ffffff",
-      "radius": "9999",
-      "paddingV": "17"
+      "radius": "49",
+      "paddingV": "15"
     },
     "cartSend": {
       "text": "Enviar pedido por WhatsApp",
-      "bg": "#FF6B35",
+      "bg": "#62d468",
       "color": "#ffffff",
-      "radius": "9999"
+      "radius": "50"
     },
     "checkout": {
       "text": "Enviar pedido por WhatsApp",
-      "bg": "#FF6B35",
+      "bg": "#f07639",
       "color": "#ffffff",
       "radius": "9999"
     }
   },
   "sizes": {
-    "heroHeight": "520",
-    "productImageHeight": "220"
+    "heroHeight": "510",
+    "productImageHeight": "400"
   },
   "store": {
     "name": "BICHITOS SHOP",
