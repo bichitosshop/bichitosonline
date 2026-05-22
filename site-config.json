@@ -83,7 +83,7 @@
     "width": 190,
     "blur": 0
   },
-  "logoImage": "https://bichitosshop.github.io/bichitosonline/images/editor/logo_1779456988908.jpg",
+  "logoImage": "https://bichitosshop.github.io/bichitosonline/images/editor/logo_1779457136858.jpg",
   "elements": {
     "logo-bichitos": {
       "image": "https://bichitosshop.github.io/bichitosonline/images/editor/elem_logo-bichitos_1779451835205.jpg",
@@ -194,5 +194,6 @@
     "copyright": "2026 BICHITOS SHOP — Mendoza, Argentina"
   },
   "logoSize": "60",
-  "logoOffsetX": "6"
+  "logoOffsetX": "6",
+  "logoOffsetY": "21"
 }
