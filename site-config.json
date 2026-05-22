@@ -1,11 +1,11 @@
 {
   "version": "1.0",
   "theme": {
-    "colorPrimary": "#1B3B5A",
-    "colorAccent": "#FF6B35",
-    "colorTeal": "#2EC4B6",
-    "colorBackground": "#FFFDF7",
-    "borderRadius": "12",
+    "colorPrimary": "#1f5664",
+    "colorAccent": "#f07639",
+    "colorTeal": "#419daa",
+    "colorBackground": "#daebec",
+    "borderRadius": "32",
     "fontFamily": "Inter"
   },
   "banners": [
