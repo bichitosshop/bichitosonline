@@ -433,6 +433,18 @@ a{text-decoration:none;color:inherit}
 
           <!-- TIENDA panel -->
           <div class="panel" id="panel-tienda">
+            <!-- Logo imagen -->
+            <div class="fg">
+              <div class="fg-h"><div class="fg-t">Logo de la tienda</div></div>
+              <div class="fg-b">
+                <div class="field">
+                  <label class="lbl">Imagen del logo (URL)</label>
+                  <input type="text" class="inp" id="logo-image-url" placeholder="https://i.ibb.co/..."/>
+                  <p style="font-size:.7rem;color:var(--gray);margin-top:4px;line-height:1.4">Pegá la URL de tu logo para reemplazar el texto "BICHITOS SHOP". Dejá vacío para volver al texto.</p>
+                </div>
+                <div id="logo-preview-wrap" style="min-height:0;margin-top:2px"></div>
+              </div>
+            </div>
             <div class="fg">
               <div class="fg-h"><div class="fg-t">Información de la tienda</div></div>
               <div class="fg-b">
@@ -591,7 +603,7 @@ async function initEditor() {
   buildFontSel(); buildPresets(); bindColors(); bindRanges(); bindBsgs();
   bindBtnFields(); bindStoreFields(); buildSections(); bindBannerPanel();
   bindExportImport(); bindDeviceBtns(); bindUndo(); bindSave();
-  bindEditMode(); buildBrandList();
+  bindEditMode(); buildBrandList(); bindLogoImage();
   loadFormValues();
   loadColorHistory();
   refreshPreview();
@@ -615,6 +627,7 @@ function defaultCfg() {
     },
     sizes:{heroHeight:'520',productImageHeight:'220'},
     titleLine:{stops:['#FF6B35','#f1c40f','#2EC4B6'],direction:90,height:4,width:80,blur:0},
+    logoImage:'',
     elements:{},
     brands:[
       {name:'Estampa',logo:'',link:'productos.html?marca=estampa'},
@@ -667,6 +680,9 @@ function loadFormValues() {
   setVal('store-weekdays', s.scheduleWeekdays||'');
   setVal('store-weekend',  s.scheduleWeekend||'');
   setVal('store-tagline',  s.footerTagline||'');
+  // Logo imagen
+  setVal('logo-image-url', config.logoImage || '');
+  updateLogoPreview();
   // Banners / Sections / Brands
   renderBannerList();
   buildSections();
@@ -1071,6 +1087,28 @@ function compress(file, maxPx=1200, q=0.85) {
 }
 
 // ── Edit mode ─────────────────────────────────────────────────────────
+// ── Logo imagen ───────────────────────────────────────────────────────
+function bindLogoImage() {
+  const inp = document.getElementById('logo-image-url');
+  if (!inp) return;
+  inp.addEventListener('input', () => {
+    pushHd();
+    config.logoImage = inp.value.trim();
+    updateLogoPreview();
+    refreshPreview();
+  });
+}
+function updateLogoPreview() {
+  const wrap = document.getElementById('logo-preview-wrap');
+  const url  = (document.getElementById('logo-image-url')?.value || '').trim();
+  if (!wrap) return;
+  if (url) {
+    wrap.innerHTML = `<img src="${url}" alt="Preview logo" style="max-height:48px;max-width:200px;object-fit:contain;border-radius:6px;border:1px solid var(--border);padding:6px;background:#f8fafc" onerror="this.style.display='none'">`;
+  } else {
+    wrap.innerHTML = `<div style="font-size:.72rem;color:var(--gray);padding:8px 0">Se muestra el texto <strong>BICHITOS SHOP</strong></div>`;
+  }
+}
+
 function bindEditMode() {
   document.getElementById('modeNav').addEventListener('click', () => setEditMode(false));
   document.getElementById('modeEdit').addEventListener('click', () => setEditMode(true));

@@ -29,6 +29,7 @@ function aplicarConfig() {
     aplicarStore();
     aplicarBanners();
     aplicarBrands();
+    aplicarLogo();
 }
 
 // ── Tema ──────────────────────────────────────────────────────────────
@@ -293,6 +294,33 @@ function ensureFont(fontFamily) {
     document.head.appendChild(link);
 }
 
+// ── Logo imagen opcional ──────────────────────────────────────────────
+function aplicarLogo() {
+    const img = window.siteConfig?.logoImage;
+    document.querySelectorAll('.logo').forEach(logoEl => {
+        const bichitosSpan = logoEl.querySelector('.logo-bichitos');
+        const shopSpan     = logoEl.querySelector('.logo-shop');
+        let imgEl = logoEl.querySelector('.logo-img-custom');
+        if (img) {
+            if (bichitosSpan) bichitosSpan.style.display = 'none';
+            if (shopSpan)     shopSpan.style.display     = 'none';
+            if (!imgEl) {
+                imgEl = document.createElement('img');
+                imgEl.className = 'logo-img-custom';
+                imgEl.alt = 'BICHITOS SHOP';
+                imgEl.style.cssText = 'height:36px;width:auto;object-fit:contain;display:block;max-width:180px';
+                logoEl.insertBefore(imgEl, logoEl.firstChild);
+            }
+            imgEl.src = img;
+            imgEl.style.display = '';
+        } else {
+            if (bichitosSpan) bichitosSpan.style.display = '';
+            if (shopSpan)     shopSpan.style.display     = '';
+            if (imgEl)        imgEl.style.display        = 'none';
+        }
+    });
+}
+
 // ── MODO EDICIÓN VISUAL ───────────────────────────────────────────────
 let _editActive = false;
 
@@ -312,7 +340,8 @@ const EDIT_CSS = `
     outline-offset: 3px !important;
     box-shadow: 0 0 0 7px rgba(255,107,53,0.12) !important;
   }
-  body.edit-active * { user-select: none; }
+  body.edit-active * { user-select: none; pointer-events: none; }
+  body.edit-active [data-edit-id] { pointer-events: auto !important; }
 `;
 
 function enableEditMode() {
@@ -324,32 +353,34 @@ function enableEditMode() {
         s.textContent = EDIT_CSS;
         document.head.appendChild(s);
     }
-    document.querySelectorAll('[data-edit-id]').forEach(el => {
-        el.addEventListener('click', _editClickHandler, true);
-    });
+    // Listener a nivel documento (capture) — intercepta antes de que el <a> navegue
+    document.addEventListener('click', _globalEditCapture, true);
 }
 
 function disableEditMode() {
     _editActive = false;
     document.body.classList.remove('edit-active');
-    document.querySelectorAll('[data-edit-id]').forEach(el => {
-        el.removeEventListener('click', _editClickHandler, true);
-        el.classList.remove('edit-sel');
-    });
+    document.removeEventListener('click', _globalEditCapture, true);
+    document.querySelectorAll('[data-edit-id].edit-sel').forEach(x => x.classList.remove('edit-sel'));
 }
 
-function _editClickHandler(e) {
+function _globalEditCapture(e) {
     if (!_editActive) return;
+    // Bloquear toda navegación / acción por defecto
     e.preventDefault();
-    e.stopPropagation();
-    const el      = this;
-    const editId  = el.dataset.editId;
-    const editType= el.dataset.editType || 'text';
+    e.stopImmediatePropagation();
+
+    // Buscar el [data-edit-id] más cercano al punto de click
+    const el = e.target.closest('[data-edit-id]');
+    if (!el) return;
+
+    const editId   = el.dataset.editId;
+    const editType = el.dataset.editType || 'text';
 
     document.querySelectorAll('[data-edit-id].edit-sel').forEach(x => x.classList.remove('edit-sel'));
     el.classList.add('edit-sel');
 
-    const comp = window.getComputedStyle(el);
+    const comp    = window.getComputedStyle(el);
     const savedEl = window.siteConfig?.elements?.[editId] || {};
 
     const info = {

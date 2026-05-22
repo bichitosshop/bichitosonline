@@ -79,6 +79,7 @@
     "width": 80,
     "blur": 0
   },
+  "logoImage": "",
   "elements": {},
   "brands": [
     { "name": "Estampa",  "logo": "", "link": "productos.html?marca=estampa" },
