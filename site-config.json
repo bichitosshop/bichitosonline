@@ -83,7 +83,7 @@
     "width": 190,
     "blur": 0
   },
-  "logoImage": "https://bichitosshop.github.io/bichitosonline/images/editor/logo_1779457202633.jpg",
+  "logoImage": "https://bichitosshop.github.io/bichitosonline/images/editor/logo_1779457136858.jpg",
   "elements": {
     "logo-bichitos": {
       "image": "https://bichitosshop.github.io/bichitosonline/images/editor/elem_logo-bichitos_1779451835205.jpg",
@@ -193,6 +193,7 @@
     "footerTagline": "Alimentos y accesorios premium para mascotas en Mendoza",
     "copyright": "2026 BICHITOS SHOP — Mendoza, Argentina"
   },
-  "logoSize": "54",
-  "logoOffsetX": "6"
+  "logoSize": "40",
+  "logoOffsetX": "-5",
+  "logoOffsetY": "0"
 }
