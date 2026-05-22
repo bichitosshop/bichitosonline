@@ -146,6 +146,9 @@
       "position": {
         "bottom": 24,
         "left": 24
+      },
+      "styles": {
+        "marginTop": 100
       }
     }
   },
