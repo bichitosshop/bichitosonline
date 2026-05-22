@@ -476,6 +476,11 @@ a{text-decoration:none;color:inherit}
 
           <!-- TIENDA panel -->
           <div class="panel" id="panel-tienda">
+            <!-- Acceso al editor de productos -->
+            <a href="index.html" class="exp-btn" style="display:flex;align-items:center;justify-content:center;gap:7px;background:var(--orange);color:#fff;text-decoration:none;padding:13px;font-weight:800;border-radius:var(--r);margin-bottom:4px">
+              🛒 Editar productos (nombres, precios, fotos)
+            </a>
+            <p style="font-size:.7rem;color:var(--gray);margin:-2px 0 6px;line-height:1.4">El texto y precio de cada producto se editan en el panel de productos. Acá editás el diseño general del sitio.</p>
             <!-- Logo imagen -->
             <div class="fg">
               <div class="fg-h"><div class="fg-t">Logo de la tienda</div></div>
@@ -1198,6 +1203,9 @@ function setEditMode(on) {
   document.getElementById('modeEdit').classList.toggle('active', on);
   document.getElementById('editBanner').classList.toggle('show', on);
   applyEditModeToIframe();
+  // Reaplicar config para que los elementos ocultos cambien entre
+  // atenuado (edición) e invisible (sitio real).
+  refreshPreview();
   if (!on) hideElemPanel();
 }
 
@@ -1303,6 +1311,9 @@ const ELEM_NAMES = {
   'nav-perros':'Menú: Perros','nav-gatos':'Menú: Gatos','nav-marcas':'Menú: Marcas','nav-contacto':'Menú: Contacto',
   'ph-productos-titulo':'Título página Productos','ph-productos-sub':'Subtítulo página Productos',
   'ph-contacto-titulo':'Título página Contacto',
+  'ft-h-contacto':'Footer: título "Contacto"','ft-h-horarios':'Footer: título "Horarios"',
+  'ct-h-whatsapp':'Contacto: tarjeta WhatsApp','ct-h-ubicacion':'Contacto: tarjeta Ubicación','ct-h-horarios':'Contacto: tarjeta Horarios',
+  'ct-cta-titulo':'Contacto: título CTA','ct-cta-sub':'Contacto: texto CTA',
 };
 
 function buildElemBody(info) {
@@ -1451,6 +1462,35 @@ function buildElemBody(info) {
   });
 
   body.appendChild(grp('Estilo de texto', [colorF, fontSizeF, fontFamF, weightF, alignF, spacingF]));
+
+  // Posición y espacio (todos los tipos)
+  const hideF = makeField('Ocultar este elemento', () => {
+    const row=document.createElement('div'); row.className='tog-row'; row.style.padding='0';
+    const lbl=document.createElement('span'); lbl.className='tog-lbl'; lbl.textContent='No mostrar en el sitio';
+    const tog=document.createElement('label'); tog.className='tog';
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=!!saved.hidden;
+    const sl=document.createElement('span'); sl.className='tog-t';
+    tog.appendChild(cb); tog.appendChild(sl);
+    cb.addEventListener('change',()=>updateElem('hidden',cb.checked));
+    row.appendChild(lbl); row.appendChild(tog); return row;
+  });
+  const mTopF = makeField('Espacio arriba', () => {
+    const row=document.createElement('div'); row.className='r-row';
+    const v0 = (curBp==='all' ? saved.styles?.marginTop : saved.responsive?.[curBp]?.marginTop) ?? 0;
+    const inp=document.createElement('input'); inp.type='range'; inp.className='r-inp'; inp.min=0; inp.max=120; inp.step=2; inp.value=v0;
+    const val=document.createElement('span'); val.className='r-val'; val.textContent=v0+'px';
+    inp.addEventListener('input',()=>{ val.textContent=inp.value+'px'; updateElem('styles.marginTop',+inp.value); });
+    row.appendChild(inp); row.appendChild(val); return row;
+  });
+  const mBotF = makeField('Espacio abajo', () => {
+    const row=document.createElement('div'); row.className='r-row';
+    const v0 = (curBp==='all' ? saved.styles?.marginBottom : saved.responsive?.[curBp]?.marginBottom) ?? 0;
+    const inp=document.createElement('input'); inp.type='range'; inp.className='r-inp'; inp.min=0; inp.max=120; inp.step=2; inp.value=v0;
+    const val=document.createElement('span'); val.className='r-val'; val.textContent=v0+'px';
+    inp.addEventListener('input',()=>{ val.textContent=inp.value+'px'; updateElem('styles.marginBottom',+inp.value); });
+    row.appendChild(inp); row.appendChild(val); return row;
+  });
+  body.appendChild(grp('Posición y espacio', [hideF, mTopF, mBotF]));
 
   // FAB specific
   if (isFab) {

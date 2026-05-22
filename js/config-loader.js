@@ -160,6 +160,14 @@ function aplicarElementos() {
                 }
             });
         }
+        // Ocultar elemento (en modo edición se ve atenuado para poder reactivarlo)
+        if (cfg.hidden) {
+            if (document.body.classList.contains('bx-edit')) {
+                css.push(`[data-edit-id="${id}"] { opacity: .3 !important; outline: 2px dashed #ef4444 !important; }`);
+            } else {
+                css.push(`[data-edit-id="${id}"] { display: none !important; }`);
+            }
+        }
         // Estilos base
         const base = propsToCSS(cfg.styles || {});
         if (base) css.push(`[data-edit-id="${id}"] { ${base} }`);
@@ -262,6 +270,8 @@ function propsToCSS(styles) {
     if (styles.letterSpacing) p.push(`letter-spacing: ${styles.letterSpacing}px !important`);
     if (styles.background)    p.push(`background: ${styles.background} !important`);
     if (styles.opacity !== undefined) p.push(`opacity: ${styles.opacity} !important`);
+    if (styles.marginTop    !== undefined) p.push(`margin-top: ${styles.marginTop}px !important`);
+    if (styles.marginBottom !== undefined) p.push(`margin-bottom: ${styles.marginBottom}px !important`);
     return p.join('; ');
 }
 
