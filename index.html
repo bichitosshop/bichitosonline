@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
-<body>
+<body class="dark-bg">
 
 <a href="#main" class="skip-link">Saltar al contenido principal</a>
 
@@ -96,48 +96,38 @@
 
 </section>
 
-<!-- ===== CATEGORIAS CASITA ===== -->
-<section class="categorias" aria-label="Categorías">
+<!-- ===== CATÁLOGO HOME ===== -->
+<section class="home-products" aria-labelledby="home-products-title">
     <div class="container">
-        <div class="categoria-grid">
-            <a href="productos.html?categoria=perros" class="categoria-casita casita-perros" aria-label="Productos para perros">
-                <div class="casita-shape"><img class="casita-img" src="https://i.ibb.co/bMth208r/CATEGORIA-CASITA-PERRO.jpg" alt="Perros" loading="lazy" /></div>
-                <span class="casita-label" data-edit-id="label-perros" data-edit-type="text">Perros</span>
-            </a>
-            <a href="productos.html?categoria=gatos" class="categoria-casita casita-gatos" aria-label="Productos para gatos">
-                <div class="casita-shape"><img class="casita-img" src="https://i.ibb.co/x8KFw7LG/CATEGORIA-CASITA-GATO.jpg" alt="Gatos" loading="lazy" /></div>
-                <span class="casita-label" data-edit-id="label-gatos" data-edit-type="text">Gatos</span>
-            </a>
+        <div class="filtros">
+            <div class="filtros-botones" role="group" aria-label="Filtrar por categoría">
+                <button class="filtro-btn active" data-categoria="todas" aria-pressed="true">Todos</button>
+                <button class="filtro-btn" data-categoria="perros" aria-pressed="false">Perros</button>
+                <button class="filtro-btn" data-categoria="gatos" aria-pressed="false">Gatos</button>
+            </div>
+            <div class="etapa-chips hidden" id="etapaChips" role="group" aria-label="Filtrar por etapa de vida"></div>
+            <input type="text" class="buscador" id="buscador" placeholder="Buscar producto..." aria-label="Buscar productos" />
+            <div class="filtros-extra">
+                <select id="filtroMarca" aria-label="Filtrar por marca">
+                    <option value="">Todas las marcas</option>
+                    <option value="estampa">Estampa</option>
+                    <option value="jaspe">Jaspe</option>
+                    <option value="vagoneta">Vagoneta</option>
+                    <option value="liwué">Liwué</option>
+                    <option value="dr perrot">Dr Perrot</option>
+                    <option value="valiant">Valiant</option>
+                    <option value="insignia">Insignia</option>
+                </select>
+                <select id="ordenar" aria-label="Ordenar productos">
+                    <option value="">Ordenar por...</option>
+                    <option value="precio-asc">Precio: menor a mayor</option>
+                    <option value="precio-desc">Precio: mayor a menor</option>
+                    <option value="nombre-az">Nombre: A-Z</option>
+                    <option value="nombre-za">Nombre: Z-A</option>
+                </select>
+            </div>
         </div>
-    </div>
-</section>
-
-<!-- ===== MARCAS SLIDER ===== -->
-<section class="marcas-section" aria-label="Nuestras marcas">
-    <div class="container"><h2 class="section-title" data-edit-id="title-marcas" data-edit-type="heading">Nuestras marcas</h2></div>
-    <div class="marcas-track-wrap">
-        <div class="marcas-track" id="marcasTrack" aria-hidden="true">
-            <span class="marca-chip">Estampa</span>
-            <span class="marca-chip">Jaspe</span>
-            <span class="marca-chip">Vagoneta</span>
-            <span class="marca-chip">Liwué</span>
-            <span class="marca-chip">Dr Perrot</span>
-            <span class="marca-chip">Valiant</span>
-            <span class="marca-chip">Estampa</span>
-            <span class="marca-chip">Jaspe</span>
-            <span class="marca-chip">Vagoneta</span>
-            <span class="marca-chip">Liwué</span>
-            <span class="marca-chip">Dr Perrot</span>
-            <span class="marca-chip">Valiant</span>
-        </div>
-    </div>
-</section>
-
-<!-- ===== DESTACADOS ===== -->
-<section class="destacados" id="destacados" aria-labelledby="destacados-title">
-    <div class="container">
-        <h2 id="destacados-title" class="section-title" data-edit-id="title-destacados" data-edit-type="heading">Productos destacados</h2>
-        <div class="productos-grid" id="destacadosGrid" aria-live="polite"></div>
+        <div class="productos-grid" id="productosGrid" aria-live="polite"></div>
     </div>
 </section>
 
@@ -228,7 +218,7 @@
 </div>
 
 <script src="js/config.js"></script>
-<script src="js/config-loader.js?v=7"></script>
+<script src="js/config-loader.js?v=8"></script>
 <script src="js/api-service.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/script.js"></script>
