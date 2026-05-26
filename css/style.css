@@ -2121,8 +2121,29 @@ body.dark-bg .filtros {
         width: 44px; height: 4px;
         border-radius: 4px;
         background: rgba(255,255,255,0.28);
-        margin: 0 auto 14px;
+        margin: 0 auto 8px;
         flex-shrink: 0;
+    }
+    /* Título "Filtrar" */
+    body.dark-bg .filtros-panel.open::after {
+        content: 'Filtrar productos';
+        display: block;
+        font-size: 1rem;
+        font-weight: 800;
+        color: rgba(220,237,242,0.95);
+        text-align: center;
+        margin-bottom: 6px;
+        order: -1;
+    }
+    /* Hover/active más visible en chips dentro del sheet */
+    body.dark-bg .filtros-panel.open .filtro-btn {
+        flex: 1;
+        min-height: 48px;
+        font-size: .85rem;
+    }
+    body.dark-bg .filtros-panel.open select {
+        min-height: 48px;
+        font-size: .88rem;
     }
 }
 
