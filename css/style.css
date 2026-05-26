@@ -1787,17 +1787,17 @@ body.dark-bg .page-header p  { color: rgba(220, 237, 242, 0.65); }
 
 /* ---- Filters — mobile-first glass ---- */
 body.dark-bg .filtros {
-    background: rgba(255, 255, 255, 0.055);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 20px;
+    /* NO backdrop-filter aquí — crearía containing block que rompe
+       position:fixed del hijo .filtros-panel.open (bottom-sheet) */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
     box-shadow: none;
     padding: 14px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 body.dark-bg .filtros-botones {
     display: grid;
