@@ -1961,10 +1961,21 @@ body.dark-bg .cart-panel {
 body.dark-bg .cart-header { border-bottom-color: rgba(255,255,255,0.08); }
 body.dark-bg .cart-header h3 { color: rgba(220,237,242,0.95); }
 body.dark-bg #cartClose { color: rgba(220,237,242,0.65); }
-body.dark-bg .cart-item { border-bottom-color: rgba(255,255,255,0.07); }
-body.dark-bg .cart-item-name,
-body.dark-bg .cart-item-price { color: rgba(220,237,242,0.90); }
-body.dark-bg .cart-item-qty { color: rgba(220,237,242,0.55); font-size: .8rem; }
+body.dark-bg .cart-item {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-left: 4px solid var(--orange);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+body.dark-bg .cart-item-name { color: rgba(220,237,242,0.95) !important; font-weight: 800; }
+body.dark-bg .cart-item-price { color: #ffb380 !important; font-weight: 900; }
+body.dark-bg .cart-item-qty { color: rgba(220,237,242,0.85); font-size: .85rem; }
+body.dark-bg .cart-item-qty span { color: #fff !important; }
+body.dark-bg .cart-item-remove {
+    background: rgba(231,76,60,0.18);
+    color: #ff8c7a !important;
+    border: 1px solid rgba(231,76,60,0.35);
+}
 body.dark-bg .cart-empty { color: rgba(220,237,242,0.45); }
 body.dark-bg .cart-footer { border-top-color: rgba(255,255,255,0.08); }
 body.dark-bg .cart-total span { color: rgba(220,237,242,0.90); }
@@ -2069,7 +2080,7 @@ body.dark-bg .filtros {
     body.dark-bg .home-products { padding-top: 66px; }
     body.dark-bg .productos-page { padding-top: 66px; }
 
-    /* Panel de filtros como bottom-sheet */
+    /* Panel de filtros como bottom-sheet — usa fixed sobre todo el viewport */
     body.dark-bg .filtros-panel {
         display: none;
     }
@@ -2077,27 +2088,36 @@ body.dark-bg .filtros {
         display: flex !important;
         flex-direction: column;
         gap: 14px;
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
-        z-index: 300;
-        background: rgba(8, 18, 28, 0.97);
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: auto !important;
+        z-index: 9999 !important;
+        background: rgba(8, 18, 28, 0.98);
         backdrop-filter: blur(28px);
         -webkit-backdrop-filter: blur(28px);
-        border-radius: 20px 20px 0 0;
-        border-top: 1px solid rgba(255,255,255,0.12);
-        padding: 20px 18px 36px;
-        box-shadow: 0 -8px 48px rgba(0,0,0,0.55);
-        max-height: 72vh;
+        border-radius: 22px 22px 0 0;
+        border-top: 1px solid rgba(255,255,255,0.14);
+        padding: 22px 18px 32px;
+        box-shadow: 0 -12px 60px rgba(0,0,0,0.70);
+        max-height: 78vh;
         overflow-y: auto;
+        margin: 0 !important;
+        animation: slideUpSheet 0.28s var(--smooth);
+    }
+    @keyframes slideUpSheet {
+        from { transform: translateY(100%); }
+        to   { transform: translateY(0); }
     }
     /* Handle visual del bottom-sheet */
     body.dark-bg .filtros-panel.open::before {
         content: '';
         display: block;
-        width: 40px; height: 4px;
+        width: 44px; height: 4px;
         border-radius: 4px;
-        background: rgba(255,255,255,0.22);
-        margin: 0 auto 16px;
+        background: rgba(255,255,255,0.28);
+        margin: 0 auto 14px;
         flex-shrink: 0;
     }
 }
@@ -2163,6 +2183,46 @@ body.dark-bg .qty-cart {
 body.dark-bg .qty-cart:hover { background: rgba(255,255,255,0.18); }
 body.dark-bg .search-modal-field { border-bottom: 1px solid rgba(255,255,255,0.10); }
 body.dark-bg .search-modal-field svg { color: rgba(220,237,242,0.45); }
+
+/* ---- Cart FAB no tapa las cards en mobile ---- */
+@media (max-width: 767px) {
+    body.dark-bg .cart-fab {
+        width: 52px;
+        height: 52px;
+        bottom: 16px;
+        right: 12px;
+        font-size: 1.3rem;
+    }
+    body.dark-bg .wa-fab {
+        width: 52px;
+        height: 52px;
+        bottom: 16px;
+        left: 12px;
+    }
+    /* Padding al final de la grilla para que los FABs no tapen la última fila */
+    body.dark-bg .productos-grid { padding-bottom: 90px; }
+}
+
+/* ---- Badges compactos en mobile ---- */
+body.dark-bg .prod-badges {
+    top: 6px;
+    left: 6px;
+    gap: 3px;
+}
+body.dark-bg .prod-badge {
+    padding: 3px 8px;
+    font-size: .60rem;
+    font-weight: 800;
+    letter-spacing: 0.1px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.30);
+    text-transform: uppercase;
+}
+@media (min-width: 600px) {
+    body.dark-bg .prod-badge {
+        padding: 4px 10px;
+        font-size: .68rem;
+    }
+}
 
 /* ---- Touch targets 44px (paladear-inspired) ---- */
 body.dark-bg .filtro-btn {
