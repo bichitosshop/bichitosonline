@@ -2061,24 +2061,25 @@ body.dark-bg .filtros {
     gap: 0;
 }
 
-/* Mobile: fixed bar debajo del header
-   IMPORTANTE: NO usar backdrop-filter aquí — crea containing block que
-   rompe el position:fixed del hijo .filtros-panel.open (bottom-sheet) */
+/* Mobile: sticky (viaja con el flow, se pega al hacer scroll)
+   NO usar backdrop-filter aquí — crea containing block que rompe el
+   position:fixed del hijo .filtros-panel.open (bottom-sheet).
+   NO usar position:fixed — flotaría sobre el carrusel y crearía gap visual. */
 @media (max-width: 767px) {
     body.dark-bg .filtros {
-        position: fixed !important;
+        position: sticky !important;
         top: var(--header-h);
         left: 0; right: 0;
         z-index: 200;
         background: #0a1620;
+        margin: 0 -12px;
         padding: 9px 14px;
         border-bottom: 1px solid rgba(255,255,255,0.08);
-        box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+        box-shadow: 0 6px 24px rgba(0,0,0,0.35);
     }
-    /* Empujar el contenido para que no quede tapado por el filtro fijo.
-       La barra del filtro mide ~56px; sumamos header (~68px) = 124px total. */
-    body.dark-bg .home-products { padding-top: 66px; }
-    body.dark-bg .productos-page { padding-top: 66px; }
+    /* Sticky vive en el flow normal — sin padding compensatorio */
+    body.dark-bg .home-products { padding: 0 0 0; }
+    body.dark-bg .productos-page { padding-top: 12px; }
 
     /* Panel de filtros como bottom-sheet — usa fixed sobre todo el viewport */
     body.dark-bg .filtros-panel {
