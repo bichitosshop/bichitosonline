@@ -106,7 +106,9 @@ function aplicarTamanios() {
         css.push(`@media (max-width: 767px) { .hero-carousel { height: ${Math.round(h*.25)}px !important; } }`);
     }
     if (sizes.productImageHeight) {
-        css.push(`.producto-img { height: ${sizes.productImageHeight}px !important; aspect-ratio: unset !important; }`);
+        // Mobile (<768px): CSS controla el tamaño compacto (130px) — NO override desde config
+        // Tablet+: usa el valor de config-loader
+        css.push(`@media (min-width: 768px) { .producto-img { height: ${sizes.productImageHeight}px !important; aspect-ratio: unset !important; } }`);
     }
     if (css.length) {
         const s = document.createElement('style');
