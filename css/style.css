@@ -2045,9 +2045,12 @@ body.dark-bg .footer::before { opacity: 0.6; }
 .home-products { padding: 40px 0 60px; }
 .home-products .section-title { margin-bottom: 24px; }
 
-/* ---- Mobile base ---- */
-html { overflow-x: hidden; }
-body.dark-bg { overflow-x: hidden; }
+/* ---- Mobile base ----
+   Usamos overflow-x: clip en lugar de hidden.
+   `hidden` crea un block formatting context que ROMPE position:sticky
+   de cualquier descendiente. `clip` no tiene ese efecto secundario. */
+html { overflow-x: clip; }
+body.dark-bg { overflow-x: clip; }
 body.dark-bg .container { padding-left: 12px; padding-right: 12px; }
 @media (min-width: 480px) { body.dark-bg .container { padding-left: 20px; padding-right: 20px; } }
 
