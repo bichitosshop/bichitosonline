@@ -14,6 +14,7 @@
 <body class="dark-bg">
 
 <canvas id="pawCanvas" aria-hidden="true"></canvas>
+<div class="bg-blob-3" aria-hidden="true"></div>
 <a href="#main" class="skip-link">Saltar al contenido principal</a>
 
 <!-- ===== HEADER ===== -->
@@ -96,32 +97,40 @@
 <section class="productos-page" aria-labelledby="productos-title">
     <div class="container">
         <h2 id="productos-title" class="section-title">Catálogo completo</h2>
-        <div class="filtros">
-            <div class="filtros-botones" role="group" aria-label="Filtrar por categoría">
-                <button class="filtro-btn active" data-categoria="todas" aria-pressed="true">Todas</button>
-                <button class="filtro-btn" data-categoria="perros" aria-pressed="false">Perros</button>
-                <button class="filtro-btn" data-categoria="gatos" aria-pressed="false">Gatos</button>
+        <div class="filtros" id="filtros">
+            <div class="filtros-topbar">
+                <input type="text" class="buscador" id="buscador" placeholder="Buscar producto..." aria-label="Buscar productos" autocomplete="off" />
+                <button class="filtros-toggle-btn" id="filtrosToggle" aria-expanded="false" aria-controls="filtrosPanel">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h14M6 10h8M9 15h2"/></svg>
+                    Filtros
+                </button>
             </div>
-            <div class="etapa-chips hidden" id="etapaChips" role="group" aria-label="Filtrar por etapa de vida"></div>
-            <input type="text" class="buscador" id="buscador" placeholder="Buscar producto..." aria-label="Buscar productos" />
-            <div class="filtros-extra">
-                <select id="filtroMarca" aria-label="Filtrar por marca">
-                    <option value="">Todas las marcas</option>
-                    <option value="estampa">Estampa</option>
-                    <option value="jaspe">Jaspe</option>
-                    <option value="vagoneta">Vagoneta</option>
-                    <option value="liwué">Liwué</option>
-                    <option value="dr perrot">Dr Perrot</option>
-                    <option value="valiant">Valiant</option>
-                    <option value="insignia">Insignia</option>
-                </select>
-                <select id="ordenar" aria-label="Ordenar productos">
-                    <option value="">Ordenar por...</option>
-                    <option value="precio-asc">Precio: menor a mayor</option>
-                    <option value="precio-desc">Precio: mayor a menor</option>
-                    <option value="nombre-az">Nombre: A-Z</option>
-                    <option value="nombre-za">Nombre: Z-A</option>
-                </select>
+            <div class="filtros-panel" id="filtrosPanel">
+                <div class="filtros-botones" role="group" aria-label="Filtrar por categoría">
+                    <button class="filtro-btn active" data-categoria="todas" aria-pressed="true">Todos</button>
+                    <button class="filtro-btn" data-categoria="perros" aria-pressed="false">Perros</button>
+                    <button class="filtro-btn" data-categoria="gatos" aria-pressed="false">Gatos</button>
+                </div>
+                <div class="etapa-chips hidden" id="etapaChips" role="group" aria-label="Filtrar por etapa de vida"></div>
+                <div class="filtros-extra">
+                    <select id="filtroMarca" aria-label="Filtrar por marca">
+                        <option value="">Todas las marcas</option>
+                        <option value="estampa">Estampa</option>
+                        <option value="jaspe">Jaspe</option>
+                        <option value="vagoneta">Vagoneta</option>
+                        <option value="liwué">Liwué</option>
+                        <option value="dr perrot">Dr Perrot</option>
+                        <option value="valiant">Valiant</option>
+                        <option value="insignia">Insignia</option>
+                    </select>
+                    <select id="ordenar" aria-label="Ordenar productos">
+                        <option value="">Ordenar por...</option>
+                        <option value="precio-asc">Precio: menor a mayor</option>
+                        <option value="precio-desc">Precio: mayor a menor</option>
+                        <option value="nombre-az">Nombre: A-Z</option>
+                        <option value="nombre-za">Nombre: Z-A</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="productos-grid" id="productosGrid" aria-live="polite"></div>
@@ -211,7 +220,7 @@
 </div>
 
 <script src="js/config.js"></script>
-<script src="js/config-loader.js?v=9"></script>
+<script src="js/config-loader.js?v=10"></script>
 <script src="js/api-service.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/script.js"></script>

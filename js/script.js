@@ -711,6 +711,15 @@ function setupUI() {
     // Filtro marca + orden
     document.getElementById('filtroMarca')?.addEventListener('change', renderProductos);
     document.getElementById('ordenar')?.addEventListener('change', renderProductos);
+
+    // Toggle panel de filtros
+    document.getElementById('filtrosToggle')?.addEventListener('click', () => {
+        const panel = document.getElementById('filtrosPanel');
+        const btn   = document.getElementById('filtrosToggle');
+        if (!panel) return;
+        const open = panel.classList.toggle('open');
+        btn?.setAttribute('aria-expanded', open);
+    });
 }
 
 // ===== UPDATE CARDS SIN RE-RENDER =====
