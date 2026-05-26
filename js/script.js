@@ -192,17 +192,17 @@ function renderDestacados() {
     initScrollAnimations(grid);
 }
 
-// Badges apilables
+// Badges apilables (sin emojis decorativos, según CLAUDE.md)
 function badgesProducto(p) {
     const badges = [];
     if (p.stock === 0) {
-        badges.push('<span class="prod-badge badge-agotado">🔴 Agotado</span>');
+        badges.push('<span class="prod-badge badge-agotado">Agotado</span>');
     } else if (p.stock && p.stock <= 5) {
-        badges.push('<span class="prod-badge badge-pocos">🔥 Quedan pocos</span>');
+        badges.push('<span class="prod-badge badge-pocos">Pocas unidades</span>');
     }
-    if (p.oferta) badges.push('<span class="prod-badge badge-oferta">🔥 Oferta</span>');
-    if (p.destacado) badges.push('<span class="prod-badge badge-destacado">⭐ Más vendido</span>');
-    if (p.envioGratis || p.envio_gratis) badges.push('<span class="prod-badge badge-envio">🚚 Envío gratis</span>');
+    if (p.oferta) badges.push('<span class="prod-badge badge-oferta">Oferta</span>');
+    if (p.destacado) badges.push('<span class="prod-badge badge-destacado">Más vendido</span>');
+    if (p.envioGratis || p.envio_gratis) badges.push('<span class="prod-badge badge-envio">Envío gratis</span>');
     if (badges.length === 0) return '';
     return `<div class="prod-badges">${badges.join('')}</div>`;
 }
@@ -263,12 +263,17 @@ function renderCarrito() {
     const totalCant = carrito.reduce((s, i) => s + i.cant, 0);
     if (count) {
         count.textContent = totalCant;
+        // Ocultar el badge cuando el carrito está vacío (menos ruido visual)
+        count.style.display = totalCant > 0 ? '' : 'none';
         count.classList.remove('bump');
         void count.offsetWidth;
         if (totalCant > 0) count.classList.add('bump');
     }
     if (fab) fab.classList.toggle('visible', totalCant > 0);
-    if (fabBadge) fabBadge.textContent = totalCant;
+    if (fabBadge) {
+        fabBadge.textContent = totalCant;
+        fabBadge.style.display = totalCant > 0 ? '' : 'none';
+    }
 
     const totalPrecio = carrito.reduce((s, i) => s + i.precio * i.cant, 0);
 
