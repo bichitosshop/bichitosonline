@@ -195,5 +195,8 @@
   },
   "logoSize": "40",
   "logoOffsetX": "-5",
-  "logoOffsetY": "0"
+  "logoOffsetY": "0",
+  "cards": {
+    "style": "scrapbook"
+  }
 }
