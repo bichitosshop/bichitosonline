@@ -1683,12 +1683,44 @@ li { list-style: none; }
 
 body.dark-bg {
     background-color: #0c1d26;
-    background-image:
-        radial-gradient(ellipse at 10% 40%, rgba(46, 196, 182, 0.18) 0%, transparent 52%),
-        radial-gradient(ellipse at 88% 10%, rgba(240, 118, 57, 0.15) 0%, transparent 48%),
-        radial-gradient(ellipse at 55% 85%, rgba(31, 86, 130, 0.20) 0%, transparent 50%);
-    background-attachment: fixed;
     color: #dcedf2;
+}
+body.dark-bg header,
+body.dark-bg main,
+body.dark-bg footer { position: relative; z-index: 1; }
+
+/* Blobs animados */
+@keyframes blobDrift1 {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33%       { transform: translate(7%, -5%) scale(1.12); }
+    66%       { transform: translate(-5%, 8%) scale(0.93); }
+}
+@keyframes blobDrift2 {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    40%       { transform: translate(-8%, 4%) scale(1.09); }
+    70%       { transform: translate(6%, -6%) scale(1.04); }
+}
+body.dark-bg::before {
+    content: '';
+    position: fixed;
+    top: -10%; left: -8%;
+    width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(46,196,182,0.20) 0%, transparent 68%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: blobDrift1 30s ease-in-out infinite;
+}
+body.dark-bg::after {
+    content: '';
+    position: fixed;
+    bottom: -8%; right: -6%;
+    width: 55vw; height: 55vw;
+    background: radial-gradient(circle, rgba(240,118,57,0.16) 0%, transparent 66%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: blobDrift2 38s ease-in-out infinite;
 }
 
 /* ---- Header ---- */
@@ -1980,6 +2012,104 @@ body.dark-bg .footer::before { opacity: 0.6; }
 /* ---- Home products section ---- */
 .home-products { padding: 40px 0 60px; }
 .home-products .section-title { margin-bottom: 24px; }
+
+/* ---- Filtros: fix overflow en mobile ---- */
+body.dark-bg .filtros { overflow: hidden; }
+body.dark-bg .buscador { min-width: 0; width: 100%; }
+
+/* ---- Cart item text colors ---- */
+body.dark-bg .cart-item-qty span { color: rgba(220,237,242,0.90); font-weight: 700; }
+body.dark-bg .qty-cart {
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: rgba(220,237,242,0.85);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1rem; line-height: 1;
+    transition: background 0.15s;
+}
+body.dark-bg .qty-cart:hover { background: rgba(255,255,255,0.18); }
+body.dark-bg .search-modal-field { border-bottom: 1px solid rgba(255,255,255,0.10); }
+body.dark-bg .search-modal-field svg { color: rgba(220,237,242,0.45); }
+
+/* ---- Qty controls en card ---- */
+body.dark-bg .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+}
+body.dark-bg .card-qty-wrap {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid rgba(255,255,255,0.14);
+    border-radius: 50px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+body.dark-bg .btn-qty-minus,
+body.dark-bg .btn-qty-plus {
+    width: 30px; height: 30px;
+    border: none;
+    background: transparent;
+    color: rgba(220,237,242,0.85);
+    font-size: 1.05rem; font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+body.dark-bg .btn-qty-plus {
+    background: var(--orange);
+    color: #fff;
+}
+body.dark-bg .btn-qty-plus:hover:not(:disabled) { background: var(--orange-dark); }
+body.dark-bg .btn-qty-minus:hover:not(:disabled) { background: rgba(255,255,255,0.12); }
+body.dark-bg .btn-qty-minus:disabled,
+body.dark-bg .btn-qty-plus:disabled { opacity: 0.28; cursor: default; }
+body.dark-bg .qty-num {
+    min-width: 22px;
+    text-align: center;
+    font-weight: 800;
+    font-size: .82rem;
+    color: rgba(220,237,242,0.92);
+}
+body.dark-bg .producto-precio { font-size: 1.15rem; }
+body.dark-bg .producto-nombre { font-size: .85rem; }
+body.dark-bg .producto-marca  { font-size: .65rem; }
+body.dark-bg .producto-body { padding: 12px; }
+
+/* ---- Carousel: más alto en mobile ---- */
+@media (max-width: 767px) {
+    body.dark-bg .hero-carousel { height: 210px; }
+}
+
+/* ---- Pinterest 2-col asimétrico en mobile ---- */
+@media (max-width: 640px) {
+    body.dark-bg .productos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        padding: 4px 0 24px;
+    }
+    body.dark-bg .producto-img { height: 150px; }
+    body.dark-bg .producto-card:nth-child(3n+2) .producto-img { height: 170px; }
+    body.dark-bg .producto-card:nth-child(5n+3) .producto-img { height: 135px; }
+    body.dark-bg .producto-body { padding: 9px; }
+    body.dark-bg .producto-nombre { font-size: .78rem; }
+    body.dark-bg .producto-precio { font-size: 1rem; }
+}
+
+/* ---- Canvas de partículas ---- */
+#pawCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
 
 /* Precio más rotundo */
 .cards-scrapbook .producto-precio { font-weight: 900; }
