@@ -1367,7 +1367,17 @@ li { list-style: none; }
     transition: transform var(--norm), box-shadow var(--norm);
 }
 .contacto-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-.contacto-icon { font-size: 3rem; display: block; margin-bottom: 14px; transition: transform var(--norm); }
+.contacto-icon {
+    font-size: 3rem;
+    display: block;
+    margin: 0 auto 14px;
+    transition: transform var(--norm);
+}
+svg.contacto-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--teal);
+}
 .contacto-card:hover .contacto-icon { transform: scale(1.15); }
 .contacto-card h3 { margin-bottom: 8px; color: var(--orange); font-size: 1.2rem; font-weight: 800; }
 .contacto-card p { color: var(--gray); margin-bottom: 18px; font-size: .9rem; }
