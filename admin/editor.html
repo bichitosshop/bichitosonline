@@ -430,6 +430,14 @@ a{text-decoration:none;color:inherit}
             <div class="fg">
               <div class="fg-h"><div class="fg-t">Tarjetas de producto</div></div>
               <div class="fg-b">
+                <div class="field">
+                  <label class="lbl">Estilo de tarjeta</label>
+                  <select class="sel" id="card-style">
+                    <option value="default">Clásico — alineado, sobrio</option>
+                    <option value="scrapbook">Scrapbook — rotaciones, stickers, divertido</option>
+                  </select>
+                  <p style="font-size:.68rem;color:var(--gray);margin-top:4px;line-height:1.4">Cambiá entre los dos estilos para ver cuál te gusta más. Se aplica a toda la grilla de productos.</p>
+                </div>
                 <div class="field"><label class="lbl">Tamaño del nombre</label><div class="r-row"><input type="range" class="r-inp" id="range-card-nameSize" min="11" max="28" step="1"/><span class="r-val" id="rv-card-nameSize"></span></div></div>
                 <div class="field"><label class="lbl">Tamaño del precio</label><div class="r-row"><input type="range" class="r-inp" id="range-card-priceSize" min="12" max="40" step="1"/><span class="r-val" id="rv-card-priceSize"></span></div></div>
                 <div class="field"><label class="lbl">Tamaño de la marca</label><div class="r-row"><input type="range" class="r-inp" id="range-card-brandSize" min="8" max="20" step="1"/><span class="r-val" id="rv-card-brandSize"></span></div></div>
@@ -655,7 +663,7 @@ async function initEditor() {
   buildFontSel(); buildPresets(); bindColors(); bindRanges(); bindBsgs();
   bindBtnFields(); bindStoreFields(); buildSections(); bindBannerPanel();
   bindExportImport(); bindDeviceBtns(); bindUndo(); bindSave();
-  bindEditMode(); buildBrandList(); bindLogoImage();
+  bindEditMode(); buildBrandList(); bindCardStyle(); bindLogoImage();
   loadFormValues();
   loadColorHistory();
   refreshPreview();
@@ -739,6 +747,8 @@ function loadFormValues() {
   setRng('logoOffsetX', config.logoOffsetX ?? 0,  'rv-logoOffsetX', 'px');
   setRng('logoOffsetY', config.logoOffsetY ?? 0,  'rv-logoOffsetY', 'px');
   // Tarjetas de producto
+  const cardStyleSel = document.getElementById('card-style');
+  if (cardStyleSel) cardStyleSel.value = config.cards?.style || 'default';
   setRng('card-nameSize',  config.cards?.nameSize  ?? 15, 'rv-card-nameSize',  'px');
   setRng('card-priceSize', config.cards?.priceSize ?? 24, 'rv-card-priceSize', 'px');
   setRng('card-brandSize', config.cards?.brandSize ?? 11, 'rv-card-brandSize', 'px');
@@ -1197,6 +1207,18 @@ function bindEditMode() {
     applyEditModeToIframe();
   });
 }
+
+function bindCardStyle() {
+  const sel = document.getElementById('card-style');
+  if (!sel) return;
+  sel.addEventListener('change', () => {
+    pushH();
+    if (!config.cards) config.cards = {};
+    config.cards.style = sel.value;
+    refreshPreview();
+  });
+}
+
 function setEditMode(on) {
   editMode = on;
   document.getElementById('modeNav').classList.toggle('active', !on);

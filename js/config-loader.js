@@ -399,11 +399,12 @@ function aplicarLogo() {
     });
 }
 
-// ── Tarjetas de producto: tamaños de texto y bordes ───────────────────
+// ── Tarjetas de producto: tamaños de texto, bordes y tema ─────────────
 function aplicarCards() {
-    const c = window.siteConfig?.cards;
+    const c = window.siteConfig?.cards || {};
+    // Tema: clásico vs scrapbook (rotaciones, sticker badges, etc.)
+    document.body.classList.toggle('cards-scrapbook', c.style === 'scrapbook');
     document.getElementById('cfg-card-styles')?.remove();
-    if (!c) return;
     const css = [];
     if (c.nameSize)  css.push(`.producto-nombre { font-size: ${c.nameSize}px !important; }`);
     if (c.priceSize) css.push(`.producto-precio { font-size: ${c.priceSize}px !important; }`);
