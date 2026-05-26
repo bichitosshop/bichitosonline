@@ -1851,6 +1851,8 @@ body.dark-bg .buscador {
     border: 1.5px solid rgba(255,255,255,0.12);
     color: rgba(220,237,242,0.90);
     border-radius: 50px;
+    min-height: 44px;
+    padding: 0 16px;
 }
 body.dark-bg .buscador::placeholder { color: rgba(220,237,242,0.38); }
 body.dark-bg .buscador:focus {
@@ -2038,15 +2040,68 @@ body.dark-bg { overflow-x: hidden; }
 body.dark-bg .container { padding-left: 12px; padding-right: 12px; }
 @media (min-width: 480px) { body.dark-bg .container { padding-left: 20px; padding-right: 20px; } }
 
-/* ---- Filtro sticky con toggle ---- */
+/* ---- Filtro fijo con toggle ---- */
 body.dark-bg .filtros {
     position: sticky;
     top: var(--header-h);
-    z-index: 100;
+    z-index: 200;
     overflow: visible;
     flex-direction: column;
     gap: 0;
 }
+
+/* Mobile: fixed bar debajo del header */
+@media (max-width: 767px) {
+    body.dark-bg .filtros {
+        position: fixed !important;
+        top: var(--header-h);
+        left: 0; right: 0;
+        z-index: 200;
+        background: rgba(8, 18, 28, 0.94);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        padding: 9px 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 6px 28px rgba(0,0,0,0.40);
+    }
+    /* Empujar el contenido para que no quede tapado por el filtro fijo.
+       La barra del filtro mide ~56px; sumamos header (~68px) = 124px total. */
+    body.dark-bg .home-products { padding-top: 66px; }
+    body.dark-bg .productos-page { padding-top: 66px; }
+
+    /* Panel de filtros como bottom-sheet */
+    body.dark-bg .filtros-panel {
+        display: none;
+    }
+    body.dark-bg .filtros-panel.open {
+        display: flex !important;
+        flex-direction: column;
+        gap: 14px;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        z-index: 300;
+        background: rgba(8, 18, 28, 0.97);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        border-radius: 20px 20px 0 0;
+        border-top: 1px solid rgba(255,255,255,0.12);
+        padding: 20px 18px 36px;
+        box-shadow: 0 -8px 48px rgba(0,0,0,0.55);
+        max-height: 72vh;
+        overflow-y: auto;
+    }
+    /* Handle visual del bottom-sheet */
+    body.dark-bg .filtros-panel.open::before {
+        content: '';
+        display: block;
+        width: 40px; height: 4px;
+        border-radius: 4px;
+        background: rgba(255,255,255,0.22);
+        margin: 0 auto 16px;
+        flex-shrink: 0;
+    }
+}
+
 body.dark-bg .filtros-topbar {
     display: flex;
     gap: 8px;
@@ -2055,7 +2110,8 @@ body.dark-bg .filtros-topbar {
 body.dark-bg .buscador { min-width: 0; flex: 1; }
 body.dark-bg .filtros-toggle-btn {
     display: flex; align-items: center; gap: 6px;
-    padding: 10px 14px;
+    padding: 0 14px;
+    min-height: 44px;
     border-radius: 50px;
     border: 1.5px solid rgba(255,255,255,0.15);
     background: rgba(255,255,255,0.09);
@@ -2068,6 +2124,8 @@ body.dark-bg .filtros-toggle-btn {
 }
 body.dark-bg .filtros-toggle-btn:hover { background: rgba(255,255,255,0.15); }
 body.dark-bg .filtros-toggle-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* Panel oculto por defecto (desktop) */
 body.dark-bg .filtros-panel {
     display: none;
     flex-direction: column;
@@ -2077,6 +2135,7 @@ body.dark-bg .filtros-panel {
     margin-top: 12px;
 }
 body.dark-bg .filtros-panel.open { display: flex; }
+
 @media (min-width: 768px) {
     body.dark-bg .filtros { flex-direction: row; align-items: center; gap: 12px; }
     body.dark-bg .filtros-topbar { flex: 1; }
@@ -2104,6 +2163,75 @@ body.dark-bg .qty-cart {
 body.dark-bg .qty-cart:hover { background: rgba(255,255,255,0.18); }
 body.dark-bg .search-modal-field { border-bottom: 1px solid rgba(255,255,255,0.10); }
 body.dark-bg .search-modal-field svg { color: rgba(220,237,242,0.45); }
+
+/* ---- Touch targets 44px (paladear-inspired) ---- */
+body.dark-bg .filtro-btn {
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 50px;
+    font-size: .82rem; font-weight: 700;
+    border: 1.5px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06);
+    color: rgba(220,237,242,0.80);
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s;
+    white-space: nowrap;
+}
+body.dark-bg .filtro-btn.active,
+body.dark-bg .filtro-btn[aria-pressed="true"] {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+}
+body.dark-bg .filtro-btn:hover:not(.active) { background: rgba(255,255,255,0.12); }
+
+/* Chips de categoría scrollables horizontalmente */
+body.dark-bg .filtros-botones,
+body.dark-bg .etapa-chips {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+}
+body.dark-bg .filtros-botones::-webkit-scrollbar,
+body.dark-bg .etapa-chips::-webkit-scrollbar { display: none; }
+
+/* Chips de etapa */
+body.dark-bg .etapa-chip {
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 50px;
+    font-size: .78rem; font-weight: 700;
+    border: 1.5px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    color: rgba(220,237,242,0.75);
+    cursor: pointer;
+    transition: background 0.18s;
+    white-space: nowrap;
+    display: inline-flex; align-items: center;
+}
+body.dark-bg .etapa-chip.active {
+    background: rgba(46,196,182,0.25);
+    border-color: var(--teal);
+    color: var(--teal);
+}
+
+/* Selects en filtros-extra */
+body.dark-bg .filtros-extra select {
+    min-height: 40px;
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.13);
+    border-radius: 50px;
+    color: rgba(220,237,242,0.85);
+    padding: 0 14px;
+    font-size: .82rem; font-weight: 600;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
 
 /* ---- Qty controls en card ---- */
 body.dark-bg .card-footer {
@@ -2161,12 +2289,12 @@ body.dark-bg .producto-body { padding: 12px; }
 
 /* ---- Imagen flotante (efecto producto que flota) ---- */
 body.dark-bg .producto-img {
-    background: #f2f2f2 !important;
+    background: #ffffff !important;
     padding: 10px;
     display: flex; align-items: center; justify-content: center;
 }
-body.dark-bg .producto-img.perros { background: linear-gradient(160deg, #fff5ef, #ffe8da) !important; }
-body.dark-bg .producto-img.gatos  { background: linear-gradient(160deg, #edfbfa, #d4f5f2) !important; }
+body.dark-bg .producto-img.perros { background: #ffffff !important; }
+body.dark-bg .producto-img.gatos  { background: #ffffff !important; }
 body.dark-bg .producto-foto {
     object-fit: contain !important;
     max-height: 100%;
@@ -2183,7 +2311,7 @@ body.dark-bg .producto-card:hover .producto-foto {
 /* ---- BENTO GRID ---- */
 /* Mobile: 2 columnas compactas */
 body.dark-bg .productos-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 8px;
     padding: 4px 0 24px;
 }

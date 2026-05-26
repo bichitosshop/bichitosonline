@@ -712,13 +712,34 @@ function setupUI() {
     document.getElementById('filtroMarca')?.addEventListener('change', renderProductos);
     document.getElementById('ordenar')?.addEventListener('change', renderProductos);
 
-    // Toggle panel de filtros
-    document.getElementById('filtrosToggle')?.addEventListener('click', () => {
-        const panel = document.getElementById('filtrosPanel');
-        const btn   = document.getElementById('filtrosToggle');
-        if (!panel) return;
-        const open = panel.classList.toggle('open');
-        btn?.setAttribute('aria-expanded', open);
+    // Toggle panel de filtros (bottom-sheet en mobile)
+    const filtrosToggleBtn = document.getElementById('filtrosToggle');
+    const filtrosPanel     = document.getElementById('filtrosPanel');
+
+    function closeFiltrosPanel() {
+        if (!filtrosPanel) return;
+        filtrosPanel.classList.remove('open');
+        filtrosToggleBtn?.setAttribute('aria-expanded', 'false');
+    }
+
+    filtrosToggleBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!filtrosPanel) return;
+        const open = filtrosPanel.classList.toggle('open');
+        filtrosToggleBtn.setAttribute('aria-expanded', String(open));
+    });
+
+    // Cerrar el panel al tocar fuera (overlay del bottom-sheet)
+    document.addEventListener('click', (e) => {
+        if (!filtrosPanel?.classList.contains('open')) return;
+        if (!filtrosPanel.contains(e.target) && e.target !== filtrosToggleBtn) {
+            closeFiltrosPanel();
+        }
+    });
+
+    // Cerrar el panel con Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeFiltrosPanel();
     });
 }
 
