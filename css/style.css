@@ -1899,52 +1899,30 @@ body.dark-bg .filtros-extra select:focus {
 
 /* ---- Product cards — glass ---- */
 body.dark-bg .productos-grid { padding: 8px 0 32px; }
-/* CARD BLANCA: fusionada con la imagen.
-   Producto flota sobre un panel claro único, sin línea divisora. */
+/* Card glass dark: el cuerpo de la card es oscuro (estética del sitio) */
 body.dark-bg .producto-card {
-    background: #ffffff;
-    border: 1px solid rgba(0,0,0,0.04);
-    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.28);
     border-radius: 14px;
     overflow: hidden;
-    transition: transform 0.25s var(--smooth), box-shadow 0.25s;
+    transition: transform 0.25s var(--smooth), border-color 0.25s, box-shadow 0.25s;
 }
 body.dark-bg .producto-card:hover {
-    box-shadow: 0 10px 32px rgba(0,0,0,0.38);
+    border-color: rgba(46, 196, 182, 0.30);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.40);
     transform: translateY(-3px);
 }
 body.dark-bg .producto-img { background: #ffffff; }
 body.dark-bg .producto-img.perros { background: #ffffff; }
 body.dark-bg .producto-img.gatos  { background: #ffffff; }
-
-/* Texto oscuro para legibilidad sobre fondo claro */
-body.dark-bg .producto-nombre { color: #1a2330; }
-body.dark-bg .producto-marca  { color: #2EC4B6; }
-body.dark-bg .producto-precio { color: #ff6b35; font-weight: 900; }
-body.dark-bg .producto-body { background: #ffffff; }
-body.dark-bg .producto-card .card-footer { background: #ffffff; }
-
-/* Qty controls sobre fondo claro */
-body.dark-bg .card-qty-wrap {
-    border: 1.5px solid rgba(0,0,0,0.10);
-    background: #fafafa;
-}
-body.dark-bg .btn-qty-minus {
-    color: #1a2330;
-}
-body.dark-bg .btn-qty-minus:hover:not(:disabled) { background: rgba(0,0,0,0.05); }
-body.dark-bg .qty-num { color: #1a2330; }
-
-/* Card en-carrito: borde teal sutil */
-body.dark-bg .producto-card.en-carrito {
-    border: 2px solid rgba(46,196,182,0.55);
-    box-shadow: 0 0 0 3px rgba(46,196,182,0.18), 0 8px 24px rgba(0,0,0,0.30);
-}
-/* Variantes (15 Kg / 20 Kg) sobre card blanca */
+body.dark-bg .producto-nombre { color: rgba(220, 237, 242, 0.94); }
+body.dark-bg .producto-marca  { color: rgba(46, 196, 182, 0.75); }
+body.dark-bg .producto-precio { color: #ff8a3d; }
 body.dark-bg .kg-btn {
-    background: #f5f5f5;
-    border-color: rgba(0,0,0,0.08);
-    color: #555;
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+    color: rgba(220,237,242,0.80);
 }
 body.dark-bg .kg-btn:hover { border-color: var(--teal); color: var(--teal); }
 body.dark-bg .kg-btn.active {
@@ -1952,7 +1930,7 @@ body.dark-bg .kg-btn.active {
     border-color: var(--orange);
     color: #fff;
 }
-body.dark-bg .stock-label { color: rgba(0,0,0,0.50); }
+body.dark-bg .stock-label { color: rgba(220,237,242,0.55); }
 body.dark-bg .producto-card.en-carrito {
     border-color: rgba(46,196,182,0.40);
     box-shadow: 0 0 0 2px rgba(46,196,182,0.20), 0 8px 32px rgba(0,0,0,0.35);
@@ -2444,25 +2422,28 @@ body.dark-bg .producto-body { padding: 12px; }
     }
 }
 
-/* ---- Imagen flotante (efecto producto que flota) ---- */
+/* ---- Imagen sin "margen" visible: producto fusiona con la zona blanca ----
+   Sin padding: la foto del producto cubre todo el contenedor blanco.
+   Cuando el blanco baked-in de la foto difiere del #ffffff del contenedor,
+   sin padding NO se nota la diferencia porque la foto cubre TODO. */
 body.dark-bg .producto-img {
     background: #ffffff !important;
-    padding: 10px;
+    padding: 0 !important;
     display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
 }
 body.dark-bg .producto-img.perros { background: #ffffff !important; }
 body.dark-bg .producto-img.gatos  { background: #ffffff !important; }
 body.dark-bg .producto-foto {
     object-fit: contain !important;
+    width: 100% !important;
+    height: 100% !important;
     max-height: 100%;
-    width: auto !important;
     max-width: 100%;
-    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.14));
-    transition: transform 0.35s var(--bounce), filter 0.35s;
+    transition: transform 0.35s var(--bounce);
 }
 body.dark-bg .producto-card:hover .producto-foto {
-    transform: scale(1.08) translateY(-4px) !important;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.20));
+    transform: scale(1.05) !important;
 }
 
 /* ---- GRID DE PRODUCTOS ---- */
