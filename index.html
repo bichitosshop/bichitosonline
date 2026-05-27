@@ -970,17 +970,22 @@ function renderAll(){
 function updateCartUI(){
   renderCart();
   saveCart();
-  products.forEach(p=>{
-    const card=document.querySelector('.product-card[data-base="'+p._base+'"]');
-    if(!card)return;
+  document.querySelectorAll('.product-card').forEach(card=>{
+    const base=card.dataset.base;
+    const groups=groupByBase(products).find(g=>g._base===base);
+    if(!groups)return;
+    const activePill=card.querySelector('.kg-pill.active');
+    const idx=activePill?parseInt(activePill.dataset.idx):0;
+    const p=groups.v[idx];
+    if(!p)return;
     const inCart=cart.find(i=>i.id===p.id);
     const qty=inCart?inCart.qty:0;
     const footer=card.querySelector('.card-footer');
-    const oldBtn=footer.querySelector('.btn-add,.qty-wrap');
+    const oldBtn=footer&&footer.querySelector('.btn-add,.qty-wrap');
     if(qty>0&&(!oldBtn||!oldBtn.classList.contains('qty-wrap'))){
       const wrap=document.createElement('div');wrap.className='qty-wrap';
       wrap.innerHTML='<button class="qty-btn" data-id="'+p.id+'" data-action="dec">\u2212</button><span class="qty-count">'+qty+'</span><button class="qty-btn" data-id="'+p.id+'" data-action="inc">+</button>';
-      if(oldBtn)oldBtn.replaceWith(wrap);else footer.append(wrap);
+      if(oldBtn)oldBtn.replaceWith(wrap);else footer&&footer.append(wrap);
       card.classList.add('in-cart');
     }else if(qty===0&&oldBtn&&oldBtn.classList.contains('qty-wrap')){
       const btn=document.createElement('button');btn.className='btn-add';btn.dataset.id=p.id;btn.dataset.action='add';
@@ -991,6 +996,8 @@ function updateCartUI(){
       const count=oldBtn.querySelector('.qty-count');
       if(count)count.textContent=qty;
     }
+    const precio=card.querySelector('.card-precio');
+    if(precio)precio.textContent=formatPrice(p.precio);
   });
 }
 function renderProductos(){
