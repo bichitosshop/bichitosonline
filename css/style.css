@@ -3255,15 +3255,84 @@ body.dark-bg .footer .logo-shop     { color: rgba(255,248,241,0.88) !important; 
    BUG FIXES — systematic-debugging
    ============================================================ */
 
-/* FIX 1: Botones +/- de la card se cortaban contra el pill
-   Root cause: .card-qty-wrap tiene overflow:hidden + border-radius:50px
-   y los botones tienen esquinas cuadradas. Las esquinas del botón
-   chocan contra la curva del wrapper. */
-body.dark-bg .btn-qty-minus {
-    border-radius: 50px 0 0 50px !important;
+/* FIX 1: Layout del card-footer cuando el precio es largo
+   Root cause real: en mobile la card mide ~140px de contenido. Con
+   precios largos ($125.000 = ~80px) + qty wrap (78px) = no entra.
+   El wrap se aplasta o el botón + queda fuera del card.
+   Fix: stackear vertical en mobile (precio arriba, qty abajo full). */
+@media (max-width: 767px) {
+    body.dark-bg .card-footer {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+    body.dark-bg .producto-precio {
+        font-size: 1.2rem !important;
+        margin: 0 !important;
+        line-height: 1.1;
+    }
+    /* Wrap full-width, los botones se reparten el espacio */
+    body.dark-bg .card-qty-wrap {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: 38px 1fr 38px !important;
+        height: 36px;
+        border-radius: 50px !important;
+    }
+    body.dark-bg .btn-qty-minus,
+    body.dark-bg .btn-qty-plus {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+        font-size: 1.1rem !important;
+    }
+    body.dark-bg .btn-qty-minus { border-radius: 50px 0 0 50px !important; }
+    body.dark-bg .btn-qty-plus  { border-radius: 0 50px 50px 0 !important; }
+    body.dark-bg .qty-num {
+        min-width: 0 !important;
+        font-size: .9rem !important;
+        line-height: 36px;
+        text-align: center;
+    }
 }
-body.dark-bg .btn-qty-plus {
-    border-radius: 0 50px 50px 0 !important;
+
+/* ELEGANCIA MOBILE: refinamiento de cards (sleek-inspired) */
+@media (max-width: 767px) {
+    body.dark-bg .producto-body {
+        padding: 12px 12px 14px !important;
+    }
+    body.dark-bg .producto-marca {
+        font-size: .56rem !important;
+        letter-spacing: 1.4px !important;
+        margin-bottom: 4px !important;
+        font-weight: 700 !important;
+    }
+    body.dark-bg .producto-nombre {
+        font-size: .8rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 10px !important;
+        min-height: 2.6em !important;
+    }
+    body.dark-bg .producto-precio {
+        font-weight: 800 !important;
+        letter-spacing: -0.4px !important;
+    }
+    /* Imagen con un poco más de aire — 130 → 140px */
+    body.dark-bg .producto-img {
+        height: 140px !important;
+    }
+    /* Sombra más liviana = más elegante */
+    body.dark-bg .producto-card {
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04) !important;
+    }
+    body.dark-bg .producto-card:hover,
+    body.dark-bg .producto-card:active {
+        box-shadow: 0 8px 28px rgba(244,81,30,0.12), 0 2px 6px rgba(0,0,0,0.05) !important;
+    }
+    /* Más spacing entre cards de la grilla */
+    body.dark-bg .productos-grid {
+        gap: 12px !important;
+    }
 }
 
 /* FIX 2: Chips de filtro se cortaban
