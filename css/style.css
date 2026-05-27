@@ -3250,3 +3250,34 @@ body.dark-bg .footer a    { color: rgba(255,248,241,0.78) !important; }
 body.dark-bg .footer a:hover { color: var(--warm-orange) !important; }
 body.dark-bg .footer .logo-bichitos { color: var(--warm-orange) !important; }
 body.dark-bg .footer .logo-shop     { color: rgba(255,248,241,0.88) !important; }
+
+/* ============================================================
+   BUG FIXES — systematic-debugging
+   ============================================================ */
+
+/* FIX 1: Botones +/- de la card se cortaban contra el pill
+   Root cause: .card-qty-wrap tiene overflow:hidden + border-radius:50px
+   y los botones tienen esquinas cuadradas. Las esquinas del botón
+   chocan contra la curva del wrapper. */
+body.dark-bg .btn-qty-minus {
+    border-radius: 50px 0 0 50px !important;
+}
+body.dark-bg .btn-qty-plus {
+    border-radius: 0 50px 50px 0 !important;
+}
+
+/* FIX 2: Chips de filtro se cortaban
+   Root cause A: regla legada en línea ~1819 setea width:100% en .filtro-btn
+   → cada chip intenta ser ancho completo del contenedor flex.
+   Root cause B: .filtros-botones padding-bottom:2px corta la sombra
+   nueva del estado active (0 4px 14px ...). */
+body.dark-bg .filtros-botones .filtro-btn,
+body.dark-bg .filtros-panel.open .filtro-btn,
+body.dark-bg .etapa-chips .filtro-btn {
+    width: auto !important;
+}
+body.dark-bg .filtros-botones,
+body.dark-bg .etapa-chips {
+    padding-bottom: 10px !important;
+    padding-top: 4px !important;
+}
