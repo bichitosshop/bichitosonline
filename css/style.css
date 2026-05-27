@@ -33,7 +33,9 @@
     --radius-lg: 30px;
     --radius-xl: 50px;
     --radius-full: 9999px;
-    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --spring-1: cubic-bezier(0.32, 0.72, 0, 1);
+    --spring-out: cubic-bezier(0.22, 1, 0.36, 1);
     --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
     --smooth: cubic-bezier(0.16, 1, 0.3, 1);
     --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -3349,4 +3351,191 @@ body.dark-bg .filtros-botones,
 body.dark-bg .etapa-chips {
     padding-bottom: 10px !important;
     padding-top: 4px !important;
+}
+
+/* ============================================================
+   HIGH-END VISUAL DESIGN LAYER
+   Skill: high-end-visual-design (Vanguard UI Architect)
+   Vibe Archetype: Soft Structuralism (consumer e-commerce)
+   Layout: minimal — el sitio ya tiene bento grid mobile
+   Foco: Double-Bezel cards, layered shadows, spring physics,
+   typography luxe. Sin grain (innecesario para este vibe).
+   ============================================================ */
+
+/* TYPOGRAPHY LUXE — Plus Jakarta Sans con feature settings */
+body.dark-bg {
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* HEADINGS — sizes más dramáticos, letter-spacing tighter */
+body.dark-bg .page-header h1 {
+    font-size: clamp(2rem, 7vw, 3rem) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.045em !important;
+    line-height: 1 !important;
+}
+body.dark-bg .page-header p {
+    font-size: 1rem !important;
+    letter-spacing: -0.01em !important;
+    margin-top: 8px !important;
+}
+body.dark-bg .section-title {
+    font-size: clamp(1.4rem, 4vw, 2rem) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.035em !important;
+    line-height: 1.05 !important;
+}
+
+/* CARDS — DOUBLE-BEZEL (outer shell + inner core)
+   Mobile: padding interno 5px crea el "frame", inner radius
+   calculado: 22px outer - 5px padding = 17px inner. */
+@media (max-width: 767px) {
+    body.dark-bg .producto-card {
+        padding: 5px !important;
+        background: linear-gradient(180deg, #fbf4ea 0%, #f7eee1 100%) !important;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+        border-radius: 22px !important;
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.7),
+            0 1px 2px rgba(45,30,15,0.04),
+            0 4px 16px rgba(45,30,15,0.05) !important;
+        transition: transform 0.45s var(--spring-1),
+                    box-shadow 0.45s var(--spring-1),
+                    border-color 0.45s var(--spring-1) !important;
+    }
+    body.dark-bg .producto-card:hover,
+    body.dark-bg .producto-card:active {
+        transform: translateY(-3px) !important;
+        border-color: rgba(244,81,30,0.18) !important;
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.8),
+            0 2px 4px rgba(244,81,30,0.10),
+            0 12px 32px rgba(244,81,30,0.14) !important;
+    }
+    /* Inner core: imagen */
+    body.dark-bg .producto-img {
+        border-radius: 17px 17px 0 0 !important;
+        margin: 0 !important;
+    }
+    /* Inner core: body — fondo blanco para crear el contraste */
+    body.dark-bg .producto-body {
+        background: #ffffff !important;
+        border-radius: 0 0 17px 17px !important;
+        padding: 14px 14px 16px !important;
+    }
+}
+
+/* BUTTON PREMIUM — layered shadows Apple-esque */
+body.dark-bg .btn-qty-plus {
+    background: linear-gradient(180deg, #f96434 0%, #e6491e 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        0 1px 2px rgba(244,81,30,0.30),
+        0 2px 8px rgba(244,81,30,0.20) !important;
+    transition: transform 0.3s var(--spring-1),
+                box-shadow 0.3s var(--spring-1),
+                background 0.3s var(--spring-1) !important;
+}
+body.dark-bg .btn-qty-plus:hover:not(:disabled) {
+    background: linear-gradient(180deg, #fa7444 0%, #e84d20 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.30),
+        0 2px 4px rgba(244,81,30,0.35),
+        0 4px 12px rgba(244,81,30,0.28) !important;
+}
+
+/* PRIMARY CTAs — botones grandes con depth */
+body.dark-bg .btn-primary,
+.btn-primary {
+    background: linear-gradient(180deg, #f96434 0%, #e6491e 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        0 1px 2px rgba(244,81,30,0.30),
+        0 4px 14px rgba(244,81,30,0.22),
+        0 10px 28px rgba(244,81,30,0.14) !important;
+    transition: transform 0.4s var(--spring-1),
+                box-shadow 0.4s var(--spring-1) !important;
+    letter-spacing: -0.01em !important;
+}
+body.dark-bg .btn-primary:hover,
+.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.30),
+        0 2px 4px rgba(244,81,30,0.35),
+        0 8px 20px rgba(244,81,30,0.28),
+        0 16px 40px rgba(244,81,30,0.20) !important;
+}
+body.dark-bg .btn-primary:active,
+.btn-primary:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* WHATSAPP BUTTON — mismo tratamiento layered */
+body.dark-bg .btn-whatsapp,
+.btn-whatsapp {
+    background: linear-gradient(180deg, #28d669 0%, #1eb858 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        0 1px 2px rgba(37,211,102,0.30),
+        0 4px 14px rgba(37,211,102,0.22),
+        0 10px 28px rgba(37,211,102,0.14) !important;
+    transition: transform 0.4s var(--spring-1),
+                box-shadow 0.4s var(--spring-1) !important;
+}
+body.dark-bg .btn-whatsapp:hover,
+.btn-whatsapp:hover {
+    transform: translateY(-2px) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.30),
+        0 2px 4px rgba(37,211,102,0.35),
+        0 8px 20px rgba(37,211,102,0.28),
+        0 16px 40px rgba(37,211,102,0.20) !important;
+}
+
+/* FAB FLOATING — refinamiento de fondo y sombra */
+body.dark-bg .cart-fab {
+    background: linear-gradient(180deg, #f96434 0%, #e6491e 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        0 4px 12px rgba(244,81,30,0.28),
+        0 12px 32px rgba(244,81,30,0.18) !important;
+}
+body.dark-bg .wa-fab {
+    background: linear-gradient(180deg, #28d669 0%, #1eb858 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        0 4px 12px rgba(37,211,102,0.28),
+        0 12px 32px rgba(37,211,102,0.18) !important;
+}
+
+/* FILTER CHIPS active — layered shadow refinada */
+body.dark-bg .filtro-btn.active,
+body.dark-bg .filtro-btn[aria-pressed="true"] {
+    background: linear-gradient(180deg, #f96434 0%, #e6491e 100%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        0 2px 6px rgba(244,81,30,0.30),
+        0 6px 18px rgba(244,81,30,0.22) !important;
+}
+
+/* PRODUCTO-PRECIO — peso de display más expresivo */
+body.dark-bg .producto-precio {
+    font-weight: 700 !important;
+    font-feature-settings: "cv11", "tnum";
+    letter-spacing: -0.025em !important;
+}
+
+/* LOGO — slightly tighter en Plus Jakarta */
+body.dark-bg .logo-bichitos,
+.logo-bichitos {
+    letter-spacing: -0.04em !important;
+    font-weight: 800 !important;
+}
+body.dark-bg .logo-shop,
+.logo-shop {
+    letter-spacing: 0.02em !important;
+    font-weight: 500 !important;
 }
