@@ -192,17 +192,17 @@ function renderDestacados() {
     initScrollAnimations(grid);
 }
 
-// Badges apilables (sin emojis decorativos, según CLAUDE.md)
+// Badges apilables
 function badgesProducto(p) {
     const badges = [];
     if (p.stock === 0) {
-        badges.push('<span class="prod-badge badge-agotado">Agotado</span>');
+        badges.push('<span class="prod-badge badge-agotado">🔴 Agotado</span>');
     } else if (p.stock && p.stock <= 5) {
-        badges.push('<span class="prod-badge badge-pocos">Pocas unidades</span>');
+        badges.push('<span class="prod-badge badge-pocos">🔥 Quedan pocos</span>');
     }
-    if (p.oferta) badges.push('<span class="prod-badge badge-oferta">Oferta</span>');
-    if (p.destacado) badges.push('<span class="prod-badge badge-destacado">Más vendido</span>');
-    if (p.envioGratis || p.envio_gratis) badges.push('<span class="prod-badge badge-envio">Envío gratis</span>');
+    if (p.oferta) badges.push('<span class="prod-badge badge-oferta">🔥 Oferta</span>');
+    if (p.destacado) badges.push('<span class="prod-badge badge-destacado">⭐ Más vendido</span>');
+    if (p.envioGratis || p.envio_gratis) badges.push('<span class="prod-badge badge-envio">🚚 Envío gratis</span>');
     if (badges.length === 0) return '';
     return `<div class="prod-badges">${badges.join('')}</div>`;
 }
@@ -225,7 +225,15 @@ function crearCardGrupo(grupo) {
         ).join('');
         const defaultName = isSingle ? p.nombre : grupo._base;
 
-        const addText = window.siteConfig?.buttons?.addToCart?.text || 'Agregar';
+        let accionHtml;
+        if (sinStock) {
+            accionHtml = '<button class="btn-sin-stock" disabled>Sin stock</button>';
+        } else if (cant === 0) {
+            accionHtml = `<button class="btn-add-cart" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}"><span class="btn-text">Agregar</span><span class="spinner"></span></button>`;
+        } else {
+            accionHtml = '';
+        }
+
         return `
         <div class="producto-card animate-ready${cant > 0 ? ' en-carrito' : ''}" data-base="${grupo._base}">
             <div class="producto-img ${p.categoria}" data-base="${grupo._base}">
@@ -236,14 +244,14 @@ function crearCardGrupo(grupo) {
                 <div class="producto-marca">${p.marca || ''}</div>
                 <div class="producto-nombre">${defaultName}</div>
                 ${!isSingle ? `<div class="kg-selector">${kgPills}</div>` : ''}
-                <div class="card-footer">
-                    <span class="producto-precio">$${p.precio.toLocaleString('es-AR')}</span>
-                    <div class="card-qty-wrap">
-                        <button class="btn-qty-minus" data-id="${p.id}" data-accion="restar"${sinStock || cant === 0 ? ' disabled' : ''} aria-label="Quitar">−</button>
-                        <span class="qty-num">${cant > 0 ? cant : ''}</span>
-                        <button class="btn-qty-plus" data-id="${p.id}" data-accion="sumar"${sinStock ? ' disabled' : ''} aria-label="${sinStock ? 'Sin stock' : 'Agregar'}">+</button>
-                    </div>
-                </div>
+                <div class="producto-precio">$${p.precio.toLocaleString('es-AR')}</div>
+                ${cant > 0 ? `<div class="qty-selector">
+                    <button class="qty-btn" data-id="${p.id}" data-accion="restar" aria-label="Quitar ${p.nombre}">−</button>
+                    <span class="qty-cant" aria-live="polite">${cant}</span>
+                    <button class="qty-btn" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">+</button>
+                </div>` : ''}
+                ${accionHtml}
+                ${cant > 0 ? `<div class="producto-subtotal">Subtotal: $${subtotal.toLocaleString('es-AR')}</div>` : ''}
             </div>
         </div>`;
     }
@@ -263,17 +271,12 @@ function renderCarrito() {
     const totalCant = carrito.reduce((s, i) => s + i.cant, 0);
     if (count) {
         count.textContent = totalCant;
-        // Ocultar el badge cuando el carrito está vacío (menos ruido visual)
-        count.style.display = totalCant > 0 ? '' : 'none';
         count.classList.remove('bump');
         void count.offsetWidth;
         if (totalCant > 0) count.classList.add('bump');
     }
     if (fab) fab.classList.toggle('visible', totalCant > 0);
-    if (fabBadge) {
-        fabBadge.textContent = totalCant;
-        fabBadge.style.display = totalCant > 0 ? '' : 'none';
-    }
+    if (fabBadge) fabBadge.textContent = totalCant;
 
     const totalPrecio = carrito.reduce((s, i) => s + i.precio * i.cant, 0);
 
@@ -325,29 +328,33 @@ document.addEventListener('click', function (e) {
     const pill = e.target.closest('.kg-pill');
     if (pill) { cambiarVariante(pill); return; }
 
-    // Qty +/- en card
-    const qtyCard = e.target.closest('.btn-qty-plus, .btn-qty-minus');
-    if (qtyCard && !qtyCard.disabled) {
-        const id = parseInt(qtyCard.dataset.id);
-        if (qtyCard.dataset.accion === 'sumar') agregarAlCarrito(id);
-        else quitarDelCarrito(id);
-        updateCardsCarrito();
-        renderCarrito();
-        guardarCarritoStorage();
-        const fab = document.getElementById('cartFab');
-        if (fab) { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
+    // Botón Agregar (3 estados)
+    const addBtn = e.target.closest('.btn-add-cart');
+    if (addBtn && !addBtn.disabled) {
+        const id = parseInt(addBtn.dataset.id);
+        addBtn.disabled = true;
+        addBtn.classList.add('loading');
+        setTimeout(() => {
+            addBtn.classList.remove('loading');
+            addBtn.classList.add('added');
+            addBtn.querySelector('.btn-text').textContent = '✓ Agregado';
+            agregarAlCarrito(id);
+            guardarCarritoStorage();
+            renderCarrito();
+            const fab = document.getElementById('cartFab');
+            if (fab) { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
+            setTimeout(() => renderAll(), 900);
+        }, 400);
         return;
     }
 
-    // Qty +/- en carrito panel
-    const qtyBtn = e.target.closest('.qty-cart');
+    // Qty +/- (en card y en carrito)
+    const qtyBtn = e.target.closest('.qty-btn, .qty-cart');
     if (qtyBtn) {
         const id = parseInt(qtyBtn.dataset.id);
         if (qtyBtn.dataset.accion === 'sumar') agregarAlCarrito(id);
         else quitarDelCarrito(id);
-        updateCardsCarrito();
-        renderCarrito();
-        guardarCarritoStorage();
+        renderAll();
         return;
     }
 
@@ -356,9 +363,7 @@ document.addEventListener('click', function (e) {
     if (rem) {
         const id = parseInt(rem.dataset.id);
         carrito = carrito.filter(i => i.id !== id);
-        updateCardsCarrito();
-        renderCarrito();
-        guardarCarritoStorage();
+        renderAll();
         return;
     }
 });
@@ -391,7 +396,7 @@ function cambiarVariante(pill) {
 
     card.querySelector('.producto-precio').textContent = '$' + newP.precio.toLocaleString('es-AR');
     card.querySelectorAll('.kg-pill').forEach(el => el.classList.toggle('active', parseInt(el.dataset.varidx) === idx));
-    card.querySelectorAll('.btn-qty-plus, .btn-qty-minus').forEach(el => el.dataset.id = newP.id);
+    card.querySelectorAll('.qty-btn, .btn-add-cart').forEach(el => el.dataset.id = newP.id);
 }
 
 // ===== CART PANEL =====
@@ -716,110 +721,4 @@ function setupUI() {
     // Filtro marca + orden
     document.getElementById('filtroMarca')?.addEventListener('change', renderProductos);
     document.getElementById('ordenar')?.addEventListener('change', renderProductos);
-
-    // Toggle panel de filtros (bottom-sheet en mobile)
-    const filtrosToggleBtn = document.getElementById('filtrosToggle');
-    const filtrosPanel     = document.getElementById('filtrosPanel');
-
-    function closeFiltrosPanel() {
-        if (!filtrosPanel) return;
-        filtrosPanel.classList.remove('open');
-        filtrosToggleBtn?.setAttribute('aria-expanded', 'false');
-    }
-
-    filtrosToggleBtn?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (!filtrosPanel) return;
-        const open = filtrosPanel.classList.toggle('open');
-        filtrosToggleBtn.setAttribute('aria-expanded', String(open));
-    });
-
-    // Cerrar el panel al tocar fuera (overlay del bottom-sheet)
-    document.addEventListener('click', (e) => {
-        if (!filtrosPanel?.classList.contains('open')) return;
-        if (!filtrosPanel.contains(e.target) && e.target !== filtrosToggleBtn) {
-            closeFiltrosPanel();
-        }
-    });
-
-    // Cerrar el panel con Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeFiltrosPanel();
-    });
 }
-
-// ===== UPDATE CARDS SIN RE-RENDER =====
-function updateCardsCarrito() {
-    document.querySelectorAll('.producto-card').forEach(card => {
-        const plusBtn = card.querySelector('.btn-qty-plus');
-        if (!plusBtn) return;
-        const id = parseInt(plusBtn.dataset.id);
-        const entry = carrito.find(i => i.id === id);
-        const cant = entry ? entry.cant : 0;
-        card.classList.toggle('en-carrito', cant > 0);
-        const qtyNum = card.querySelector('.qty-num');
-        if (qtyNum) qtyNum.textContent = cant > 0 ? cant : '';
-        const minusBtn = card.querySelector('.btn-qty-minus');
-        if (minusBtn) minusBtn.disabled = cant === 0;
-    });
-}
-
-// ===== PAW PARTICLES =====
-(function initPawParticles() {
-    const canvas = document.getElementById('pawCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let W, H;
-    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-    resize();
-    window.addEventListener('resize', resize);
-
-    const N = 14;
-    const R = 22; // collision radius
-    const particles = Array.from({ length: N }, () => ({
-        x: R + Math.random() * (W - R * 2),
-        y: R + Math.random() * (H - R * 2),
-        vx: (Math.random() - 0.5) * 0.45,
-        vy: (Math.random() - 0.5) * 0.45,
-        size: 16 + Math.random() * 14,
-        alpha: 0.05 + Math.random() * 0.07,
-        rot: Math.random() * Math.PI * 2,
-    }));
-
-    function step() {
-        ctx.clearRect(0, 0, W, H);
-        for (let i = 0; i < N; i++) {
-            const a = particles[i];
-            a.x += a.vx; a.y += a.vy;
-            if (a.x < R)     { a.x = R;     a.vx = Math.abs(a.vx); }
-            if (a.x > W - R) { a.x = W - R; a.vx = -Math.abs(a.vx); }
-            if (a.y < R)     { a.y = R;     a.vy = Math.abs(a.vy); }
-            if (a.y > H - R) { a.y = H - R; a.vy = -Math.abs(a.vy); }
-            for (let j = i + 1; j < N; j++) {
-                const b = particles[j];
-                const dx = b.x - a.x, dy = b.y - a.y;
-                const d2 = dx * dx + dy * dy;
-                const min = R * 2;
-                if (d2 < min * min && d2 > 0) {
-                    const d = Math.sqrt(d2);
-                    const nx = dx / d, ny = dy / d;
-                    const sep = (min - d) / 2;
-                    a.x -= nx * sep; a.y -= ny * sep;
-                    b.x += nx * sep; b.y += ny * sep;
-                    const dot = (a.vx - b.vx) * nx + (a.vy - b.vy) * ny;
-                    a.vx -= dot * nx; a.vy -= dot * ny;
-                    b.vx += dot * nx; b.vy += dot * ny;
-                }
-            }
-            ctx.save();
-            ctx.globalAlpha = a.alpha;
-            ctx.font = `${a.size}px serif`;
-            ctx.translate(a.x, a.y);
-            ctx.rotate(a.rot);
-            ctx.fillText('🐾', -a.size / 2, a.size / 2);
-            ctx.restore();
-        }
-        requestAnimationFrame(step);
-    }
-    step();
-})();
