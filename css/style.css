@@ -589,7 +589,7 @@ li { list-style: none; }
 .marcas-track {
     display: flex;
     width: max-content;
-    animation: marquee 22s linear infinite;
+    animation: marquee 15s linear infinite;
 }
 .marcas-track-wrap:hover .marcas-track { animation-play-state: paused; }
 .marca-chip {
@@ -606,8 +606,9 @@ li { list-style: none; }
     color: var(--gray-dark);
     white-space: nowrap;
     transition: all var(--fast);
-    cursor: default;
+    cursor: pointer;
     letter-spacing: 0.5px;
+    text-decoration: none;
 }
 .marca-chip:hover {
     background: var(--orange);

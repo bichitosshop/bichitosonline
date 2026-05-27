@@ -69,6 +69,7 @@ function renderAll() {
     renderDestacados();
     renderCarrito();
     guardarCarritoStorage();
+    renderMarcas();
 }
 
 // Aplica filtros que vienen por query string (categoria / etapa / marca)
@@ -127,18 +128,21 @@ function actualizarEtapaChips(cat) {
         const btn = document.createElement('button');
         btn.className = 'etapa-btn' + (e.val === activeEtapa ? ' active' : '');
         btn.dataset.etapa = e.val;
-        btn.textContent = e.label;
         btn.setAttribute('aria-pressed', e.val === activeEtapa ? 'true' : 'false');
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.etapa-btn').forEach(b => {
-                b.classList.remove('active'); b.setAttribute('aria-pressed', 'false');
-            });
-            btn.classList.add('active');
-            btn.setAttribute('aria-pressed', 'true');
-            renderProductos();
-        });
+        btn.textContent = e.label;
         wrap.appendChild(btn);
     });
+}
+
+function renderMarcas() {
+    const track = document.getElementById('marcasTrack');
+    if (!track) return;
+    const brands = [...new Set(productos.map(p => (p.marca || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b,'es'));
+    if (!brands.length) return;
+    const chips = [...brands, ...brands].map(m =>
+        `<a class="marca-chip" href="productos.html?marca=${encodeURIComponent(m.toLowerCase())}">${m}</a>`
+    ).join('');
+    track.innerHTML = chips;
 }
 
 function renderProductos() {
