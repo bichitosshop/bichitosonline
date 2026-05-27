@@ -3539,3 +3539,37 @@ body.dark-bg .logo-shop,
     letter-spacing: 0.02em !important;
     font-weight: 500 !important;
 }
+
+/* LOGO ICON — SVG pawprint inline */
+.logo {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+.logo-icon {
+    width: 26px;
+    height: 26px;
+    color: var(--warm-orange, #f4511e);
+    transform: rotate(-15deg);
+    transition: transform 0.4s var(--spring-1, cubic-bezier(0.32,0.72,0,1));
+    flex-shrink: 0;
+    /* sombra sutil del ícono para depth */
+    filter: drop-shadow(0 1px 2px rgba(244,81,30,0.18));
+}
+.logo:hover .logo-icon {
+    transform: rotate(0deg) scale(1.08);
+}
+/* En el footer dark, el ícono mantiene su naranja */
+body.dark-bg .footer .logo-icon {
+    color: var(--warm-orange, #f4511e);
+}
+/* Mobile: levemente más chico */
+@media (max-width: 767px) {
+    .logo-icon {
+        width: 22px;
+        height: 22px;
+    }
+    .logo {
+        gap: 6px !important;
+    }
+}
