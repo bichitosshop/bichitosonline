@@ -273,12 +273,13 @@ header .logo span{color:var(--terracotta)}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
   pointer-events:none;z-index:1;
 }
+.product-card.visible{opacity:1;transform:translateY(0)}
+.product-card.ani{animation:popIn .4s var(--bounce)}
 @keyframes popIn{
   0%{opacity:0;transform:translateY(20px)scale(.95)}
   55%{transform:translateY(-3px)scale(1.01);opacity:1}
   100%{opacity:1;transform:translateY(0)scale(1)}
 }
-.product-card.visible{animation:popIn .4s var(--bounce) both}
 .product-card:active{transform:scale(.97)}
 .product-card.in-cart{
   border-color:var(--eucalyptus);
@@ -590,7 +591,7 @@ footer a:active{color:var(--terracotta-dark)}
 /* ===== REDUCED MOTION ===== */
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-  .product-card{opacity:1;transform:none}
+  .product-card{opacity:1}
 }
 </style>
 </head>
@@ -986,7 +987,7 @@ function updateCartUI(){
       const wrap=document.createElement('div');wrap.className='qty-wrap';
       wrap.innerHTML='<button class="qty-btn" data-id="'+p.id+'" data-action="dec">\u2212</button><span class="qty-count">'+qty+'</span><button class="qty-btn" data-id="'+p.id+'" data-action="inc">+</button>';
       if(oldBtn)oldBtn.replaceWith(wrap);else footer&&footer.append(wrap);
-      card.classList.add('in-cart');
+      card.classList.remove('ani');card.classList.add('in-cart');
     }else if(qty===0&&oldBtn&&oldBtn.classList.contains('qty-wrap')){
       const btn=document.createElement('button');btn.className='btn-add';btn.dataset.id=p.id;btn.dataset.action='add';
       btn.textContent='Agregar';
@@ -1015,11 +1016,14 @@ function renderProductos(){
   const cards=grid.querySelectorAll('.product-card');
   if(_firstRender){
     requestAnimationFrame(()=>{
-      cards.forEach((el,i)=>{setTimeout(()=>el.classList.add('visible'),i*30)});
+      cards.forEach((el,i)=>{setTimeout(()=>{
+        el.classList.add('visible','ani');
+        setTimeout(()=>el.classList.remove('ani'),500);
+      },i*30)});
     });
     _firstRender=false;
   }else{
-    cards.forEach(el=>el.classList.add('visible'));
+    cards.forEach(el=>{el.classList.add('visible','ani');setTimeout(()=>el.classList.remove('ani'),500)});
   }
 }
 function cardHTML(gr){
