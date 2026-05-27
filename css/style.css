@@ -2751,3 +2751,98 @@ body.dark-bg .search-result-thumb {
     border: 1px solid rgba(255,255,255,0.08);
     background: rgba(255,255,255,0.10);
 }
+
+/* ============================================================
+   WEB-DESIGN-GUIDELINES COMPLIANCE LAYER
+   Vercel Web Interface Guidelines audit + fixes
+   ============================================================ */
+
+/* DARK MODE — color-scheme en body.dark-bg para que el browser
+   adapte scrollbars, form controls y selects al esquema oscuro. */
+body.dark-bg { color-scheme: dark; }
+
+/* TRANSITION: ALL → ESPECÍFICAS
+   "transition: all" hace que el browser calcule si CADA propiedad
+   CSS cambia en cada frame. Reemplazar con propiedades explícitas
+   mejora rendimiento y evita transiciones accidentales.
+   Las reglas de acá sobreescriben las del base (cascade, same specificity). */
+.carousel-dot {
+    transition: background-color var(--fast), width var(--fast), border-radius var(--fast);
+}
+.marca-chip {
+    transition: background-color var(--fast), color var(--fast),
+                border-color var(--fast), transform var(--fast), box-shadow var(--fast);
+}
+.kg-pill {
+    transition: background-color var(--fast), border-color var(--fast),
+                color var(--fast), transform var(--fast), box-shadow var(--fast);
+}
+.qty-btn {
+    transition: background-color var(--fast), color var(--fast),
+                transform var(--fast), box-shadow var(--fast);
+}
+.filtro-btn {
+    transition: background-color var(--fast), border-color var(--fast), color var(--fast);
+}
+.cart-item-qty button {
+    transition: background-color var(--fast), color var(--fast), transform var(--fast);
+}
+.cart-item-remove {
+    transition: background-color var(--fast), color var(--fast), transform var(--fast);
+}
+.search-modal-close {
+    transition: background-color var(--fast), color var(--fast), transform var(--fast);
+}
+#checkoutModalClose {
+    transition: background-color var(--fast), color var(--fast), transform var(--fast);
+}
+.btn-map-action {
+    transition: background-color var(--fast), color var(--fast);
+}
+body.dark-bg .filtro-btn {
+    transition: background-color 0.18s var(--smooth),
+                border-color 0.18s var(--smooth), color 0.18s var(--smooth);
+}
+
+/* TOUCH-ACTION: MANIPULATION — elimina el delay de 300ms en tap
+   en todos los elementos interactivos. Crítico para mobile UX. */
+button, [role="button"],
+.filtro-btn, .etapa-btn, .etapa-chip,
+.kg-pill, .kg-btn,
+.qty-btn, .btn-qty-plus, .btn-qty-minus, .qty-cart,
+.btn-primary, .btn-whatsapp, .btn-cart-send,
+.btn-add-cart, .btn-map-action,
+.cart-fab, .wa-fab, .cart-item-remove,
+.filtros-toggle-btn, .carousel-btn, .carousel-dot,
+.search-modal-close, #checkoutModalClose,
+.btn-icon, .menu-toggle, .marca-chip {
+    touch-action: manipulation;
+}
+
+/* OVERSCROLL-BEHAVIOR: CONTAIN — evita que el scroll del panel
+   se propague a la página de fondo (scroll chaining). */
+.cart-panel,
+.checkout-modal-content,
+.search-results {
+    overscroll-behavior: contain;
+}
+body.dark-bg .filtros-panel.open {
+    overscroll-behavior: contain;
+}
+
+/* SAFE AREA — en iPhones con notch/isla, los FABs podrían quedar
+   tapados por el home indicator. env() garantiza espacio mínimo. */
+@media (max-width: 767px) {
+    body.dark-bg .wa-fab {
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        left: calc(12px + env(safe-area-inset-left, 0px));
+    }
+    body.dark-bg .cart-fab {
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        right: calc(12px + env(safe-area-inset-right, 0px));
+    }
+    /* Bottom-sheet también respeta el home indicator */
+    body.dark-bg .filtros-panel.open {
+        padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+    }
+}

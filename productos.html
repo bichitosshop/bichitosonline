@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a1620" />
     <title>Productos — BICHITOS SHOP</title>
     <meta name="description" content="Catálogo de alimentos premium para perros y gatos en Mendoza.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=24" />
+    <link rel="stylesheet" href="css/style.css?v=25" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body class="dark-bg">
@@ -20,7 +21,7 @@
 <!-- ===== HEADER ===== -->
 <header class="header">
     <div class="header-main">
-        <a href="index.html" class="logo" aria-label="BICHITOS SHOP — Inicio">
+        <a href="index.html" class="logo" aria-label="BICHITOS SHOP — Inicio" translate="no">
             <span class="logo-bichitos">BICHITOS</span><span class="logo-shop"> SHOP</span>
         </a>
 
@@ -202,11 +203,11 @@
         <div class="checkout-form">
             <div class="checkout-field">
                 <label for="checkoutName">Tu nombre</label>
-                <input type="text" id="checkoutName" placeholder="ej: Juan Pérez" required />
+                <input type="text" id="checkoutName" placeholder="ej: Juan Pérez" autocomplete="name" required />
             </div>
             <div class="checkout-field">
                 <label for="checkoutAddress">Dirección de entrega</label>
-                <input type="text" id="checkoutAddress" placeholder="ej: Av. San Martín 123, Mendoza" />
+                <input type="text" id="checkoutAddress" placeholder="ej: Av. San Martín 123, Mendoza" autocomplete="street-address" />
             </div>
             <div class="checkout-map-wrap" id="checkoutMapWrap"><div id="checkoutMap"></div></div>
             <div class="checkout-map-actions">
@@ -220,9 +221,9 @@
 </div>
 
 <script src="js/config.js"></script>
-<script src="js/config-loader.js?v=24"></script>
+<script src="js/config-loader.js?v=25"></script>
 <script src="js/api-service.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="js/script.js?v=24"></script>
+<script src="js/script.js?v=25"></script>
 </body>
 </html>
