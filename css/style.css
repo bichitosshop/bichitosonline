@@ -1977,6 +1977,11 @@ body.dark-bg .cart-panel {
         border-radius: 0 !important;
         right: -100vw;
     }
+    /* CRÍTICO: override de especificidad. El selector .cart-panel.open
+       (0,0,2,0) pierde contra body.dark-bg .cart-panel (0,0,2,1). */
+    body.dark-bg .cart-panel.open {
+        right: 0 !important;
+    }
     body.dark-bg .cart-header {
         background: linear-gradient(135deg, #1a2a36, #0a1620) !important;
         padding: 16px 18px !important;
