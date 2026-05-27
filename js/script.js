@@ -143,6 +143,21 @@ function renderMarcas() {
         `<a class="marca-chip" href="productos.html?marca=${encodeURIComponent(m.toLowerCase())}">${m}</a>`
     ).join('');
     track.innerHTML = chips;
+    // Auto-scroll
+    clearInterval(track._scroll);
+    const wrap = track.parentElement;
+    if (!wrap) return;
+    let speed = 0.5;
+    let running = true;
+    wrap.addEventListener('touchstart', () => { running = false; }, { passive: true });
+    wrap.addEventListener('touchend', () => { setTimeout(() => { running = true; }, 2000); }, { passive: true });
+    wrap.addEventListener('mouseenter', () => { running = false; });
+    wrap.addEventListener('mouseleave', () => { running = true; });
+    track._scroll = setInterval(() => {
+        if (!running) return;
+        wrap.scrollLeft += speed;
+        if (wrap.scrollLeft >= wrap.scrollWidth / 2) wrap.scrollLeft = 0;
+    }, 16);
 }
 
 function renderProductos() {
