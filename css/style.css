@@ -2517,3 +2517,99 @@ body.dark-bg .qty-num { min-width: 18px; font-size: .78rem; }
 
 /* Precio más rotundo */
 .cards-scrapbook .producto-precio { font-weight: 900; }
+
+/* ============================================================
+   POLISH LAYER — make-interfaces-feel-better skill
+   Aplicado: tabular nums, text-wrap, scale on press, image
+   outlines, transition specificity. Mobile-first.
+   ============================================================ */
+
+/* 1. TABULAR NUMS — números no causan layout shift al cambiar */
+body.dark-bg .producto-precio,
+body.dark-bg .cart-item-price,
+body.dark-bg .cart-total span,
+body.dark-bg .cart-count-badge,
+body.dark-bg .cart-fab-badge,
+body.dark-bg .qty-num,
+body.dark-bg .cart-item-qty span,
+#cartTotal {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+}
+
+/* 2. TEXT WRAP — headings balanceados, nombres sin orphans */
+body.dark-bg h1,
+body.dark-bg h2,
+body.dark-bg h3,
+body.dark-bg .section-title {
+    text-wrap: balance;
+}
+body.dark-bg .producto-nombre,
+body.dark-bg p {
+    text-wrap: pretty;
+}
+
+/* 3. SCALE ON PRESS — feedback táctil 0.96 en botones */
+body.dark-bg .btn-qty-plus:active:not(:disabled),
+body.dark-bg .btn-qty-minus:active:not(:disabled),
+body.dark-bg .filtro-btn:active,
+body.dark-bg .filtros-toggle-btn:active,
+body.dark-bg .kg-btn:active,
+body.dark-bg .btn-primary:active,
+body.dark-bg .btn-whatsapp:active,
+body.dark-bg .btn-cart-send:active,
+body.dark-bg .btn-icon:active,
+body.dark-bg #cartClose:active,
+body.dark-bg .cart-fab:active,
+body.dark-bg .wa-fab:active,
+body.dark-bg .cart-item-remove:active,
+body.dark-bg .qty-cart:active {
+    transform: scale(0.96);
+    transition: transform 0.08s var(--smooth);
+}
+
+/* 4. IMAGE OUTLINES — borde sutil para definir foto sobre fondo blanco
+   En dark mode usar blanco con baja opacidad, nunca colores tintados */
+body.dark-bg .producto-foto {
+    /* outline inset: no afecta layout. Apenas perceptible pero define
+       los bordes de la foto cuando hay zonas casi blancas en la imagen */
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+/* 5. TRANSITION SPECIFICITY — reemplazar transition: all por propiedades
+   exactas en los elementos interactivos más usados */
+body.dark-bg .producto-card {
+    transition: transform 0.25s var(--smooth),
+                border-color 0.25s var(--smooth),
+                box-shadow 0.25s var(--smooth);
+}
+body.dark-bg .btn-qty-plus,
+body.dark-bg .btn-qty-minus,
+body.dark-bg .kg-btn,
+body.dark-bg .filtro-btn {
+    transition: background-color 0.18s var(--smooth),
+                border-color 0.18s var(--smooth),
+                color 0.18s var(--smooth),
+                transform 0.18s var(--smooth);
+}
+
+/* 6. MINIMUM HIT AREA — íconos del header con hit area extendido a 44px
+   (Apple HIG y Material Design) */
+body.dark-bg .header .btn-icon,
+body.dark-bg #menuToggle {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* 7. RESPECT REDUCED MOTION — desactivar animaciones para usuarios
+   que tienen "reduce motion" activado en el OS */
+@media (prefers-reduced-motion: reduce) {
+    body.dark-bg *,
+    body.dark-bg *::before,
+    body.dark-bg *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
