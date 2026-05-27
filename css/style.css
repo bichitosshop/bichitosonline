@@ -2613,3 +2613,141 @@ body.dark-bg #menuToggle {
         scroll-behavior: auto !important;
     }
 }
+
+/* ============================================================
+   INTERFACE-DESIGN LAYER — craft pass
+   Applied via interface-design skill: surface transitions,
+   elevation states, interaction feedback, accent hierarchy.
+   ============================================================ */
+
+/* 1. CARD IMAGE/BODY TRANSITION
+   Vignette sutil en el borde inferior de la foto → suaviza el
+   corte entre el área blanca de la imagen y el cuerpo oscuro.
+   Muy sutil: apenas perceptible, pero elimina el borde duro. */
+body.dark-bg .producto-img {
+    position: relative;
+}
+body.dark-bg .producto-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 28px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(6, 14, 22, 0.13) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* 2. CARD PRESS STATE — feedback táctil al tocar una card */
+body.dark-bg .producto-card:active {
+    transform: scale(0.983) !important;
+    transition: transform 0.09s var(--smooth) !important;
+}
+
+/* 3. EN-CARRITO — barra de acento teal en el tope de la card
+   Usa el ::before que ya está en la base (es opacity:0 por defecto)
+   y lo activa con color teal sólido en dark theme. */
+body.dark-bg .producto-card.en-carrito::before {
+    opacity: 1;
+    background: var(--teal);
+    height: 3px;
+}
+
+/* 4. CAROUSEL DOTS — en mobile (175px) los dots a bottom:78px
+   caen a la mitad del banner. Los bajamos al borde inferior. */
+@media (max-width: 767px) {
+    body.dark-bg .carousel-dots {
+        bottom: 10px;
+    }
+    body.dark-bg .carousel-dot {
+        width: 6px;
+        height: 6px;
+    }
+    body.dark-bg .carousel-dot.active {
+        width: 20px;
+        height: 6px;
+    }
+}
+
+/* 5. PAGE HEADER — más presencia: gradient direccional + acento
+   inferior. Antes era un rectángulo gris plano sin personalidad. */
+body.dark-bg .page-header {
+    padding: 28px 0 24px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.16) 100%) !important;
+    position: relative;
+}
+body.dark-bg .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 56px; height: 3px;
+    background: linear-gradient(90deg, var(--orange), var(--teal));
+    border-radius: 3px;
+}
+body.dark-bg .page-header h1 {
+    font-size: clamp(1.55rem, 5vw, 2.2rem);
+    letter-spacing: -0.4px;
+}
+
+/* 6. CONTACTO — cada card con su acento de color propio.
+   Principio: color comunica categoría, no solo decora. */
+/* WhatsApp card → verde */
+body.dark-bg .contacto-info .contacto-card:nth-child(1) {
+    border-color: rgba(37, 211, 102, 0.22) !important;
+}
+body.dark-bg .contacto-info .contacto-card:nth-child(1):hover {
+    border-color: rgba(37, 211, 102, 0.42) !important;
+    box-shadow: 0 10px 36px rgba(0,0,0,0.30), 0 0 0 1px rgba(37,211,102,0.18) !important;
+}
+/* Ubicación card → naranja */
+body.dark-bg .contacto-info .contacto-card:nth-child(2) {
+    border-color: rgba(255, 107, 53, 0.20) !important;
+}
+body.dark-bg .contacto-info .contacto-card:nth-child(2):hover {
+    border-color: rgba(255, 107, 53, 0.38) !important;
+    box-shadow: 0 10px 36px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,107,53,0.14) !important;
+}
+/* Horarios card → teal */
+body.dark-bg .contacto-info .contacto-card:nth-child(3) {
+    border-color: rgba(46, 196, 182, 0.20) !important;
+}
+body.dark-bg .contacto-info .contacto-card:nth-child(3):hover {
+    border-color: rgba(46, 196, 182, 0.40) !important;
+    box-shadow: 0 10px 36px rgba(0,0,0,0.30), 0 0 0 1px rgba(46,196,182,0.16) !important;
+}
+
+/* 7. BTN-CART-SEND — dark theme explícito (heredaba el verde base
+   pero sin sombra ni weight apropiado para el dark). */
+body.dark-bg .btn-cart-send {
+    background: linear-gradient(135deg, #25D366, #1fbd5a) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.28) !important;
+    font-weight: 800;
+}
+body.dark-bg .btn-cart-send:hover {
+    box-shadow: 0 8px 28px rgba(37,211,102,0.40) !important;
+    transform: translateY(-2px);
+}
+
+/* 8. FILTER TOGGLE — acento visual cuando el panel está abierto.
+   Le da feedback de "esto está activo" sin depender del panel. */
+body.dark-bg .filtros-toggle-btn[aria-expanded="true"] {
+    background: rgba(255, 107, 53, 0.16);
+    border-color: rgba(255, 107, 53, 0.42);
+    color: var(--orange);
+}
+
+/* 9. SUBTOTAL DE CARD — dark theme explícito */
+body.dark-bg .producto-subtotal {
+    background: rgba(255, 107, 53, 0.10);
+    border-radius: 8px;
+    color: #ffb07a;
+    font-size: .72rem;
+    padding: 6px 0 10px;
+}
+
+/* 10. SEARCH RESULT THUMB — borde sutil en dark */
+body.dark-bg .search-result-thumb {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.10);
+}
