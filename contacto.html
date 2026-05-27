@@ -23,7 +23,7 @@
 
         <nav class="mega-nav" id="nav" aria-label="Navegación principal">
             <div class="nav-item">
-                <a href="productos.html?categoria=perros" class="nav-link">
+                <a href="productos.html?categoria=perros" class="nav-link" data-edit-id="nav-perros" data-edit-type="text">
                     PERROS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
@@ -36,7 +36,7 @@
                 </ul>
             </div>
             <div class="nav-item">
-                <a href="productos.html?categoria=gatos" class="nav-link">
+                <a href="productos.html?categoria=gatos" class="nav-link" data-edit-id="nav-gatos" data-edit-type="text">
                     GATOS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
@@ -49,7 +49,7 @@
                 </ul>
             </div>
             <div class="nav-item">
-                <a href="productos.html" class="nav-link">
+                <a href="productos.html" class="nav-link" data-edit-id="nav-marcas" data-edit-type="text">
                     MARCAS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
@@ -63,7 +63,7 @@
                 </ul>
             </div>
             <div class="nav-item">
-                <a href="contacto.html" class="nav-link">CONTACTO</a>
+                <a href="contacto.html" class="nav-link" data-edit-id="nav-contacto" data-edit-type="text">CONTACTO</a>
             </div>
         </nav>
 
@@ -85,7 +85,7 @@
 
 <main id="main">
 <section class="page-header">
-    <div class="container"><h1>💬 Contactanos</h1></div>
+    <div class="container"><h1 data-edit-id="ph-contacto-titulo" data-edit-type="heading">💬 Contactanos</h1></div>
 </section>
 
 <section class="contacto-page" aria-labelledby="contacto-title">
@@ -94,24 +94,24 @@
             <h2 id="contacto-title" class="section-title">Información de contacto</h2>
             <div class="contacto-card">
                 <span class="contacto-icon" aria-hidden="true">💬</span>
-                <h3>WhatsApp</h3>
+                <h3 data-edit-id="ct-h-whatsapp" data-edit-type="heading">WhatsApp</h3>
                 <p>Hacé tu pedido directamente</p>
                 <a href="https://wa.me/5492615081413" target="_blank" class="btn-whatsapp">💬 Escribinos ahora</a>
             </div>
             <div class="contacto-card">
                 <span class="contacto-icon" aria-hidden="true">📍</span>
-                <h3>Ubicación</h3>
+                <h3 data-edit-id="ct-h-ubicacion" data-edit-type="heading">Ubicación</h3>
                 <p>Mendoza, Argentina</p>
             </div>
             <div class="contacto-card">
                 <span class="contacto-icon" aria-hidden="true">🕐</span>
-                <h3>Horarios</h3>
+                <h3 data-edit-id="ct-h-horarios" data-edit-type="heading">Horarios</h3>
                 <p>Lun a Sáb: 9:00 – 20:00</p>
             </div>
         </div>
         <div class="contacto-cta">
-            <h2>¿Listo para pedir?</h2>
-            <p>Hacé clic en WhatsApp, decinos qué productos querés y te respondemos al toque.</p>
+            <h2 data-edit-id="ct-cta-titulo" data-edit-type="heading">¿Listo para pedir?</h2>
+            <p data-edit-id="ct-cta-sub" data-edit-type="text">Hacé clic en WhatsApp, decinos qué productos querés y te respondemos al toque.</p>
             <a href="productos.html" class="btn-primary">Ver productos</a>
         </div>
     </div>
@@ -150,12 +150,12 @@
             <p>Alimentos y accesorios premium para mascotas en Mendoza</p>
         </div>
         <div>
-            <h4>Contacto</h4>
+            <h4 data-edit-id="ft-h-contacto" data-edit-type="heading">Contacto</h4>
             <p>📱 <a href="https://wa.me/5492615081413">+54 9 261 508-1413</a></p>
             <p style="margin-top:8px">📍 Gran Mendoza</p>
         </div>
         <div>
-            <h4>Horarios</h4>
+            <h4 data-edit-id="ft-h-horarios" data-edit-type="heading">Horarios</h4>
             <p>Lun a Sáb: 9:00 – 20:00</p>
             <p style="margin-top:6px;font-size:.8rem;opacity:.7">Dom: cerrado</p>
         </div>
@@ -203,6 +203,7 @@
 </div>
 
 <script src="js/config.js"></script>
+<script src="js/config-loader.js?v=6"></script>
 <script src="js/api-service.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/script.js"></script>

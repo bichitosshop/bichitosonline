@@ -106,9 +106,7 @@ function aplicarTamanios() {
         css.push(`@media (max-width: 767px) { .hero-carousel { height: ${Math.round(h*.25)}px !important; } }`);
     }
     if (sizes.productImageHeight) {
-        // Mobile (<768px): CSS controla el tamaño compacto (130px) — NO override desde config
-        // Tablet+: usa el valor de config-loader
-        css.push(`@media (min-width: 768px) { .producto-img { height: ${sizes.productImageHeight}px !important; aspect-ratio: unset !important; } }`);
+        css.push(`.producto-img { height: ${sizes.productImageHeight}px !important; aspect-ratio: unset !important; }`);
     }
     if (css.length) {
         const s = document.createElement('style');
@@ -401,12 +399,11 @@ function aplicarLogo() {
     });
 }
 
-// ── Tarjetas de producto: tamaños de texto, bordes y tema ─────────────
+// ── Tarjetas de producto: tamaños de texto y bordes ───────────────────
 function aplicarCards() {
-    const c = window.siteConfig?.cards || {};
-    // Tema: clásico vs scrapbook (rotaciones, sticker badges, etc.)
-    document.body.classList.toggle('cards-scrapbook', c.style === 'scrapbook');
+    const c = window.siteConfig?.cards;
     document.getElementById('cfg-card-styles')?.remove();
+    if (!c) return;
     const css = [];
     if (c.nameSize)  css.push(`.producto-nombre { font-size: ${c.nameSize}px !important; }`);
     if (c.priceSize) css.push(`.producto-precio { font-size: ${c.priceSize}px !important; }`);

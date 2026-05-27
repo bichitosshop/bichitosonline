@@ -452,9 +452,37 @@ a { color: inherit; text-decoration: none; }
   display: flex; align-items: center; justify-content: center;
   font-size: 2rem;
   flex-shrink: 0;
+  cursor: pointer;
+  border: 2px dashed rgba(27,59,90,0.15);
+  transition: border-color .2s, background .2s;
 }
-.img-url-info { flex: 1; font-size: .8rem; color: var(--gray); line-height: 1.5; }
+.img-preview-placeholder:hover { border-color: var(--orange); background: #fff3ee; }
+.img-preview-side { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.img-url-info { font-size: .78rem; color: var(--gray); line-height: 1.4; }
 .img-url-info a { color: var(--orange); font-weight: 600; }
+.btn-upload-img {
+  display: flex; align-items: center; gap: 7px;
+  background: linear-gradient(135deg, var(--teal), #5dd8cc);
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: .82rem; font-weight: 800;
+  transition: opacity .15s;
+  width: fit-content;
+}
+.btn-upload-img:active { opacity: .8; }
+.btn-upload-img.loading { opacity: .6; pointer-events: none; }
+.img-warn {
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: .78rem;
+  font-weight: 600;
+  line-height: 1.4;
+  display: none;
+}
+.img-warn.visible { display: block; }
 
 /* Campos del formulario */
 .field-group { display: flex; flex-direction: column; gap: 4px; }
@@ -654,11 +682,10 @@ a { color: inherit; text-decoration: none; }
     <p>Ingresá tu token de GitHub para conectar el panel con tu tienda. Se guarda solo en este dispositivo.</p>
 
     <div class="setup-step">
-      <label class="setup-label" for="tokenInput">Token de GitHub</label>
+      <label class="setup-label" for="tokenInput">Token de GitHub <span style="color:var(--orange)">*</span></label>
       <input class="setup-input" type="password" id="tokenInput" placeholder="ghp_..." autocomplete="off" />
       <div class="setup-hint">
         Creá un token en <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens</a> con permiso <strong>repo</strong>.
-        Solo vos y los admins que autoricés van a tenerlo.
       </div>
     </div>
 
@@ -674,6 +701,10 @@ a { color: inherit; text-decoration: none; }
   <header class="adm-header">
     <div class="adm-logo">BICHITOS<span> SHOP</span> <span style="font-size:.65rem;opacity:.5;font-weight:400">Admin</span></div>
     <div class="adm-header-actions">
+      <a class="btn-icon-sm" href="editor.html" title="Editor visual del sitio" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Editor
+      </a>
       <button class="btn-icon-sm" id="btnSync" title="Sincronizar con GitHub">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
         Sync
@@ -736,18 +767,25 @@ a { color: inherit; text-decoration: none; }
       <input type="hidden" id="fId" />
 
       <!-- Imagen -->
+      <input type="file" id="fileInput" accept="image/*" style="display:none" />
       <div class="img-preview-wrap">
-        <div class="img-preview-placeholder" id="imgPlaceholder">🐾</div>
+        <div class="img-preview-placeholder" id="imgPlaceholder" title="Tocar para subir foto">📷</div>
         <img class="img-preview" id="imgPreview" src="" alt="" hidden />
-        <div class="img-url-info">
-          <strong>Foto del producto</strong><br>
-          Subí tu imagen a <a href="https://imgbb.com" target="_blank">imgbb.com</a>, copiá el enlace directo y pegalo abajo.
+        <div class="img-preview-side">
+          <button class="btn-upload-img" id="btnUpload">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Subir foto
+          </button>
+          <div class="img-url-info">La foto se sube automáticamente a tu sitio.<br><span style="opacity:.7">O pegá una URL externa abajo.</span></div>
         </div>
+      </div>
+      <div class="img-warn" id="imgWarn">
+        ⚠️ Ese link es la <strong>página</strong> de ImgBB, no la imagen directa. Usá el botón <strong>Subir foto</strong> arriba para subir automático.
       </div>
 
       <div class="field-group">
-        <label class="field-label" for="fImagen">URL de la imagen (ImgBB)</label>
-        <input class="field-input" type="url" id="fImagen" placeholder="https://i.ibb.co/..." />
+        <label class="field-label" for="fImagen">URL de la imagen <span style="font-weight:400;color:var(--gray)">(se llena automático al subir)</span></label>
+        <input class="field-input" type="url" id="fImagen" placeholder="https://..." />
       </div>
 
       <!-- Nombre -->
@@ -890,11 +928,12 @@ const GITHUB_REPO   = 'bichitosonline';
 const GITHUB_BRANCH = 'main';
 const FILE_PATH     = 'productos.json';
 
-let token       = '';
-let productos   = [];
-let fileSha     = '';
+let token         = '';
+let imgbbKey      = '';
+let productos     = [];
+let fileSha       = '';
 let hayPendientes = false;
-let editingId   = null;
+let editingId     = null;
 let confirmCallback = null;
 
 // ===== UTILIDADES =====
@@ -1124,13 +1163,121 @@ function cerrarModal() {
 function actualizarPreviewImagen(url) {
   const img  = $('imgPreview');
   const ph   = $('imgPlaceholder');
-  if (url && url.startsWith('http')) {
-    img.src = url;
-    img.hidden = false;
-    ph.style.display = 'none';
+  const warn = $('imgWarn');
+
+  img.onload  = null;
+  img.onerror = null;
+
+  const urlLimpia = (url || '').trim();
+
+  // Detectar link de página ImgBB (ibb.co) vs link directo (i.ibb.co)
+  const esUrlPaginaImgBB = /^https?:\/\/ibb\.co\//.test(urlLimpia);
+  warn.classList.toggle('visible', esUrlPaginaImgBB);
+
+  if (urlLimpia && !esUrlPaginaImgBB && (urlLimpia.startsWith('http://') || urlLimpia.startsWith('https://'))) {
+    ph.style.display = 'flex';
+    ph.textContent   = '⏳';
+    img.hidden = true;
+
+    img.onload = () => {
+      img.hidden = false;
+      ph.style.display = 'none';
+    };
+    img.onerror = () => {
+      img.hidden = true;
+      ph.style.display = 'flex';
+      ph.textContent = '❌';
+      setTimeout(() => { ph.textContent = '📷'; }, 2000);
+    };
+    img.src = urlLimpia;
   } else {
     img.hidden = true;
+    img.src = '';
     ph.style.display = 'flex';
+    if (!esUrlPaginaImgBB) ph.textContent = '📷';
+  }
+}
+
+// ===== SUBIR IMAGEN AL REPO DE GITHUB =====
+// La foto se comprime, se sube al repo y la URL queda en GitHub Pages.
+// No necesita ninguna API key extra — usa el mismo token de GitHub.
+
+function comprimirImagen(file, maxPx = 900, calidad = 0.82) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxPx || h > maxPx) {
+        if (w >= h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else        { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      c.toBlob(resolve, 'image/jpeg', calidad);
+    };
+    img.src = url;
+  });
+}
+
+function blobABase64(blob) {
+  return new Promise(resolve => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result.split(',')[1]);
+    r.readAsDataURL(blob);
+  });
+}
+
+async function subirImagenGitHub(file) {
+  const btn = $('btnUpload');
+  const ph  = $('imgPlaceholder');
+  const ICONO_ORIGINAL = btn.innerHTML;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin .7s linear infinite"><circle cx="12" cy="12" r="10"/></svg> Subiendo...';
+  btn.classList.add('loading');
+  ph.textContent = '⏳';
+
+  try {
+    // 1. Comprimir (max 900px, JPEG 82%) — queda bien por debajo de 1MB
+    const blob   = await comprimirImagen(file, 900, 0.82);
+    const base64 = await blobABase64(blob);
+
+    // 2. Nombre de archivo único
+    const ts       = Date.now();
+    const filename = `prod_${ts}.jpg`;
+    const ghPath   = `images/productos/${filename}`;
+
+    // 3. Verificar si ya existe (para obtener SHA si hay que reemplazar)
+    let sha;
+    const check = await ghFetch(ghPath);
+    if (check.ok) { const d = await check.json(); sha = d.sha; }
+
+    // 4. Subir al repo
+    const body = {
+      message: `Imagen de producto: ${filename}`,
+      content: base64,
+      branch:  GITHUB_BRANCH,
+      ...(sha ? { sha } : {})
+    };
+    const res = await ghFetch(ghPath, { method: 'PUT', body: JSON.stringify(body) });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || `GitHub ${res.status}`);
+    }
+
+    // 5. URL pública en GitHub Pages
+    const imageUrl = `https://${GITHUB_OWNER}.github.io/${GITHUB_REPO}/${ghPath}`;
+    $('fImagen').value = imageUrl;
+    actualizarPreviewImagen(imageUrl);
+    toast('Foto subida. La tienda la mostrará en ~1 min.', 'success', 4000);
+
+  } catch (err) {
+    ph.textContent = '📷';
+    toast('No se pudo subir: ' + err.message, 'error', 5000);
+  } finally {
+    btn.classList.remove('loading');
+    btn.innerHTML = ICONO_ORIGINAL;
   }
 }
 
@@ -1190,7 +1337,7 @@ async function validarToken(tk) {
 
 async function intentarLogin() {
   const tk = $('tokenInput').value.trim();
-  if (!tk) { toast('Ingresá tu token', 'error'); return; }
+  if (!tk) { toast('Ingresá tu token de GitHub', 'error'); return; }
   const btn = $('btnSetup');
   btn.textContent = 'Verificando...';
   btn.style.opacity = '.7';
@@ -1282,6 +1429,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Preview imagen en tiempo real
   $('fImagen').addEventListener('input', e => actualizarPreviewImagen(e.target.value.trim()));
+
+  // Botón subir foto → abre file picker
+  $('btnUpload').addEventListener('click', () => $('fileInput').click());
+  $('imgPlaceholder').addEventListener('click', () => $('fileInput').click());
+  $('fileInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) subirImagenGitHub(file);
+    e.target.value = '';
+  });
 
   // Agotado toggle sincroniza stock
   $('tAgotado').addEventListener('change', e => {

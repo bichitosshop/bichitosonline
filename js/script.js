@@ -225,11 +225,12 @@ function crearCardGrupo(grupo) {
         ).join('');
         const defaultName = isSingle ? p.nombre : grupo._base;
 
+        const addText = window.siteConfig?.buttons?.addToCart?.text || 'Agregar';
         let accionHtml;
         if (sinStock) {
             accionHtml = '<button class="btn-sin-stock" disabled>Sin stock</button>';
         } else if (cant === 0) {
-            accionHtml = `<button class="btn-add-cart" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}"><span class="btn-text">Agregar</span><span class="spinner"></span></button>`;
+            accionHtml = `<button class="btn-add-cart" data-id="${p.id}" data-accion="sumar" aria-label="${addText} ${p.nombre}"><span class="btn-text">${addText}</span><span class="spinner"></span></button>`;
         } else {
             accionHtml = '';
         }

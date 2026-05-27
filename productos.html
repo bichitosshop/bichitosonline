@@ -24,7 +24,7 @@
 
         <nav class="mega-nav" id="nav" aria-label="Navegación principal">
             <div class="nav-item">
-                <a href="productos.html?categoria=perros" class="nav-link">
+                <a href="productos.html?categoria=perros" class="nav-link" data-edit-id="nav-perros" data-edit-type="text">
                     PERROS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
@@ -37,7 +37,7 @@
                 </ul>
             </div>
             <div class="nav-item">
-                <a href="productos.html?categoria=gatos" class="nav-link">
+                <a href="productos.html?categoria=gatos" class="nav-link" data-edit-id="nav-gatos" data-edit-type="text">
                     GATOS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
@@ -50,7 +50,7 @@
                 </ul>
             </div>
             <div class="nav-item">
-                <a href="productos.html" class="nav-link">
+                <a href="productos.html" class="nav-link" data-edit-id="nav-marcas" data-edit-type="text">
                     MARCAS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
@@ -64,7 +64,7 @@
                 </ul>
             </div>
             <div class="nav-item">
-                <a href="contacto.html" class="nav-link">CONTACTO</a>
+                <a href="contacto.html" class="nav-link" data-edit-id="nav-contacto" data-edit-type="text">CONTACTO</a>
             </div>
         </nav>
 
@@ -87,8 +87,8 @@
 <main id="main">
 <section class="page-header">
     <div class="container">
-        <h1>Nuestros productos</h1>
-        <p>Encontrá el alimento ideal para tu bichito</p>
+        <h1 data-edit-id="ph-productos-titulo" data-edit-type="heading">Nuestros productos</h1>
+        <p data-edit-id="ph-productos-sub" data-edit-type="text">Encontrá el alimento ideal para tu bichito</p>
     </div>
 </section>
 
@@ -162,12 +162,12 @@
             <p>Alimentos y accesorios premium para mascotas en Mendoza</p>
         </div>
         <div>
-            <h4>Contacto</h4>
+            <h4 data-edit-id="ft-h-contacto" data-edit-type="heading">Contacto</h4>
             <p>📱 <a href="https://wa.me/5492615081413">+54 9 261 508-1413</a></p>
             <p style="margin-top:8px">📍 Gran Mendoza</p>
         </div>
         <div>
-            <h4>Horarios</h4>
+            <h4 data-edit-id="ft-h-horarios" data-edit-type="heading">Horarios</h4>
             <p>Lun a Sáb: 9:00 – 20:00</p>
             <p style="margin-top:6px;font-size:.8rem;opacity:.7">Dom: cerrado</p>
         </div>
@@ -210,6 +210,7 @@
 </div>
 
 <script src="js/config.js"></script>
+<script src="js/config-loader.js?v=6"></script>
 <script src="js/api-service.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/script.js"></script>
