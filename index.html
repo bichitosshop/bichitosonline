@@ -13,22 +13,23 @@
   --terracotta:#C85238;
   --terracotta-dark:#a83f2a;
   --terracotta-light:rgba(200,82,56,.08);
-  --eucalyptus:#4A7C59;
-  --eucalyptus-dark:#3a6347;
-  --eucalyptus-light:rgba(74,124,89,.08);
+  --eucalyptus:#3d6b4a;
+  --eucalyptus-dark:#2d5238;
+  --eucalyptus-light:rgba(61,107,74,.08);
   --gold:#D4A84A;
   --gold-light:rgba(212,168,74,.12);
   --cream:#FBF6F0;
   --cream-dark:#f0e8de;
   --text:#2C1810;
-  --text-secondary:#6b4f45;
-  --text-muted:#a0887c;
+  --text-secondary:#5a4036;
+  --text-muted:#8a7468;
   --white:#FFFFFF;
-  --border:#e8ddd6;
-  --shadow-sm:0 1px 3px rgba(44,24,16,.06);
-  --shadow:0 4px 20px rgba(44,24,16,.08);
-  --shadow-md:0 8px 30px rgba(44,24,16,.1);
-  --shadow-lg:0 12px 40px rgba(44,24,16,.14);
+  --border:#e0d5cc;
+  --shadow-tint:rgba(200,82,56,.04);
+  --shadow-sm:0 1px 3px var(--shadow-tint),0 1px 2px rgba(44,24,16,.04);
+  --shadow:0 4px 16px var(--shadow-tint),0 2px 8px rgba(44,24,16,.06);
+  --shadow-md:0 8px 24px var(--shadow-tint),0 4px 12px rgba(44,24,16,.08);
+  --shadow-lg:0 12px 36px var(--shadow-tint),0 6px 16px rgba(44,24,16,.1);
   --radius-sm:6px;
   --radius-md:10px;
   --radius-lg:16px;
@@ -40,10 +41,17 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  background:var(--cream);color:var(--text);line-height:1.5;
+  background:var(--cream);color:var(--text);line-height:1.6;
   min-height:100dvh;display:flex;flex-direction:column;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
   overscroll-behavior-y:contain;
+  font-size:16px;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  opacity:.35;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px 256px;
 }
 h1,h2,h3,h4{font-family:Georgia,Times,Times New Roman,serif;font-weight:700;letter-spacing:-.01em}
 a{color:inherit;text-decoration:none}
@@ -55,7 +63,7 @@ img{display:block;max-width:100%}
 .skip-link{
   position:fixed;top:-100%;left:16px;z-index:9999;
   background:var(--terracotta);color:white;padding:12px 24px;
-  border-radius:var(--radius-full);font-weight:600;font-size:.85rem;
+  border-radius:var(--radius-full);font-weight:600;font-size:.875rem;
 }
 .skip-link:focus{top:16px}
 
@@ -89,6 +97,8 @@ header .logo span{color:var(--terracotta)}
   transform:scale(0);transition:transform .3s var(--bounce);
 }
 .cart-badge.visible{transform:scale(1)}
+.cart-badge.bump{animation:bump .35s var(--bounce)}
+@keyframes bump{0%{transform:scale(1)}50%{transform:scale(1.35)}100%{transform:scale(1)}}
 
 /* ===== MOBILE NAV ===== */
 .mobile-nav-overlay{
@@ -134,14 +144,14 @@ header .logo span{color:var(--terracotta)}
 }
 .hero h1 em{color:var(--terracotta);font-style:normal}
 .hero p{
-  font-size:.88rem;color:var(--text-secondary);margin-bottom:20px;
-  position:relative;max-width:340px;margin-left:auto;margin-right:auto;
+  font-size:.9375rem;color:var(--text-secondary);margin-bottom:20px;
+  position:relative;max-width:360px;margin-left:auto;margin-right:auto;
   line-height:1.6;
 }
 .hero-cta{
   display:inline-flex;align-items:center;gap:8px;
-  padding:14px 28px;border-radius:var(--radius-full);
-  background:var(--terracotta);color:white;font-weight:700;font-size:.9rem;
+  padding:16px 32px;border-radius:var(--radius-full);
+  background:var(--terracotta);color:white;font-weight:700;font-size:.9375rem;
   transition:all .25s var(--ease);position:relative;
 }
 .hero-cta:active{transform:scale(.97);background:var(--terracotta-dark)}
@@ -159,8 +169,8 @@ header .logo span{color:var(--terracotta)}
 }
 .category-chips::-webkit-scrollbar{display:none}
 .chip{
-  flex-shrink:0;padding:8px 16px;border-radius:var(--radius-full);
-  font-size:.8rem;font-weight:600;
+  flex-shrink:0;padding:10px 18px;border-radius:var(--radius-full);
+  font-size:.8125rem;font-weight:600;
   background:var(--cream);color:var(--text-secondary);
   transition:all .2s var(--ease);border:1px solid transparent;
   white-space:nowrap;
@@ -180,7 +190,7 @@ header .logo span{color:var(--terracotta)}
 .etapa-chips::-webkit-scrollbar{display:none}
 .etapa-chips.hidden{display:none}
 .etapa-btn{
-  flex-shrink:0;padding:5px 12px;border-radius:var(--radius-full);
+  flex-shrink:0;padding:7px 14px;border-radius:var(--radius-full);
   font-size:.75rem;font-weight:500;background:transparent;
   color:var(--text-muted);border:1px solid var(--border);
   transition:all .2s var(--ease);white-space:nowrap;
@@ -202,7 +212,7 @@ header .logo span{color:var(--terracotta)}
 .search-bar svg{width:18px;height:18px;color:var(--text-muted);flex-shrink:0}
 .search-bar input{
   flex:1;border:none;outline:none;background:transparent;
-  padding:12px 0;font-size:.88rem;color:var(--text);
+  padding:13px 0;font-size:1rem;color:var(--text);
   min-width:0;
 }
 .search-bar input::placeholder{color:var(--text-muted)}
@@ -221,8 +231,8 @@ header .logo span{color:var(--terracotta)}
 }
 .brand-strip::-webkit-scrollbar{display:none}
 .brand-chip{
-  flex-shrink:0;padding:6px 14px;border-radius:var(--radius-full);
-  font-size:.72rem;font-weight:600;
+  flex-shrink:0;padding:8px 16px;border-radius:var(--radius-full);
+  font-size:.75rem;font-weight:600;
   background:var(--white);color:var(--text-secondary);
   border:1px solid var(--border);transition:all .2s var(--ease);
   white-space:nowrap;
@@ -247,11 +257,12 @@ header .logo span{color:var(--terracotta)}
 /* ===== PRODUCT CARD ===== */
 .product-card{
   background:var(--white);border-radius:var(--radius-lg);
-  border:1px solid var(--border);
+  border:1px solid var(--border);box-shadow:var(--shadow-sm);
   overflow:hidden;display:flex;flex-direction:column;
   transition:all .25s var(--ease);
   opacity:0;transform:translateY(16px);
 }
+.product-card:active{transform:scale(.98)}
 .product-card.visible{opacity:1;transform:translateY(0)}
 .product-card.in-cart{border-color:var(--eucalyptus)}
 .card-img{
@@ -270,8 +281,8 @@ header .logo span{color:var(--terracotta)}
   pointer-events:none;z-index:2;
 }
 .prod-badge{
-  display:inline-flex;padding:2px 8px;border-radius:var(--radius-full);
-  font-size:.6rem;font-weight:700;text-transform:uppercase;
+  display:inline-flex;padding:3px 8px;border-radius:var(--radius-full);
+  font-size:.625rem;font-weight:700;text-transform:uppercase;
   letter-spacing:.02em;line-height:1.4;
 }
 .badge-oferta{background:#f97316;color:white}
@@ -280,14 +291,14 @@ header .logo span{color:var(--terracotta)}
 .badge-agotado{background:#6b7280;color:white}
 .badge-pocos{background:#f97316;color:white}
 .card-body{
-  padding:10px 12px 12px;display:flex;flex-direction:column;gap:3px;flex:1;
+  padding:12px;display:flex;flex-direction:column;gap:4px;flex:1;
 }
 .card-marca{
-  font-size:.65rem;font-weight:600;text-transform:uppercase;
+  font-size:.6875rem;font-weight:600;text-transform:uppercase;
   letter-spacing:.06em;color:var(--eucalyptus);
 }
 .card-nombre{
-  font-size:.78rem;font-weight:600;color:var(--text);
+  font-size:.8125rem;font-weight:600;color:var(--text);
   line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;
   -webkit-box-orient:vertical;overflow:hidden;
 }
@@ -295,8 +306,8 @@ header .logo span{color:var(--terracotta)}
   display:flex;gap:4px;flex-wrap:wrap;margin:2px 0;
 }
 .kg-pill{
-  padding:2px 8px;border-radius:var(--radius-full);
-  font-size:.65rem;font-weight:600;
+  padding:4px 10px;border-radius:var(--radius-full);
+  font-size:.6875rem;font-weight:600;
   background:var(--cream);color:var(--text-secondary);
   border:1px solid var(--border);transition:all .15s;
 }
@@ -307,14 +318,14 @@ header .logo span{color:var(--terracotta)}
   gap:6px;margin-top:auto;padding-top:4px;
 }
 .card-precio{
-  font-size:1.1rem;font-weight:800;color:var(--text);
+  font-size:1.125rem;font-weight:800;color:var(--text);
   letter-spacing:-.01em;
 }
 .btn-add{
-  flex-shrink:0;padding:10px 16px;border-radius:var(--radius-full);
+  flex-shrink:0;padding:10px 18px;border-radius:var(--radius-full);
   background:var(--terracotta);color:white;font-weight:700;
-  font-size:.78rem;transition:all .2s var(--ease);
-  min-height:40px;display:flex;align-items:center;gap:4px;line-height:1;
+  font-size:.8125rem;transition:all .2s var(--ease);
+  min-height:44px;display:flex;align-items:center;gap:4px;line-height:1;
 }
 .btn-add:active{transform:scale(.95);background:var(--terracotta-dark)}
 .btn-add.loading{opacity:.7;pointer-events:none}
@@ -372,8 +383,8 @@ header .logo span{color:var(--terracotta)}
 }
 @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 .cart-item-info{flex:1;min-width:0}
-.cart-item-name{font-weight:600;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cart-item-precio{font-weight:700;font-size:.8rem;color:var(--terracotta);margin-top:1px}
+.cart-item-name{font-weight:600;font-size:.8125rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-precio{font-weight:700;font-size:.8125rem;color:var(--terracotta);margin-top:1px}
 .cart-item-qty{display:flex;align-items:center;gap:0;margin-top:4px}
 .cart-qty-btn{
   width:34px;height:34px;display:flex;align-items:center;justify-content:center;
@@ -962,7 +973,7 @@ function cardHTML(gr){
   else btn='<button class="btn-add" data-id="'+p.id+'" data-action="add">Agregar</button>';
 
   return '<div class="product-card'+(qty?' in-cart':'')+'" data-base="'+gr._base+'">'+
-    '<div class="card-img">'+bHtml+(imgHtml||'<span class="img-placeholder">🐾</span>')+'<span class="img-placeholder" style="display:none;position:absolute;font-size:2.5rem">🐾</span></div>'+
+    '<div class="card-img">'+bHtml+(imgHtml||'<span class="img-placeholder"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M12 2C9.5 2 7 4 7 6.5c0 1.5.5 2.5 1 3.5.5 1 1 2 1 3 0 1.5-1 2.5-2 2.5s-2-1-2-2.5c0-1 .5-2 1-3s1-2 1-3.5C7 4 5 2 2 2"/><circle cx="7" cy="15" r="2"/><circle cx="17" cy="15" r="2"/><path d="M17 2c-2.5 0-5 2-5 4.5 0 1.5.5 2.5 1 3.5s1 2 1 3c0 1.5-1 2.5-2 2.5s-2-1-2-2.5c0-1 .5-2 1-3s1-2 1-3.5C12 4 14 2 17 2"/></svg></span>')+'<span class="img-placeholder" style="display:none;position:absolute;font-size:2.5rem;align-items:center;justify-content:center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M12 2C9.5 2 7 4 7 6.5c0 1.5.5 2.5 1 3.5.5 1 1 2 1 3 0 1.5-1 2.5-2 2.5s-2-1-2-2.5c0-1 .5-2 1-3s1-2 1-3.5C7 4 5 2 2 2"/><circle cx="7" cy="15" r="2"/><circle cx="17" cy="15" r="2"/><path d="M17 2c-2.5 0-5 2-5 4.5 0 1.5.5 2.5 1 3.5s1 2 1 3c0 1.5-1 2.5-2 2.5s-2-1-2-2.5c0-1 .5-2 1-3s1-2 1-3.5C12 4 14 2 17 2"/></svg></span></div>'+
     '<div class="card-body"><div class="card-marca">'+p.marca+'</div>'+
     '<div class="card-nombre">'+(multi?gr._base:p.nombre)+'</div>'+
     (multi?'<div class="card-kg">'+pills:'')+
@@ -982,7 +993,11 @@ function renderCart(){
   const foot=document.getElementById('cartFoot');
   if(!items)return;
   const totalQty=cart.reduce((s,i)=>s+i.qty,0);
-  if(badge){badge.textContent=totalQty;badge.classList.toggle('visible',totalQty>0)}
+  if(badge){
+    const prev=parseInt(badge.textContent)||0;
+    badge.textContent=totalQty;badge.classList.toggle('visible',totalQty>0);
+    if(totalQty>prev){badge.classList.remove('bump');void badge.offsetWidth;badge.classList.add('bump')}
+  }
   const sum=cart.reduce((s,i)=>s+i.precio*i.qty,0);
   if(!cart.length){
     items.innerHTML='<p class="cart-empty">Todavía no hay nada acá</p>';
@@ -1024,7 +1039,7 @@ function showToast(msg){
   const t=document.getElementById('toast');
   if(!t)return;
   t.textContent=msg;t.classList.add('visible');
-  clearTimeout(t._hide);t._hide=setTimeout(()=>t.classList.remove('visible'),2000);
+  clearTimeout(t._hide);t._hide=setTimeout(()=>t.classList.remove('visible'),2600);
 }
 
 // ===== EVENT DELEGATION =====
@@ -1269,7 +1284,7 @@ function renderModalSearch(q){
   const matches=products.filter(p=>p.nombre.toLowerCase().includes(q)||(p.marca||'').toLowerCase().includes(q)).slice(0,20);
   if(!matches.length){res.innerHTML='<p class="search-empty">No encontramos nada para "'+q+'"</p>';return}
   res.innerHTML=matches.map(p=>'<div class="search-item" data-id="'+p.id+'">'+
-    '<div class="search-item-img">🐾</div>'+
+    '<div class="search-item-img"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M12 2C9.5 2 7 4 7 6.5c0 1.5.5 2.5 1 3.5.5 1 1 2 1 3 0 1.5-1 2.5-2 2.5s-2-1-2-2.5c0-1 .5-2 1-3s1-2 1-3.5C7 4 5 2 2 2"/><circle cx="7" cy="15" r="2"/><circle cx="17" cy="15" r="2"/><path d="M17 2c-2.5 0-5 2-5 4.5 0 1.5.5 2.5 1 3.5s1 2 1 3c0 1.5-1 2.5-2 2.5s-2-1-2-2.5c0-1 .5-2 1-3s1-2 1-3.5C12 4 14 2 17 2"/></svg></div>'+
     '<div class="search-item-info"><div class="search-item-nombre">'+p.nombre+'</div>'+
     '<div class="search-item-marca">'+p.marca+'</div></div>'+
     '<div class="search-item-precio">'+formatPrice(p.precio)+'</div></div>').join('');
