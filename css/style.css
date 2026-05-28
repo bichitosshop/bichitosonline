@@ -527,6 +527,7 @@ li { list-style: none; }
 /* ===== CATEGORIAS CASITA ===== */
 .categorias {
     padding: 16px 0 24px;
+    background: #DCEFF0;
 }
 .categoria-grid {
     display: grid;
