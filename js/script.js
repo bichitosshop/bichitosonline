@@ -246,8 +246,6 @@ function renderCompactCard(grupo) {
     const img = p.imagen || imagenContextual(p);
     const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
     const badges = badgesProducto(p);
-    const sinStock = p.stock === 0;
-    const label = sinStock ? 'Agotado' : `$${p.precio.toLocaleString('es-AR')}`;
     const imgHtml = `<img src="${img}" alt="${p.nombre}" loading="lazy" width="150" height="150" style="width:100%;height:100%;object-fit:cover;" onerror="${imgOnError(iconoCat)}" />`;
 
     return `
@@ -255,11 +253,6 @@ function renderCompactCard(grupo) {
             <div class="producto-img ${p.categoria}">
                 ${badges}
                 ${imgHtml}
-            </div>
-            <div class="producto-body">
-                <div class="producto-marca">${p.marca || ''}</div>
-                <div class="producto-nombre">${p.nombre}</div>
-                <div class="producto-precio">${label}</div>
             </div>
         </div>
     `;
