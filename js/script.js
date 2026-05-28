@@ -211,12 +211,7 @@ function renderProductos(skipAnim) {
 function renderDestacados(skipAnim) {
     const grid = document.getElementById('destacadosGrid');
     if (!grid) return;
-    const destacados = productos.filter(p => p.destacado).slice(0, 12);
-    if (destacados.length === 0) {
-        grid.innerHTML = '<p class="placeholder-msg">Próximamente...</p>';
-        return;
-    }
-    const grupos = window.productosAPI.groupByVariants(destacados);
+    const grupos = window.productosAPI.groupByVariants(productos);
     grid.innerHTML = grupos.map(g => crearCardGrupo(g, skipAnim)).join('');
     initScrollAnimations(grid);
 }
