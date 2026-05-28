@@ -405,20 +405,16 @@ function crearCardGrupo(grupo, skipAnim) {
 function renderCarrito() {
     const items = document.getElementById('cartItems');
     const total = document.getElementById('cartTotal');
-    const count = document.getElementById('cartCount');
-    const fab = document.getElementById('cartFab');
     const fabBadge = document.getElementById('cartFabBadge');
     if (!items) return;
 
     const totalCant = carrito.reduce((s, i) => s + i.cant, 0);
-    if (count) {
-        count.textContent = totalCant;
-        count.classList.remove('bump');
-        void count.offsetWidth;
-        if (totalCant > 0) count.classList.add('bump');
+    if (fabBadge) {
+        fabBadge.textContent = totalCant;
+        fabBadge.classList.remove('bump');
+        void fabBadge.offsetWidth;
+        if (totalCant > 0) fabBadge.classList.add('bump');
     }
-    if (fab) fab.classList.toggle('visible', totalCant > 0);
-    if (fabBadge) fabBadge.textContent = totalCant;
 
     const totalPrecio = carrito.reduce((s, i) => s + i.precio * i.cant, 0);
 
@@ -851,8 +847,7 @@ function setupMegaMenu() {
 function setupUI() {
     setupMegaMenu();
 
-    document.getElementById('cartToggle')?.addEventListener('click', e => { e.preventDefault(); abrirCarrito(); });
-    document.getElementById('cartFab')?.addEventListener('click', () => { if (carrito.length > 0) abrirCarrito(); });
+    document.getElementById('cartFab')?.addEventListener('click', abrirCarrito);
     document.getElementById('cartClose')?.addEventListener('click', cerrarCarrito);
     document.getElementById('cartOverlay')?.addEventListener('click', cerrarCarrito);
     document.getElementById('cartSend')?.addEventListener('click', abrirCheckout);
