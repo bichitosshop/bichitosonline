@@ -545,8 +545,12 @@ li { list-style: none; }
     cursor: pointer;
     transition: transform var(--norm);
     align-self: start;
+    -webkit-tap-highlight-color: transparent;
 }
-.categoria-casita { transition: transform var(--norm); }
+.categoria-casita:focus-visible {
+    outline: 3px solid var(--brand-orange);
+    outline-offset: 4px;
+}
 .categoria-casita:active { transform: scale(0.97); }
 
 @media (hover: hover) {
@@ -566,23 +570,12 @@ li { list-style: none; }
 }
 .casita-perros .casita-shape { background: #DCEFF0; }
 .casita-gatos .casita-shape { background: #DCEFF0; }
-.casita-perros:hover .casita-shape {
-    background: linear-gradient(160deg, #DCEFF0 0%, #ffd4c0 100%);
-    box-shadow: 0 20px 60px rgba(255, 107, 53, 0.22);
-}
-.casita-gatos:hover .casita-shape {
-    background: linear-gradient(160deg, #DCEFF0 0%, #b6efea 100%);
-    box-shadow: 0 20px 60px rgba(46, 196, 182, 0.22);
-}
 .casita-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
     transition: transform var(--norm);
-}
-.categoria-casita:hover .casita-img {
-    transform: scale(1.08);
 }
 .casita-label {
     font-size: 1.1rem;
