@@ -595,34 +595,19 @@ li { list-style: none; }
     pointer-events: none;
 }
 .marcas-track > * { pointer-events: auto; }
-.marca-chip {
+.marca-logo-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 14px 32px;
-    margin: 0 8px;
-    background: var(--cream);
-    border-radius: var(--radius-full);
-    border: 2px solid rgba(0,0,0,0.06);
-    font-weight: 800;
-    font-size: .95rem;
-    color: var(--gray-dark);
-    white-space: nowrap;
-    transition: all var(--fast);
-    cursor: pointer;
-    letter-spacing: 0.5px;
+    margin: 0 12px;
+    transition: transform var(--fast);
     text-decoration: none;
 }
-.marca-chip:hover {
-    background: var(--orange);
-    color: #fff;
-    border-color: transparent;
-    transform: scale(1.05);
-    box-shadow: 0 4px 16px var(--orange-glow);
-}
-.marca-chip .marca-logo { height: 28px; width: auto; object-fit: contain; flex-shrink: 0; }
-.marca-chip:hover .marca-logo { filter: brightness(0) invert(1); }
-.marca-chip .marca-label { white-space: nowrap; }
+.marca-logo-link:hover { transform: scale(1.1); }
+.marca-logo { height: 32px; width: auto; object-fit: contain; }
+.marca-fallback { display: none; }
+img[data-fail] + .marca-fallback { display: inline; font-weight: 800; font-size: .95rem; color: var(--gray-dark); }
+img[data-fail] { display: none !important; }
 
 /* ===== PRODUCT CARDS ===== */
 .productos-grid {
