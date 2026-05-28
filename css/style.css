@@ -339,7 +339,7 @@ li { list-style: none; }
     position: relative;
     overflow: hidden;
     height: 130px;
-    box-shadow: 0 3px 10px rgba(13, 86, 100, 0.06), 0 6px 20px rgba(13, 86, 100, 0.03);
+    box-shadow: 0 3px 10px rgba(13, 86, 100, 0.12), 0 6px 20px rgba(13, 86, 100, 0.06);
 }
 
 @media (min-width: 768px) {
@@ -546,19 +546,23 @@ li { list-style: none; }
     transition: transform var(--norm);
     align-self: start;
 }
+.categoria-casita { transition: transform var(--norm); }
+.categoria-casita:active { transform: scale(0.97); }
+
+@media (hover: hover) {
 .categoria-casita:hover { transform: translateY(-8px); }
-.casita-shape {
-    width: 100%;
-    aspect-ratio: 1;
-    max-width: 200px;
-    clip-path: polygon(50% 0%, 100% 18%, 100% 100%, 0% 100%, 0% 18%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow);
-    transition: box-shadow var(--norm), background var(--norm);
-    position: relative;
-    overflow: hidden;
+.categoria-casita:hover .casita-img {
+    transform: scale(1.08);
+}
+.categoria-casita:hover .casita-shape {
+    box-shadow: 0 24px 64px rgba(0,0,0,0.13);
+}
+.casita-perros:hover .casita-shape {
+    background: linear-gradient(160deg, #DCEFF0 0%, #ffd4c0 100%);
+}
+.casita-gatos:hover .casita-shape {
+    background: linear-gradient(160deg, #DCEFF0 0%, #b6efea 100%);
+}
 }
 .casita-perros .casita-shape { background: #DCEFF0; }
 .casita-gatos .casita-shape { background: #DCEFF0; }
@@ -592,7 +596,7 @@ li { list-style: none; }
     padding: 32px 0;
     overflow: hidden;
     background: var(--white);
-    box-shadow: 0 4px 14px rgba(13, 86, 100, 0.06), 0 -3px 10px rgba(13, 86, 100, 0.04);
+    box-shadow: 0 4px 14px rgba(13, 86, 100, 0.12), 0 -3px 10px rgba(13, 86, 100, 0.06);
 }
 .marcas-section .section-title { margin-bottom: 20px; }
 .marcas-track-wrap {
