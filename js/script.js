@@ -245,13 +245,11 @@ function renderCompactCard(grupo) {
     const p = grupo.variantes[0];
     const img = p.imagen || imagenContextual(p);
     const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
-    const badges = badgesProducto(p);
     const imgHtml = `<img src="${img}" alt="${p.nombre}" loading="lazy" width="150" height="150" style="width:100%;height:100%;object-fit:cover;" onerror="${imgOnError(iconoCat)}" />`;
 
     return `
         <div class="prod-card-compact" data-id="${p.id}" data-accion="ver-detalle" role="button" tabindex="0" aria-label="${p.nombre}">
             <div class="producto-img ${p.categoria}">
-                ${badges}
                 ${imgHtml}
             </div>
         </div>

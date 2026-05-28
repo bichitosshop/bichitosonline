@@ -991,19 +991,7 @@ li { list-style: none; }
     aspect-ratio: 1;
     width: 100%;
 }
-.prod-card-compact .badge-agotado {
-    font-size: .55rem;
-    padding: 2px 6px;
-}
-.prod-card-compact .prod-badge {
-    font-size: .6rem;
-    padding: 2px 7px;
-}
-.prod-card-compact .prod-badges {
-    top: 4px;
-    left: 4px;
-    gap: 3px;
-}
+/* Compact card — border radius handled by card overflow */
 
 /* ===== PRODUCT MODAL ===== */
 .prod-modal-overlay {
