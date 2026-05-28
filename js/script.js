@@ -139,10 +139,18 @@ function renderMarcas() {
     if (!track) return;
     const brands = [...new Set(productos.map(p => (p.marca || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b,'es'));
     if (!brands.length) return;
+    const logoMap = {
+        vagoneta: 'img/vagoneta.svg',
+        'dr-perrot': 'img/dr-perrot.svg',
+        estampa: 'img/logo-estampa.png',
+        insignia: 'img/logo-insignia.png',
+        jaspe: 'img/logo-jaspe.png',
+    };
     const chips = [...brands, ...brands].map(m => {
         const key = m.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
         const link = `productos.html?marca=${encodeURIComponent(m.toLowerCase())}`;
-        return `<a class="marca-chip" href="${link}"><span class="marca-logo-wrap"><img class="marca-logo" src="img/${key}.svg" alt="${m}" loading="lazy" onerror="this.closest('.marca-chip').classList.add('no-logo')"></span><span class="marca-label">${m}</span></a>`;
+        const src = logoMap[key] || `img/${key}.svg`;
+        return `<a class="marca-chip" href="${link}"><span class="marca-logo-wrap"><img class="marca-logo" src="${src}" alt="${m}" loading="lazy" onerror="this.closest('.marca-chip').classList.add('no-logo')"></span><span class="marca-label">${m}</span></a>`;
     }).join('');
     track.innerHTML = chips;
     // Auto-scroll
