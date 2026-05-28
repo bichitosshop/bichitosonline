@@ -171,6 +171,11 @@ li { list-style: none; }
     flex-shrink: 0;
 }
 .logo:hover { transform: scale(1.04); }
+.logo-img {
+    height: 44px;
+    width: auto;
+    display: block;
+}
 .logo-bichitos { color: var(--orange); }
 .logo-shop { color: var(--blue); }
 
