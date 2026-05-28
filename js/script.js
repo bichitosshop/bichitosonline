@@ -139,9 +139,11 @@ function renderMarcas() {
     if (!track) return;
     const brands = [...new Set(productos.map(p => (p.marca || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b,'es'));
     if (!brands.length) return;
-    const chips = [...brands, ...brands].map(m =>
-        `<a class="marca-chip" href="productos.html?marca=${encodeURIComponent(m.toLowerCase())}">${m}</a>`
-    ).join('');
+    const chips = [...brands, ...brands].map(m => {
+        const key = m.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        const link = `productos.html?marca=${encodeURIComponent(m.toLowerCase())}`;
+        return `<a class="marca-chip" href="${link}"><img class="marca-logo" src="img/${key}.svg" alt="${m}" loading="lazy" onerror="this.style.display='none'" height="28"><span class="marca-label">${m}</span></a>`;
+    }).join('');
     track.innerHTML = chips;
     // Auto-scroll
     clearInterval(track._scroll);

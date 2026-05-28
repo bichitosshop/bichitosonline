@@ -74,6 +74,7 @@ li { list-style: none; }
     outline-offset: 3px;
     border-radius: var(--radius-sm);
 }
+* { -webkit-tap-highlight-color: transparent; }
 
 /* ===== REDUCE MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -128,6 +129,11 @@ li { list-style: none; }
     60% { transform: scale(0.9); }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+@keyframes addedPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
 @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-12px) rotate(5deg); }
@@ -488,13 +494,10 @@ li { list-style: none; }
 
 /* ===== SECTION TITLES ===== */
 .section-title {
-    text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 900;
-    color: var(--black);
-    margin-bottom: 40px;
-    letter-spacing: -0.5px;
-    position: relative;
+    color: var(--blue);
+    text-wrap: balance;
 }
 .section-title::after {
     content: '';
@@ -617,6 +620,9 @@ li { list-style: none; }
     transform: scale(1.05);
     box-shadow: 0 4px 16px var(--orange-glow);
 }
+.marca-chip .marca-logo { height: 28px; width: auto; object-fit: contain; flex-shrink: 0; }
+.marca-chip:hover .marca-logo { filter: brightness(0) invert(1); }
+.marca-chip .marca-label { white-space: nowrap; }
 
 /* ===== PRODUCT CARDS ===== */
 .productos-grid {
@@ -666,6 +672,7 @@ li { list-style: none; }
 .producto-img.gatos { background: linear-gradient(135deg, #e0f7f5, #c0efea); }
 .producto-foto {
     transition: transform var(--norm);
+    outline: 1px solid rgba(0,0,0,0.1);
 }
 .producto-card:hover .producto-foto {
     transform: scale(1.06);
@@ -724,6 +731,7 @@ li { list-style: none; }
     line-height: 1.35;
     color: var(--gray-dark);
     flex: 1;
+    text-wrap: pretty;
 }
 .producto-precio {
     font-size: 1.5rem;
@@ -731,6 +739,7 @@ li { list-style: none; }
     color: var(--orange);
     margin-bottom: 12px;
     letter-spacing: -0.5px;
+    font-variant-numeric: tabular-nums;
 }
 
 /* KG selector */
@@ -828,10 +837,10 @@ li { list-style: none; }
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 25px var(--orange-glow);
 }
-.btn-add-cart:active { transform: translateY(0) scale(0.98); }
+.btn-add-cart:active { transform: translateY(0) scale(0.96); }
 .btn-add-cart:disabled { cursor: default; }
 .btn-add-cart.loading { background: var(--gray); cursor: wait; }
-.btn-add-cart.added { background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 4px 15px rgba(39,174,96,0.35); }
+.btn-add-cart.added { background: linear-gradient(135deg, #27ae60, #2ecc71); box-shadow: 0 4px 15px rgba(39,174,96,0.35); animation: addedPop 0.4s var(--bounce); }
 .btn-add-cart .spinner {
     width: 14px;
     height: 14px;
@@ -1347,7 +1356,7 @@ li { list-style: none; }
     box-shadow: 0 4px 15px var(--orange-glow);
 }
 .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 30px var(--orange-glow); }
-.btn-primary:active { transform: translateY(0) scale(0.98); }
+.btn-primary:active { transform: translateY(0) scale(0.96); }
 .btn-whatsapp {
     background: linear-gradient(135deg, #25D366, #20bd5a);
     color: #fff;
@@ -1604,4 +1613,12 @@ li { list-style: none; }
     .filtros-extra select { flex: 1; }
     .contacto-grid { grid-template-columns: 1fr; }
     .footer-grid { gap: 20px; }
+
+    /* Cards más compactas en mobile */
+    .producto-img { height: 140px; }
+    .producto-body { padding: 12px; }
+    .producto-nombre { font-size: .85rem; margin-bottom: 6px; }
+    .producto-precio { font-size: 1.25rem; margin-bottom: 8px; }
+    .btn-add-cart { padding: 12px; font-size: .95rem; }
+    .productos-grid { gap: 16px; padding: 12px 0; }
 }
