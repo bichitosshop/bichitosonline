@@ -512,6 +512,7 @@ li { list-style: none; }
 /* ===== CATEGORIAS CASITA ===== */
 .categorias {
     padding: 20px 0 40px;
+    background: #fef7ee;
 }
 .categoria-grid {
     display: grid;
@@ -543,10 +544,10 @@ li { list-style: none; }
     position: relative;
     overflow: hidden;
 }
-.casita-perros .casita-shape { background: linear-gradient(160deg, #fff8ed 0%, #ffe8da 100%); }
-.casita-gatos .casita-shape { background: linear-gradient(160deg, #fdf5ea 0%, #d4f5f2 100%); }
+.casita-perros .casita-shape { background: #fef8ed; }
+.casita-gatos .casita-shape { background: #fdf5ea; }
 .casita-perros:hover .casita-shape {
-    background: linear-gradient(160deg, #fff8ed 0%, #ffd4c0 100%);
+    background: linear-gradient(160deg, #fef8ed 0%, #ffd4c0 100%);
     box-shadow: 0 20px 60px rgba(255, 107, 53, 0.22);
 }
 .casita-gatos:hover .casita-shape {
