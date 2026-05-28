@@ -933,7 +933,7 @@ li { list-style: none; }
 .brand-row {
     background: var(--blue);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 24px rgba(180, 50, 20, 0.2);
     padding: 16px 0;
     margin: 16px 20px;
 }
@@ -952,6 +952,7 @@ li { list-style: none; }
     display: flex;
     align-items: center;
     gap: 4px;
+    text-wrap: balance;
 }
 .brand-row-link {
     font-size: .78rem;
@@ -979,17 +980,21 @@ li { list-style: none; }
     cursor: pointer;
     background: var(--white);
     border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+    box-shadow: 0 2px 8px rgba(15, 30, 55, 0.2);
     overflow: hidden;
     transition: transform var(--fast), box-shadow var(--fast);
 }
 .prod-card-compact:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    box-shadow: 0 4px 16px rgba(15, 30, 55, 0.25);
 }
 .prod-card-compact:active { transform: scale(0.96); }
 .prod-card-compact .producto-img {
     aspect-ratio: 1;
     width: 100%;
+}
+.prod-card-compact .producto-img img {
+    outline: 1px solid rgba(0,0,0,0.08);
+    outline-offset: -1px;
 }
 /* Compact card — border radius handled by card overflow */
 
