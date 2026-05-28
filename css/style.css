@@ -174,20 +174,15 @@ li { list-style: none; }
     gap: 0;
 }
 .logo:hover { transform: scale(1.04); }
-.logo-badge-wrap {
-    width: 48px;
-    height: 48px;
-    overflow: hidden;
-    flex-shrink: 0;
-    border-radius: 50%;
-}
-.logo-badge {
-    height: 48px;
+.logo-svg {
+    height: 44px;
     width: auto;
     display: block;
 }
 .logo-bichitos { color: var(--orange); }
 .logo-shop { color: var(--blue); }
+.logo .logo-bichitos,
+.logo .logo-shop { display: none; }
 
 /* Mega Nav */
 .mega-nav {
