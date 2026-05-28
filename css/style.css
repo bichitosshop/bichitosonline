@@ -558,14 +558,14 @@ li { list-style: none; }
     position: relative;
     overflow: hidden;
 }
-.casita-perros .casita-shape { background: #DCEFF0; }
-.casita-gatos .casita-shape { background: #DCEFF0; }
+.casita-perros .casita-shape { background: #DEF0F4; }
+.casita-gatos .casita-shape { background: #DAEFF4; }
 .casita-perros:hover .casita-shape {
-    background: linear-gradient(160deg, #DCEFF0 0%, #ffd4c0 100%);
+    background: linear-gradient(160deg, #DEF0F4 0%, #ffd4c0 100%);
     box-shadow: 0 20px 60px rgba(255, 107, 53, 0.22);
 }
 .casita-gatos:hover .casita-shape {
-    background: linear-gradient(160deg, #DCEFF0 0%, #b6efea 100%);
+    background: linear-gradient(160deg, #DAEFF4 0%, #b6efea 100%);
     box-shadow: 0 20px 60px rgba(46, 196, 182, 0.22);
 }
 .casita-img {
