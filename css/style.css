@@ -134,6 +134,10 @@ li { list-style: none; }
     40%  { transform: scale(1.08); }
     100% { transform: scale(1); }
 }
+@keyframes inCartPulse {
+    0%, 100% { box-shadow: var(--shadow-orange); }
+    50% { box-shadow: 0 0 0 4px rgba(255,107,53,0.08), var(--shadow-orange); }
+}
 @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-12px) rotate(5deg); }
@@ -826,8 +830,8 @@ li { list-style: none; }
     margin-bottom: 10px;
 }
 .qty-btn {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 2px solid var(--teal);
     background: var(--white);
@@ -909,6 +913,7 @@ li { list-style: none; }
 .producto-card.en-carrito {
     box-shadow: var(--shadow-orange);
     border-color: rgba(255,107,53,0.3);
+    animation: inCartPulse 3s ease-in-out infinite;
 }
 .producto-subtotal {
     text-align: center;
