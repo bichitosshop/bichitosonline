@@ -64,9 +64,9 @@ async function cargarProductos() {
     renderAll();
 }
 
-function renderAll() {
-    renderProductos();
-    renderDestacados();
+function renderAll(skipProductAnim) {
+    renderProductos(skipProductAnim);
+    renderDestacados(skipProductAnim);
     renderCarrito();
     guardarCarritoStorage();
     renderMarcas();
@@ -170,7 +170,7 @@ function renderMarcas() {
     }, 16);
 }
 
-function renderProductos() {
+function renderProductos(skipAnim) {
     const grid = document.getElementById('productosGrid');
     if (!grid) return;
 
@@ -204,11 +204,11 @@ function renderProductos() {
         return;
     }
     const grupos = window.productosAPI.groupByVariants(filtrados);
-    grid.innerHTML = grupos.map(g => crearCardGrupo(g)).join('');
+    grid.innerHTML = grupos.map(g => crearCardGrupo(g, skipAnim)).join('');
     initScrollAnimations(grid);
 }
 
-function renderDestacados() {
+function renderDestacados(skipAnim) {
     const grid = document.getElementById('destacadosGrid');
     if (!grid) return;
     const destacados = productos.filter(p => p.destacado).slice(0, 12);
@@ -217,7 +217,7 @@ function renderDestacados() {
         return;
     }
     const grupos = window.productosAPI.groupByVariants(destacados);
-    grid.innerHTML = grupos.map(g => crearCardGrupo(g)).join('');
+    grid.innerHTML = grupos.map(g => crearCardGrupo(g, skipAnim)).join('');
     initScrollAnimations(grid);
 }
 
@@ -236,7 +236,7 @@ function badgesProducto(p) {
     return `<div class="prod-badges">${badges.join('')}</div>`;
 }
 
-function crearCardGrupo(grupo) {
+function crearCardGrupo(grupo, skipAnim) {
     const v = grupo.variantes;
 
     function html(p, idx) {
@@ -264,8 +264,9 @@ function crearCardGrupo(grupo) {
             accionHtml = '';
         }
 
+        const animReady = skipAnim ? '' : 'animate-ready';
         return `
-        <div class="producto-card animate-ready${cant > 0 ? ' en-carrito' : ''}" data-base="${grupo._base}">
+        <div class="producto-card ${animReady}${cant > 0 ? ' en-carrito' : ''}" data-base="${grupo._base}">
             <div class="producto-img ${p.categoria}" data-base="${grupo._base}">
                 ${badges}
                 ${imgHtml}
@@ -373,7 +374,7 @@ document.addEventListener('click', function (e) {
             renderCarrito();
             const fab = document.getElementById('cartFab');
             if (fab) { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
-            setTimeout(() => renderAll(), 900);
+            setTimeout(() => renderAll(true), 900);
         }, 400);
         return;
     }
@@ -384,7 +385,7 @@ document.addEventListener('click', function (e) {
         const id = parseInt(qtyBtn.dataset.id);
         if (qtyBtn.dataset.accion === 'sumar') agregarAlCarrito(id);
         else quitarDelCarrito(id);
-        renderAll();
+        renderAll(true);
         return;
     }
 
@@ -393,7 +394,7 @@ document.addEventListener('click', function (e) {
     if (rem) {
         const id = parseInt(rem.dataset.id);
         carrito = carrito.filter(i => i.id !== id);
-        renderAll();
+        renderAll(true);
         return;
     }
 });
