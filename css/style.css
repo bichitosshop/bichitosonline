@@ -700,7 +700,7 @@ li { list-style: none; }
 .producto-card.animate-in { animation: bounceIn 0.5s var(--bounce) both; }
 
 .producto-img {
-    height: 190px;
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1655,7 +1655,6 @@ li { list-style: none; }
     .footer-grid { gap: 20px; }
 
     /* Cards más compactas en mobile */
-    .producto-img { height: 140px; }
     .producto-body { padding: 12px; }
     .producto-nombre { font-size: .85rem; margin-bottom: 6px; }
     .producto-precio { font-size: 1.25rem; margin-bottom: 8px; }
