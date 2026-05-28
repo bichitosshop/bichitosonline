@@ -621,6 +621,27 @@ li { list-style: none; }
     transform: scale(1.05);
     box-shadow: 0 4px 16px var(--orange-glow);
 }
+/* Chips con logo SVG exitoso: invisibles, solo el logo flota */
+.marca-chip:not(.no-logo) {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0 12px;
+    border-radius: 0;
+    gap: 0;
+}
+.marca-chip:not(.no-logo):hover {
+    background: none;
+    transform: scale(1.1);
+    box-shadow: none;
+    border-color: transparent;
+}
+.marca-chip:not(.no-logo) .marca-logo-wrap {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+}
 .marca-logo-wrap {
     display: inline-flex;
     align-items: center;
@@ -630,7 +651,9 @@ li { list-style: none; }
     padding: 4px 8px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
+.marca-chip:not(.no-logo) .marca-logo { height: 32px; }
 .marca-chip:hover .marca-logo-wrap { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.marca-chip:not(.no-logo):hover .marca-logo-wrap { box-shadow: none; }
 .marca-logo { height: 24px; width: auto; object-fit: contain; display: block; }
 .marca-label { display: none; }
 .marca-chip.no-logo .marca-label { display: inline; }
