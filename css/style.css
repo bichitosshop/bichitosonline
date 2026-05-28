@@ -1581,6 +1581,7 @@ li { list-style: none; }
     align-items: center;
     justify-content: center;
     font-size: 1.6rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.35);
     z-index: 150;
     transition: transform var(--fast), box-shadow var(--fast);
 }
