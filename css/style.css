@@ -12,6 +12,12 @@
     --orange: #FF6B35;
     --orange-dark: #e55a2b;
     --orange-glow: rgba(255, 107, 53, 0.3);
+    --brand-blue: #0D5664;
+    --brand-orange: #F97316;
+    --brand-bg-light: #DCEFF0;
+    --brand-navy-text: #163B59;
+    --brand-blue-dark: #063C4C;
+    --brand-orange-dark: #C95713;
     --teal: #2EC4B6;
     --teal-dark: #25a89c;
     --teal-glow: rgba(46, 196, 182, 0.3);
@@ -927,43 +933,57 @@ li { list-style: none; }
 
 /* ===== BRAND ROWS (HOME) ===== */
 .brand-rows {
-    background: var(--orange);
-    padding: 20px 0;
+    background: var(--brand-bg-light);
+    padding: 32px 0;
 }
 .brand-row {
-    background: var(--blue);
-    border-radius: 16px;
-    box-shadow: 0 6px 24px rgba(180, 50, 20, 0.2);
-    padding: 16px 0;
-    margin: 16px 20px;
+    background: var(--white);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(13, 86, 100, 0.08);
+    padding: 20px 0;
+    margin: 20px 24px;
 }
 .brand-row-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 20px;
     padding-right: 20px;
+}
+.brand-row-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 18px;
+    background: var(--brand-orange);
+    border-radius: 2px;
 }
 .brand-row-title {
     font-size: 1rem;
-    font-weight: 600;
-    color: var(--white);
-    letter-spacing: 0;
+    font-weight: 700;
+    color: var(--brand-navy-text);
+    letter-spacing: -0.2px;
     display: flex;
     align-items: center;
     gap: 4px;
-    text-wrap: balance;
 }
 .brand-row-link {
     font-size: .78rem;
     font-weight: 600;
-    color: var(--teal);
+    color: var(--brand-orange);
     text-decoration: none;
     white-space: nowrap;
+    transition: color var(--fast);
 }
+.brand-row-link:hover { color: var(--brand-orange-dark); }
 .brand-scroll {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -979,13 +999,13 @@ li { list-style: none; }
     scroll-snap-align: start;
     cursor: pointer;
     background: var(--white);
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(15, 30, 55, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(13, 86, 100, 0.1);
     overflow: hidden;
     transition: transform var(--fast), box-shadow var(--fast);
 }
 .prod-card-compact:hover {
-    box-shadow: 0 4px 16px rgba(15, 30, 55, 0.25);
+    box-shadow: 0 4px 16px rgba(13, 86, 100, 0.15);
 }
 .prod-card-compact:active { transform: scale(0.96); }
 .prod-card-compact .producto-img {
@@ -993,7 +1013,7 @@ li { list-style: none; }
     width: 100%;
 }
 .prod-card-compact .producto-img img {
-    outline: 1px solid rgba(0,0,0,0.08);
+    outline: 1px solid rgba(0,0,0,0.06);
     outline-offset: -1px;
 }
 /* Compact card — border radius handled by card overflow */
@@ -1176,7 +1196,7 @@ li { list-style: none; }
 }
 .prod-modal-relacionados .prod-card-compact {
     width: 100px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(13, 86, 100, 0.08);
 }
 .prod-modal-relacionados .prod-card-compact .producto-img {
     border-radius: 0;
@@ -1922,12 +1942,12 @@ li { list-style: none; }
     .btn-add-cart { padding: 12px; font-size: .95rem; }
     .productos-grid { gap: 16px; padding: 12px 0; }
 
-    /* Brand rows mobile: 2.5 cards, logo colors */
-    .brand-rows { padding: 12px 0; }
-    .brand-row { margin: 10px 0; border-radius: 0; padding: 12px 0; }
+    /* Brand rows mobile: 2.5 cards, tarjetas blancas */
+    .brand-rows { padding: 20px 0; }
+    .brand-row { margin: 12px 0; border-radius: 0; padding: 16px 0; }
     .brand-row .container { padding: 0; }
     .brand-row-header { padding: 0 16px; }
-    .brand-scroll { gap: 8px; padding: 0 16px 4px; }
+    .brand-scroll { gap: 10px; padding: 0 16px 4px; }
     .prod-card-compact { width: 140px; }
 
     /* Tighten section gaps */
