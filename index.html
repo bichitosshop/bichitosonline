@@ -120,15 +120,23 @@
     </div>
 </section>
 
-<!-- ===== PRODUCTOS ===== -->
-<section class="destacados" id="destacados" aria-labelledby="productos-title">
+<!-- ===== PRODUCTOS POR MARCA ===== -->
+<section class="brand-rows" id="brandRowsSection">
     <div class="container">
-        <h2 id="productos-title" class="section-title">Nuestros Productos</h2>
-        <div class="productos-grid" id="destacadosGrid" aria-live="polite"></div>
+        <div id="brandRowsContainer"></div>
     </div>
 </section>
 
 </main>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="prod-modal-overlay" id="prodModalOverlay" aria-hidden="true"></div>
+<div class="prod-modal" id="prodModal" role="dialog" aria-label="Detalle del producto" aria-modal="true">
+    <div class="prod-modal-panel" id="prodModalPanel">
+        <button class="prod-modal-close" id="prodModalClose" aria-label="Cerrar">✕</button>
+        <div class="prod-modal-content" id="prodModalContent"></div>
+    </div>
+</div>
 
 <!-- ===== CART ===== -->
 <div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>

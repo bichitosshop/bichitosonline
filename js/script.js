@@ -209,11 +209,136 @@ function renderProductos(skipAnim) {
 }
 
 function renderDestacados(skipAnim) {
-    const grid = document.getElementById('destacadosGrid');
-    if (!grid) return;
+    const container = document.getElementById('brandRowsContainer');
+    if (!container) return;
+
     const grupos = window.productosAPI.groupByVariants(productos);
-    grid.innerHTML = grupos.map(g => crearCardGrupo(g, skipAnim)).join('');
-    initScrollAnimations(grid);
+    const porMarca = {};
+    for (const g of grupos) {
+        const marca = g.variantes[0].marca || 'Otras';
+        if (!porMarca[marca]) porMarca[marca] = [];
+        porMarca[marca].push(g);
+    }
+
+    const marcasOrden = Object.keys(porMarca).sort();
+    if (marcasOrden.length === 0) {
+        container.innerHTML = '<p class="placeholder-msg">Próximamente...</p>';
+        return;
+    }
+
+    container.innerHTML = marcasOrden.map(marca => `
+        <div class="brand-row">
+            <div class="container">
+                <div class="brand-row-header">
+                    <span class="brand-row-title">${marca}</span>
+                    <a href="productos.html?marca=${encodeURIComponent(marca.toLowerCase())}" class="brand-row-link">Ver todos →</a>
+                </div>
+                <div class="brand-scroll">
+                    ${porMarca[marca].map(g => renderCompactCard(g)).join('')}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderCompactCard(grupo) {
+    const p = grupo.variantes[0];
+    const img = p.imagen || imagenContextual(p);
+    const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
+    const badges = badgesProducto(p);
+    const sinStock = p.stock === 0;
+    const label = sinStock ? 'Agotado' : `$${p.precio.toLocaleString('es-AR')}`;
+    const imgHtml = `<img src="${img}" alt="${p.nombre}" loading="lazy" width="150" height="150" style="width:100%;height:100%;object-fit:cover;" onerror="${imgOnError(iconoCat)}" />`;
+
+    return `
+        <div class="prod-card-compact" data-id="${p.id}" data-accion="ver-detalle" role="button" tabindex="0" aria-label="${p.nombre}">
+            <div class="producto-img ${p.categoria}">
+                ${badges}
+                ${imgHtml}
+            </div>
+            <div class="producto-body">
+                <div class="producto-marca">${p.marca || ''}</div>
+                <div class="producto-nombre">${p.nombre}</div>
+                <div class="producto-precio">${label}</div>
+            </div>
+        </div>
+    `;
+}
+
+// ===== PRODUCT MODAL =====
+let _modalGrupo = null;
+let _modalVarIdx = 0;
+
+function abrirModalProducto(grupo) {
+    _modalGrupo = grupo;
+    _modalVarIdx = 0;
+    document.getElementById('prodModalContent').innerHTML = renderModalContent(grupo, 0);
+    document.getElementById('prodModalOverlay').classList.add('open');
+    document.getElementById('prodModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalProducto() {
+    document.getElementById('prodModalOverlay').classList.remove('open');
+    document.getElementById('prodModal').classList.remove('open');
+    document.body.style.overflow = '';
+    _modalGrupo = null;
+}
+
+function renderModalContent(grupo, varIdx) {
+    const v = grupo.variantes;
+    const p = v[varIdx];
+    const enCarrito = carrito.find(i => i.id === p.id);
+    const cant = enCarrito ? enCarrito.cant : 0;
+    const img = p.imagen || imagenContextual(p);
+    const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
+    const imgHtml = `<img src="${img}" alt="${p.nombre}" class="prod-modal-img" loading="lazy" width="400" height="400" onerror="${imgOnError(iconoCat)}" />`;
+    const isSingle = v.length === 1;
+    const kgPills = v.map((vp, vi) =>
+        `<button class="kg-pill${vi === varIdx ? ' active' : ''}" data-accion="modal-kg" data-varidx="${vi}" aria-label="${vp._peso || vp.nombre}">${vp._peso || (vi + 1)}</button>`
+    ).join('');
+    const sinStock = p.stock === 0;
+    const addText = window.siteConfig?.buttons?.addToCart?.text || 'Agregar';
+
+    let addBtnHtml;
+    if (sinStock) {
+        addBtnHtml = '<button class="btn-add-cart" disabled style="opacity:.5;cursor:default">Sin stock</button>';
+    } else if (cant > 0) {
+        addBtnHtml = `<button class="btn-add-cart added" disabled>✓ En carrito</button>`;
+    } else {
+        addBtnHtml = `<button class="btn-add-cart" data-id="${p.id}" data-accion="modal-add">${addText}</button>`;
+    }
+
+    // Relacionados: misma categoria, excluyendo el actual
+    const relacionados = window.productosAPI.groupByVariants(
+        productos.filter(pr => pr.categoria === p.categoria && pr._base !== grupo._base)
+    ).slice(0, 8);
+
+    const relacionadosHtml = relacionados.length > 0 ? `
+        <div class="prod-modal-relacionados">
+            <h4>También te puede interesar</h4>
+            <div class="brand-scroll">
+                ${relacionados.map(rg => renderCompactCard(rg)).join('')}
+            </div>
+        </div>
+    ` : '';
+
+    return `
+        ${imgHtml}
+        <div class="prod-modal-body">
+            <div class="prod-modal-marca">${p.marca || ''}</div>
+            <div class="prod-modal-nombre">${p.nombre}</div>
+            <div class="prod-modal-precio">$${p.precio.toLocaleString('es-AR')}</div>
+            ${!isSingle ? `<div class="kg-selector">${kgPills}</div>` : ''}
+            <div class="qty-selector">
+                <button class="qty-btn" data-id="${p.id}" data-accion="modal-restar" aria-label="Quitar">−</button>
+                <span class="qty-cant" aria-live="polite">${cant}</span>
+                <button class="qty-btn" data-id="${p.id}" data-accion="modal-sumar" aria-label="Agregar">+</button>
+            </div>
+            ${addBtnHtml}
+            ${relacionadosHtml}
+        </div>
+    `;
 }
 
 // Badges apilables
@@ -350,6 +475,60 @@ function quitarDelCarrito(id) {
 
 // ===== EVENT DELEGATION =====
 document.addEventListener('click', function (e) {
+    // Close modal
+    const closeBtn = e.target.closest('#prodModalClose');
+    const overlay = e.target.closest('#prodModalOverlay');
+    if (closeBtn || (overlay && overlay.classList.contains('open'))) {
+        cerrarModalProducto();
+        return;
+    }
+
+    // Compact card → ver detalle en modal
+    const compactCard = e.target.closest('.prod-card-compact');
+    if (compactCard) {
+        const id = parseInt(compactCard.dataset.id);
+        const grupos = window.productosAPI.groupByVariants(productos);
+        const grupo = grupos.find(g => g.variantes.some(v => v.id === id));
+        if (grupo) abrirModalProducto(grupo);
+        return;
+    }
+
+    // Modal: cambiar kg
+    const modalKg = e.target.closest('.kg-pill[data-accion="modal-kg"]');
+    if (modalKg && _modalGrupo) {
+        _modalVarIdx = parseInt(modalKg.dataset.varidx);
+        document.getElementById('prodModalContent').innerHTML = renderModalContent(_modalGrupo, _modalVarIdx);
+        return;
+    }
+
+    // Modal: qty +/-
+    const modalQty = e.target.closest('.qty-btn[data-accion="modal-restar"], .qty-btn[data-accion="modal-sumar"]');
+    if (modalQty && _modalGrupo) {
+        const id = parseInt(modalQty.dataset.id);
+        if (modalQty.dataset.accion === 'modal-sumar') agregarAlCarrito(id);
+        else quitarDelCarrito(id);
+        guardarCarritoStorage();
+        renderCarrito();
+        const fab = document.getElementById('cartFab');
+        if (fab) { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
+        document.getElementById('prodModalContent').innerHTML = renderModalContent(_modalGrupo, _modalVarIdx);
+        return;
+    }
+
+    // Modal: add to cart
+    const modalAdd = e.target.closest('.btn-add-cart[data-accion="modal-add"]');
+    if (modalAdd && _modalGrupo) {
+        modalAdd.disabled = true;
+        const id = parseInt(modalAdd.dataset.id);
+        agregarAlCarrito(id);
+        guardarCarritoStorage();
+        renderCarrito();
+        const fab = document.getElementById('cartFab');
+        if (fab) { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
+        document.getElementById('prodModalContent').innerHTML = renderModalContent(_modalGrupo, _modalVarIdx);
+        return;
+    }
+
     // KG pill
     const pill = e.target.closest('.kg-pill');
     if (pill) { cambiarVariante(pill); return; }
@@ -705,7 +884,7 @@ function setupUI() {
         });
     }
     document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') { cerrarSearch(); cerrarCheckout(); cerrarCarrito(); }
+        if (e.key === 'Escape') { cerrarModalProducto(); cerrarSearch(); cerrarCheckout(); cerrarCarrito(); }
     });
 
     // Map search
