@@ -9,11 +9,9 @@
     --blue-dark: #0f2a40;
     --blue-light: #2a5275;
     --blue-glow: rgba(27, 59, 90, 0.25);
-    --blue-pale: #E8EFF6;
     --orange: #FF6B35;
     --orange-dark: #e55a2b;
     --orange-glow: rgba(255, 107, 53, 0.3);
-    --orange-pale: #FFF0E7;
     --teal: #2EC4B6;
     --teal-dark: #25a89c;
     --teal-glow: rgba(46, 196, 182, 0.3);
@@ -929,27 +927,27 @@ li { list-style: none; }
 
 /* ===== BRAND ROWS (HOME) ===== */
 .brand-rows {
-    background: var(--blue-pale);
-    padding: 16px 0;
+    background: var(--orange);
+    padding: 20px 0;
 }
 .brand-row {
-    background: var(--orange-pale);
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-sm);
-    padding: 14px 0;
+    background: var(--blue);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    padding: 16px 0;
     margin: 16px 20px;
 }
 .brand-row-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     padding-right: 20px;
 }
 .brand-row-title {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--gray-dark);
+    color: var(--white);
     letter-spacing: 0;
     display: flex;
     align-items: center;
@@ -957,7 +955,7 @@ li { list-style: none; }
 }
 .brand-row-link {
     font-size: .78rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--teal);
     text-decoration: none;
     white-space: nowrap;
@@ -980,13 +978,13 @@ li { list-style: none; }
     scroll-snap-align: start;
     cursor: pointer;
     background: var(--white);
-    border-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.13);
     overflow: hidden;
     transition: transform var(--fast), box-shadow var(--fast);
 }
 .prod-card-compact:hover {
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
 }
 .prod-card-compact:active { transform: scale(0.96); }
 .prod-card-compact .producto-img {
@@ -1919,9 +1917,9 @@ li { list-style: none; }
     .btn-add-cart { padding: 12px; font-size: .95rem; }
     .productos-grid { gap: 16px; padding: 12px 0; }
 
-    /* Brand rows mobile: 2.5 cards, tarjetas blancas flotando */
-    .brand-rows { padding: 8px 0; }
-    .brand-row { margin: 8px 0; border-radius: 0; padding: 10px 0; }
+    /* Brand rows mobile: 2.5 cards, logo colors */
+    .brand-rows { padding: 12px 0; }
+    .brand-row { margin: 10px 0; border-radius: 0; padding: 12px 0; }
     .brand-row .container { padding: 0; }
     .brand-row-header { padding: 0 16px; }
     .brand-scroll { gap: 8px; padding: 0 16px 4px; }
