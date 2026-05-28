@@ -259,6 +259,7 @@ function renderCompactCard(grupo) {
 // ===== PRODUCT MODAL =====
 let _modalGrupo = null;
 let _modalVarIdx = 0;
+let _prevenirSalida = false;
 
 function abrirModalProducto(grupo) {
     _modalGrupo = grupo;
@@ -267,6 +268,9 @@ function abrirModalProducto(grupo) {
     document.getElementById('prodModalOverlay').classList.add('open');
     document.getElementById('prodModal').classList.add('open');
     document.body.style.overflow = 'hidden';
+    history.pushState({modal: true}, '');
+    _prevenirSalida = true;
+    window.addEventListener('beforeunload', prevenirSalida);
 }
 
 function cerrarModalProducto() {
@@ -274,6 +278,13 @@ function cerrarModalProducto() {
     document.getElementById('prodModal').classList.remove('open');
     document.body.style.overflow = '';
     _modalGrupo = null;
+}
+
+function prevenirSalida(e) {
+    if (_prevenirSalida) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
 }
 
 function renderModalContent(grupo, varIdx) {
@@ -467,6 +478,9 @@ document.addEventListener('click', function (e) {
     const overlay = e.target.closest('#prodModalOverlay');
     if (closeBtn || (overlay && overlay.classList.contains('open'))) {
         cerrarModalProducto();
+        _prevenirSalida = false;
+        window.removeEventListener('beforeunload', prevenirSalida);
+        if (history.state?.modal) history.back();
         return;
     }
 
@@ -913,3 +927,9 @@ function setupUI() {
     document.getElementById('filtroMarca')?.addEventListener('change', renderProductos);
     document.getElementById('ordenar')?.addEventListener('change', renderProductos);
 }
+
+// Back button → cierra modal; si está cerrado, beforeunload advierte
+window.addEventListener('popstate', () => {
+    const modal = document.getElementById('prodModal');
+    if (modal?.classList.contains('open')) cerrarModalProducto();
+});
