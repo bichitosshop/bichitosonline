@@ -142,7 +142,7 @@ function renderMarcas() {
     const chips = [...brands, ...brands].map(m => {
         const key = m.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
         const link = `productos.html?marca=${encodeURIComponent(m.toLowerCase())}`;
-        return `<a class="marca-logo-link" href="${link}"><img class="marca-logo" src="img/${key}.svg" alt="${m}" loading="lazy" onerror="this.dataset.fail=1"><span class="marca-fallback">${m}</span></a>`;
+        return `<a class="marca-chip" href="${link}"><span class="marca-logo-wrap"><img class="marca-logo" src="img/${key}.svg" alt="${m}" loading="lazy" onerror="this.closest('.marca-chip').classList.add('no-logo')"></span><span class="marca-label">${m}</span></a>`;
     }).join('');
     track.innerHTML = chips;
     // Auto-scroll

@@ -595,19 +595,46 @@ li { list-style: none; }
     pointer-events: none;
 }
 .marcas-track > * { pointer-events: auto; }
-.marca-logo-link {
+.marca-chip {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 0 12px;
-    transition: transform var(--fast);
+    padding: 14px 32px;
+    margin: 0 8px;
+    background: var(--cream);
+    border-radius: var(--radius-full);
+    border: 2px solid rgba(0,0,0,0.06);
+    font-weight: 800;
+    font-size: .95rem;
+    color: var(--gray-dark);
+    white-space: nowrap;
+    transition: all var(--fast);
+    cursor: pointer;
+    letter-spacing: 0.5px;
     text-decoration: none;
+    gap: 8px;
 }
-.marca-logo-link:hover { transform: scale(1.1); }
-.marca-logo { height: 32px; width: auto; object-fit: contain; }
-.marca-fallback { display: none; }
-img[data-fail] + .marca-fallback { display: inline; font-weight: 800; font-size: .95rem; color: var(--gray-dark); }
-img[data-fail] { display: none !important; }
+.marca-chip:hover {
+    background: var(--orange);
+    color: #fff;
+    border-color: transparent;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px var(--orange-glow);
+}
+.marca-logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 6px;
+    padding: 4px 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+.marca-chip:hover .marca-logo-wrap { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.marca-logo { height: 24px; width: auto; object-fit: contain; display: block; }
+.marca-label { display: none; }
+.marca-chip.no-logo .marca-label { display: inline; }
+.marca-chip.no-logo .marca-logo-wrap { display: none; }
 
 /* ===== PRODUCT CARDS ===== */
 .productos-grid {
