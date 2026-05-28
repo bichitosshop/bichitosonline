@@ -927,14 +927,15 @@ li { list-style: none; }
 
 /* ===== BRAND ROWS (HOME) ===== */
 .brand-rows {
-    background: #f0f7f8;
-    padding: 4px 0;
+    background: var(--cream-dark);
+    padding: 16px 0;
 }
 .brand-row {
-    background: #fef5ec;
+    background: var(--white);
     border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
     padding: 14px 0;
-    margin: 10px 20px;
+    margin: 16px 20px;
 }
 .brand-row-header {
     display: flex;
@@ -1928,18 +1929,13 @@ li { list-style: none; }
     .btn-add-cart { padding: 12px; font-size: .95rem; }
     .productos-grid { gap: 16px; padding: 12px 0; }
 
-    /* Brand rows mobile: 2.5 cards, fondos celeste/naranja */
-    .brand-rows { padding: 0; }
-    .brand-row {
-        margin: 6px 0;
-        border-radius: 0;
-        padding: 10px 0;
-    }
+    /* Brand rows mobile: 2.5 cards, tarjetas blancas flotando */
+    .brand-rows { padding: 8px 0; }
+    .brand-row { margin: 8px 0; border-radius: 0; padding: 10px 0; }
     .brand-row .container { padding: 0; }
     .brand-row-header { padding: 0 16px; }
     .brand-scroll { gap: 8px; padding: 0 16px 4px; }
     .prod-card-compact { width: 140px; }
-    .prod-card-compact .producto-img { border-radius: 0; }
 
     /* Tighten section gaps */
     .categorias { padding: 12px 0 20px; }
