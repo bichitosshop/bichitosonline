@@ -927,14 +927,15 @@ li { list-style: none; }
 
 /* ===== BRAND ROWS (HOME) ===== */
 .brand-row {
-    padding: 8px 0 4px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
 }
 .brand-row-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 8px;
-    padding: 0 20px;
+    padding-right: 20px;
 }
 .brand-row-title {
     font-size: 1rem;
@@ -954,30 +955,34 @@ li { list-style: none; }
 }
 .brand-scroll {
     display: flex;
-    gap: 5px;
+    gap: 6px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    padding: 0 0 4px;
+    padding: 0 0 4px 20px;
     scrollbar-width: none;
 }
 .brand-scroll::-webkit-scrollbar { display: none; }
 
-/* Compact card - Netflix style */
+/* Compact card */
 .prod-card-compact {
     flex: 0 0 auto;
     width: 105px;
     scroll-snap-align: start;
     cursor: pointer;
+    background: var(--white);
     border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     overflow: hidden;
-    transition: transform var(--fast);
+    transition: transform var(--fast), box-shadow var(--fast);
+}
+.prod-card-compact:hover {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 .prod-card-compact:active { transform: scale(0.96); }
 .prod-card-compact .producto-img {
     aspect-ratio: 1;
     width: 100%;
-    border-radius: 4px;
 }
 .prod-card-compact .badge-agotado {
     font-size: .55rem;
@@ -1167,12 +1172,14 @@ li { list-style: none; }
 }
 .prod-modal-relacionados .brand-scroll {
     gap: 8px;
+    padding-left: 0;
 }
 .prod-modal-relacionados .prod-card-compact {
     width: 100px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 .prod-modal-relacionados .prod-card-compact .producto-img {
-    border-radius: 3px;
+    border-radius: 0;
 }
 
 /* ===== DESTACADOS & PRODUCTS PAGE ===== */
@@ -1915,16 +1922,16 @@ li { list-style: none; }
     .btn-add-cart { padding: 12px; font-size: .95rem; }
     .productos-grid { gap: 16px; padding: 12px 0; }
 
-    /* Brand rows mobile: edge to edge, más chicas */
+    /* Brand rows mobile: edge to edge, shadow cards */
     .brand-row .container { padding: 0; }
     .brand-row-header { padding: 0 16px; }
-    .brand-scroll { gap: 4px; padding-left: 12px; }
-    .prod-card-compact { width: 95px; border-radius: 3px; }
-    .prod-card-compact .producto-img { border-radius: 3px; }
+    .brand-scroll { gap: 5px; padding: 0 16px 4px; }
+    .prod-card-compact { width: 95px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+    .prod-card-compact .producto-img { border-radius: 0; }
 
     /* Tighten section gaps */
     .categorias { padding: 12px 0 20px; }
     .marcas-section { padding: 20px 0; }
     .marcas-section .section-title { margin-bottom: 14px; }
-    .brand-row { padding: 6px 0 2px; }
+    .brand-row { padding: 6px 0; }
 }
