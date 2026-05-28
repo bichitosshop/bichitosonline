@@ -9,9 +9,11 @@
     --blue-dark: #0f2a40;
     --blue-light: #2a5275;
     --blue-glow: rgba(27, 59, 90, 0.25);
+    --blue-pale: #E8EFF6;
     --orange: #FF6B35;
     --orange-dark: #e55a2b;
     --orange-glow: rgba(255, 107, 53, 0.3);
+    --orange-pale: #FFF0E7;
     --teal: #2EC4B6;
     --teal-dark: #25a89c;
     --teal-glow: rgba(46, 196, 182, 0.3);
@@ -927,11 +929,11 @@ li { list-style: none; }
 
 /* ===== BRAND ROWS (HOME) ===== */
 .brand-rows {
-    background: var(--cream-dark);
+    background: var(--blue-pale);
     padding: 16px 0;
 }
 .brand-row {
-    background: var(--white);
+    background: var(--orange-pale);
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-sm);
     padding: 14px 0;
