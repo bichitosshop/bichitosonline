@@ -125,6 +125,15 @@
         }
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        .coverToe1, .coverToe2, .coverToe3, .coverToe4, .coverPaw,
+        .toeOverlay, .heartState, .pawReturn, .heartCore {
+          animation: none !important;
+          opacity: 0 !important;
+        }
+        .heartState { opacity: 1 !important; }
+      }
+
       @keyframes pawBack {
         0%, 26%, 70% {
           opacity: 0;

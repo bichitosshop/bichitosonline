@@ -379,12 +379,12 @@ function aplicarLogo() {
     document.querySelectorAll('.logo').forEach(logoEl => {
         const bichitosSpan = logoEl.querySelector('.logo-bichitos');
         const shopSpan     = logoEl.querySelector('.logo-shop');
-        const svgEl        = logoEl.querySelector('.logo-svg');
+        const badgeWrap    = logoEl.querySelector('.logo-badge-wrap');
         let imgEl = logoEl.querySelector('.logo-img-custom');
         if (img) {
             if (bichitosSpan) bichitosSpan.style.display = 'none';
             if (shopSpan)     shopSpan.style.display     = 'none';
-            if (svgEl)        svgEl.style.display        = 'none';
+            if (badgeWrap)    badgeWrap.style.display    = 'none';
             if (!imgEl) {
                 imgEl = document.createElement('img');
                 imgEl.className = 'logo-img-custom';
@@ -396,7 +396,7 @@ function aplicarLogo() {
         } else {
             if (bichitosSpan) bichitosSpan.style.display = '';
             if (shopSpan)     shopSpan.style.display     = '';
-            if (svgEl)        svgEl.style.display        = '';
+            if (badgeWrap)    badgeWrap.style.display    = '';
             if (imgEl)        imgEl.style.display        = 'none';
         }
     });
