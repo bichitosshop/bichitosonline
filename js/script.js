@@ -693,14 +693,28 @@ async function buscarEnMapa(query) {
             mapaCheckout.setView([r.lat, r.lon], 15);
             colocarMarcador(parseFloat(r.lat), parseFloat(r.lon));
         } else {
-            alert('No se encontró esa dirección');
+            mostrarError('No se encontró esa dirección');
         }
     } catch (e) {
-        alert('Error al buscar dirección');
+        mostrarError('Error al buscar dirección');
     }
 }
+function mostrarError(msg) {
+    let toast = document.getElementById('toast-error');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast-error';
+        toast.setAttribute('role', 'alert');
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('visible');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('visible'), 4000);
+}
+
 function usarUbicacionActual() {
-    if (!navigator.geolocation) { alert('Tu navegador no soporta geolocalización'); return; }
+    if (!navigator.geolocation) { mostrarError('Tu navegador no soporta geolocalización'); return; }
     navigator.geolocation.getCurrentPosition(
         pos => {
             const { latitude, longitude } = pos.coords;
@@ -708,7 +722,7 @@ function usarUbicacionActual() {
             colocarMarcador(latitude, longitude);
             buscarDireccion(latitude, longitude);
         },
-        () => alert('No pudimos obtener tu ubicación. Permití el acceso o escribí la dirección manualmente.')
+        () => mostrarError('No pudimos obtener tu ubicación. Permití el acceso o escribí la dirección manualmente.')
     );
 }
 function enviarWhatsAppCheckout() {
