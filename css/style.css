@@ -1704,6 +1704,8 @@ li { list-style: none; }
     font-size: .8rem;
     color: var(--gray);
 }
+.footer-mapa { margin-top: 8px; }
+.footer-dom { margin-top: 6px; font-size: .8rem; opacity: .7; }
 
 /* ===== CHECKOUT ===== */
 .checkout-modal {
