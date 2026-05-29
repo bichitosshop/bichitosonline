@@ -1037,10 +1037,10 @@ li { list-style: none; }
 }
 .prod-modal-close {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 36px;
-    height: 36px;
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: none;
     background: rgba(0,0,0,0.06);
@@ -1400,8 +1400,8 @@ li { list-style: none; }
 .cart-item-price { color: var(--orange); font-weight: 900; font-size: .95rem; }
 .cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
 .cart-item-qty button {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: 2px solid var(--teal);
     background: var(--white);
@@ -1419,8 +1419,8 @@ li { list-style: none; }
 .cart-item-remove {
     color: #e74c3c;
     cursor: pointer;
-    min-width: 40px;
-    min-height: 40px;
+    min-width: 44px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
