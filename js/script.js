@@ -825,7 +825,7 @@ function renderSearchResults(term) {
         const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
         const fotoUrl = p.imagen || imagenContextual(p);
         return `<a class="search-result-item" href="productos.html?categoria=${p.categoria}">
-            <img class="search-result-thumb" src="${fotoUrl}" alt="" loading="lazy" onerror="${imgOnError(iconoCat)}" />
+            <img class="search-result-thumb" src="${fotoUrl}" alt="${p.nombre}" loading="lazy" onerror="${imgOnError(iconoCat)}" />
             <div>
                 <div class="search-result-name">${p.nombre}</div>
                 <div class="search-result-price">$${p.precio.toLocaleString('es-AR')}</div>

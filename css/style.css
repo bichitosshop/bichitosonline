@@ -141,8 +141,8 @@ li { list-style: none; }
     100% { transform: scale(1); }
 }
 @keyframes inCartPulse {
-    0%, 100% { box-shadow: var(--shadow-orange); }
-    50% { box-shadow: 0 0 0 4px rgba(255,107,53,0.08), var(--shadow-orange); }
+    0%, 100% { border-color: rgba(255,107,53,0.15); }
+    50% { border-color: rgba(255,107,53,0.45); }
 }
 @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
