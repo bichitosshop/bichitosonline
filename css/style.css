@@ -655,13 +655,19 @@ li { list-style: none; }
 /* ===== PRODUCT CARDS ===== */
 .productos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 24px;
-    padding: 20px 0;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    padding: 12px 0;
+}
+@media (min-width: 768px) {
+    .productos-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+}
+@media (min-width: 1024px) {
+    .productos-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
 }
 .producto-card {
     background: var(--white);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     display: flex;
@@ -681,14 +687,14 @@ li { list-style: none; }
 }
 .producto-card:hover::before { opacity: 1; }
 .producto-card:hover {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
 }
 .producto-card.animate-ready { opacity: 0; transform: scale(0.85) translateY(30px); }
 .producto-card.animate-in { animation: bounceIn 0.5s var(--bounce) both; }
 
 .producto-img {
-    aspect-ratio: 1;
+    aspect-ratio: 3 / 4;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -742,34 +748,39 @@ li { list-style: none; }
 .badge-envio { background: linear-gradient(135deg, var(--teal), var(--teal-dark)); color: #fff; }
 
 .producto-body {
-    padding: 16px;
+    padding: 8px;
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 2px;
 }
 .producto-marca {
-    font-size: .8rem;
-    font-weight: 800;
-    color: #1a7a72;
+    font-size: .65rem;
+    font-weight: 700;
+    color: var(--orange);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 5px;
+    letter-spacing: 1px;
+    margin-bottom: 0;
 }
 .producto-nombre {
-    font-weight: 700;
-    font-size: .95rem;
-    margin-bottom: 10px;
-    line-height: 1.35;
+    font-weight: 600;
+    font-size: .8rem;
+    margin-bottom: 4px;
+    line-height: 1.3;
     color: var(--gray-dark);
     flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     text-wrap: pretty;
 }
 .producto-precio {
-    font-size: 1.5rem;
+    font-size: 1.05rem;
     font-weight: 900;
     color: var(--orange);
-    margin-bottom: 12px;
-    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
     font-variant-numeric: tabular-nums;
 }
 
@@ -817,14 +828,14 @@ li { list-style: none; }
     margin-bottom: 10px;
 }
 .qty-btn {
-    width: 44px;
-    height: 44px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
-    border: 2px solid var(--teal);
+    border: 2px solid var(--orange);
     background: var(--white);
-    color: var(--teal);
+    color: var(--orange);
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: all var(--fast);
     display: inline-flex;
@@ -832,10 +843,10 @@ li { list-style: none; }
     justify-content: center;
 }
 .qty-btn:hover {
-    background: var(--teal);
+    background: var(--orange);
     color: #fff;
     transform: scale(1.1);
-    box-shadow: 0 4px 12px var(--teal-glow);
+    box-shadow: 0 4px 12px var(--orange-glow);
 }
 .qty-btn:active { transform: scale(0.9); }
 .qty-cant {
@@ -849,13 +860,13 @@ li { list-style: none; }
 /* Add to cart button (3 estados) */
 .btn-add-cart {
     width: 100%;
-    padding: 17px;
+    padding: 8px;
     border: none;
     border-radius: var(--radius-full);
     background: linear-gradient(135deg, var(--orange), #ff9f5a);
     color: #fff;
     font-weight: 800;
-    font-size: 1.05rem;
+    font-size: .75rem;
     cursor: pointer;
     transition: transform var(--fast), box-shadow var(--fast), background var(--fast);
     box-shadow: 0 4px 15px var(--orange-glow);
@@ -907,9 +918,8 @@ li { list-style: none; }
 }
 
 .producto-card.en-carrito {
-    box-shadow: var(--shadow-orange);
-    border-color: rgba(255,107,53,0.3);
-    animation: inCartPulse 3s ease-in-out infinite;
+    box-shadow: inset 0 0 0 2px var(--orange);
+    border-color: transparent;
 }
 .producto-subtotal {
     text-align: center;
@@ -983,21 +993,21 @@ li { list-style: none; }
 /* Compact card */
 .prod-card-compact {
     flex: 0 0 auto;
-    width: 150px;
+    width: 130px;
     scroll-snap-align: start;
     cursor: pointer;
     background: var(--white);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(13, 86, 100, 0.1);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
     transition: transform var(--fast), box-shadow var(--fast);
 }
 .prod-card-compact:hover {
-    box-shadow: 0 4px 16px rgba(13, 86, 100, 0.15);
+    box-shadow: var(--shadow);
 }
 .prod-card-compact:active { transform: scale(0.96); }
 .prod-card-compact .producto-img {
-    aspect-ratio: 1;
+    aspect-ratio: 3 / 4;
     width: 100%;
 }
 .prod-card-compact .producto-img img {
@@ -1910,12 +1920,8 @@ li { list-style: none; }
     .contacto-grid { grid-template-columns: 1fr; }
     .footer-grid { gap: 20px; }
 
-    /* Cards más compactas en mobile */
-    .producto-body { padding: 12px; }
-    .producto-nombre { font-size: .85rem; margin-bottom: 6px; }
-    .producto-precio { font-size: 1.25rem; margin-bottom: 8px; }
-    .btn-add-cart { padding: 12px; font-size: .95rem; }
-    .productos-grid { gap: 16px; padding: 12px 0; }
+    /* Cards Shein-style: la grilla 2-col y tamaños compactos
+       ya están en las reglas base mobile-first; no se sobreescriben acá. */
 
     /* Brand rows mobile: edge to edge, sin márgenes */
     .brand-rows { padding: 20px 0; }
@@ -1923,7 +1929,7 @@ li { list-style: none; }
     .brand-row .container { padding: 0; }
     .brand-row-header { padding: 0 16px; }
     .brand-scroll { gap: 10px; padding: 0 16px 4px; }
-    .prod-card-compact { width: 140px; }
+    .prod-card-compact { width: 130px; }
 
     /* Tighten section gaps */
     .categorias { padding: 12px 0 20px; }
