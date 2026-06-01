@@ -2,6 +2,13 @@
 // BICHITOS SHOP — Lógica principal
 // ============================================
 
+// Sanitización: evita XSS al insertar texto en innerHTML
+function escHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+}
+
 const WHATSAPP_NUMBER = '5492615081413';
 const WHATSAPP_MSG_PREFIX = '🐾 Pedido - BICHITOS SHOP%0A%0A';
 const CART_STORAGE_KEY = 'bichitos_carrito';
@@ -20,6 +27,25 @@ document.addEventListener('DOMContentLoaded', () => {
     setupUI();
     initCarousel();
 });
+
+// ===== FOCUS TRAP =====
+function trapFocus(modal) {
+    const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (!focusable.length) return () => {};
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    function handler(e) {
+        if (e.key !== 'Tab') return;
+        if (e.shiftKey) {
+            if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+            if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+    }
+    modal.addEventListener('keydown', handler);
+    first.focus();
+    return () => modal.removeEventListener('keydown', handler);
+}
 
 // ===== STORAGE =====
 function cargarCarritoStorage() {
@@ -150,7 +176,7 @@ function renderMarcas() {
         const key = m.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
         const link = `productos.html?marca=${encodeURIComponent(m.toLowerCase())}`;
         const src = logoMap[key] || `img/${key}.svg`;
-        return `<a class="marca-chip" href="${link}"><span class="marca-logo-wrap"><img class="marca-logo" src="${src}" alt="${m}" loading="lazy" onerror="this.closest('.marca-chip').classList.add('no-logo')"></span><span class="marca-label">${m}</span></a>`;
+        return `<a class="marca-chip" href="${link}"><span class="marca-logo-wrap"><img class="marca-logo" src="${src}" alt="${escHtml(m)}" loading="lazy" onerror="this.closest('.marca-chip').classList.add('no-logo')"></span><span class="marca-label">${escHtml(m)}</span></a>`;
     }).join('');
     track.innerHTML = chips;
     // Auto-scroll
@@ -230,7 +256,7 @@ function renderDestacados(skipAnim) {
         <div class="brand-row">
             <div class="container">
                 <div class="brand-row-header">
-                    <span class="brand-row-title">${marca}</span>
+                    <span class="brand-row-title">${escHtml(marca)}</span>
                     <a href="productos.html?marca=${encodeURIComponent(marca.toLowerCase())}" class="brand-row-link">Ver todos →</a>
                 </div>
                 <div class="brand-scroll">
@@ -245,10 +271,10 @@ function renderCompactCard(grupo) {
     const p = grupo.variantes[0];
     const img = p.imagen || imagenContextual(p);
     const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
-    const imgHtml = `<img src="${img}" alt="${p.nombre}" loading="lazy" width="150" height="150" style="width:100%;height:100%;object-fit:cover;" onerror="${imgOnError(iconoCat)}" />`;
+    const imgHtml = `<img src="${img}" alt="${escHtml(p.nombre)}" class="producto-foto" loading="lazy" width="150" height="150" onerror="${imgOnError(iconoCat)}" />`;
 
     return `
-        <div class="prod-card-compact" data-id="${p.id}" data-accion="ver-detalle" role="button" tabindex="0" aria-label="${p.nombre}">
+        <div class="prod-card-compact" data-id="${p.id}" data-accion="ver-detalle" role="button" tabindex="0" aria-label="${escHtml(p.nombre)}">
             <div class="producto-img ${p.categoria}">
                 ${imgHtml}
             </div>
@@ -260,6 +286,7 @@ function renderCompactCard(grupo) {
 let _modalGrupo = null;
 let _modalVarIdx = 0;
 let _prevenirSalida = false;
+let _modalFocusTrap = null;
 
 function abrirModalProducto(grupo) {
     _modalGrupo = grupo;
@@ -271,6 +298,7 @@ function abrirModalProducto(grupo) {
     history.pushState({modal: true}, '');
     _prevenirSalida = true;
     window.addEventListener('beforeunload', prevenirSalida);
+    _modalFocusTrap = trapFocus(document.getElementById('prodModal'));
 }
 
 function cerrarModalProducto() {
@@ -278,6 +306,7 @@ function cerrarModalProducto() {
     document.getElementById('prodModal').classList.remove('open');
     document.body.style.overflow = '';
     _modalGrupo = null;
+    if (_modalFocusTrap) { _modalFocusTrap(); _modalFocusTrap = null; }
 }
 
 function prevenirSalida(e) {
@@ -294,7 +323,7 @@ function renderModalContent(grupo, varIdx) {
     const cant = enCarrito ? enCarrito.cant : 0;
     const img = p.imagen || imagenContextual(p);
     const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
-    const imgHtml = `<img src="${img}" alt="${p.nombre}" class="prod-modal-img" loading="lazy" width="400" height="400" onerror="${imgOnError(iconoCat)}" />`;
+    const imgHtml = `<img src="${img}" alt="${escHtml(p.nombre)}" class="prod-modal-img" loading="lazy" width="400" height="400" onerror="${imgOnError(iconoCat)}" />`;
     const isSingle = v.length === 1;
     const kgPills = v.map((vp, vi) =>
         `<button class="kg-pill${vi === varIdx ? ' active' : ''}" data-accion="modal-kg" data-varidx="${vi}" aria-label="${vp._peso || vp.nombre}">${vp._peso || (vi + 1)}</button>`
@@ -304,7 +333,7 @@ function renderModalContent(grupo, varIdx) {
 
     let addBtnHtml;
     if (sinStock) {
-        addBtnHtml = '<button class="btn-add-cart" disabled style="opacity:.5;cursor:default">Sin stock</button>';
+        addBtnHtml = '<button class="btn-add-cart" disabled>Sin stock</button>';
     } else if (cant > 0) {
         addBtnHtml = `<button class="btn-add-cart added" disabled>✓ En carrito</button>`;
     } else {
@@ -328,8 +357,8 @@ function renderModalContent(grupo, varIdx) {
     return `
         ${imgHtml}
         <div class="prod-modal-body">
-            <div class="prod-modal-marca">${p.marca || ''}</div>
-            <div class="prod-modal-nombre">${p.nombre}</div>
+            <div class="prod-modal-marca">${escHtml(p.marca || '')}</div>
+            <div class="prod-modal-nombre">${escHtml(p.nombre)}</div>
             <div class="prod-modal-precio">$${p.precio.toLocaleString('es-AR')}</div>
             ${!isSingle ? `<div class="kg-selector">${kgPills}</div>` : ''}
             <div class="qty-selector">
@@ -368,7 +397,7 @@ function crearCardGrupo(grupo, skipAnim) {
         const badges = badgesProducto(p);
         const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
         const fotoUrl = p.imagen || imagenContextual(p);
-        const imgHtml = `<img src="${fotoUrl}" alt="${p.nombre}" class="producto-foto" loading="lazy" width="400" height="400" style="width:100%;height:100%;object-fit:cover;" onerror="${imgOnError(iconoCat)}" />`;
+        const imgHtml = `<img src="${fotoUrl}" alt="${escHtml(p.nombre)}" class="producto-foto" loading="lazy" width="400" height="400" onerror="${imgOnError(iconoCat)}" />`;
         const isSingle = v.length === 1;
         const sinStock = p.stock === 0;
         const kgPills = v.map((varp, vi) =>
@@ -394,8 +423,8 @@ function crearCardGrupo(grupo, skipAnim) {
                 ${imgHtml}
             </div>
             <div class="producto-body" data-base="${grupo._base}">
-                <div class="producto-marca">${p.marca || ''}</div>
-                <div class="producto-nombre">${defaultName}</div>
+                <div class="producto-marca">${escHtml(p.marca || '')}</div>
+                <div class="producto-nombre">${escHtml(defaultName)}</div>
                 ${!isSingle ? `<div class="kg-selector">${kgPills}</div>` : ''}
                 <div class="producto-precio">$${p.precio.toLocaleString('es-AR')}</div>
                 ${cant > 0 ? `<div class="qty-selector">
@@ -606,13 +635,16 @@ function cambiarVariante(pill) {
 }
 
 // ===== CART PANEL =====
+let _cartFocusTrap = null;
 function abrirCarrito() {
     document.getElementById('cartPanel')?.classList.add('open');
     document.getElementById('cartOverlay')?.classList.add('open');
+    _cartFocusTrap = trapFocus(document.getElementById('cartPanel'));
 }
 function cerrarCarrito() {
     document.getElementById('cartPanel')?.classList.remove('open');
     document.getElementById('cartOverlay')?.classList.remove('open');
+    if (_cartFocusTrap) { _cartFocusTrap(); _cartFocusTrap = null; }
 }
 
 // ===== CHECKOUT =====
@@ -707,8 +739,9 @@ function mostrarError(msg) {
         toast.setAttribute('role', 'alert');
         document.body.appendChild(toast);
     }
-    toast.textContent = msg;
+    toast.innerHTML = `<span>${msg}</span><button class="toast-close" aria-label="Cerrar">✕</button>`;
     toast.classList.add('visible');
+    toast.querySelector('.toast-close').addEventListener('click', () => toast.classList.remove('visible'));
     clearTimeout(toast._timer);
     toast._timer = setTimeout(() => toast.classList.remove('visible'), 4000);
 }
@@ -730,10 +763,10 @@ function enviarWhatsAppCheckout() {
     const direccion = document.getElementById('checkoutAddress').value.trim();
     if (!nombre) {
         document.getElementById('checkoutName').focus();
-        document.getElementById('checkoutName').style.borderColor = '#e74c3c';
+        document.getElementById('checkoutName').classList.add('field-error');
         return;
     }
-    document.getElementById('checkoutName').style.borderColor = '';
+    document.getElementById('checkoutName').classList.remove('field-error');
 
     let mapsLink = '';
     if (coordsCheckout) mapsLink = `https://www.google.com/maps?q=${coordsCheckout.lat},${coordsCheckout.lng}`;
@@ -825,9 +858,9 @@ function renderSearchResults(term) {
         const iconoCat = p.categoria === 'gatos' ? 'cat' : 'dog';
         const fotoUrl = p.imagen || imagenContextual(p);
         return `<a class="search-result-item" href="productos.html?categoria=${p.categoria}">
-            <img class="search-result-thumb" src="${fotoUrl}" alt="${p.nombre}" loading="lazy" onerror="${imgOnError(iconoCat)}" />
+            <img class="search-result-thumb" src="${fotoUrl}" alt="${escHtml(p.nombre)}" loading="lazy" onerror="${imgOnError(iconoCat)}" />
             <div>
-                <div class="search-result-name">${p.nombre}</div>
+                <div class="search-result-name">${escHtml(p.nombre)}</div>
                 <div class="search-result-price">$${p.precio.toLocaleString('es-AR')}</div>
             </div>
         </a>`;
