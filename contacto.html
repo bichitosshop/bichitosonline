@@ -22,7 +22,7 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -35,14 +35,10 @@
             <img class="logo-img" src="img/logo.png" alt="BICHITOS SHOP">
         </a>
 
-        <div class="nav-overlay" id="navOverlay"></div>
         <nav class="mega-nav" id="nav" aria-label="Navegación principal">
-            <div class="nav-panel-header">
-                <img src="img/logo.png" alt="BICHITOS SHOP">
-            </div>
-            <div class="nav-item" data-cat="perros">
+            <div class="nav-item">
                 <a href="productos.html?categoria=perros" class="nav-link" data-edit-id="nav-perros" data-edit-type="text">
-                    🐕 PERROS
+                    PERROS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
                 <ul class="nav-dropdown" aria-label="Categorías perros">
@@ -53,9 +49,9 @@
                     <li><a href="productos.html?categoria=perros&etapa=especiales">Necesidades Especiales</a></li>
                 </ul>
             </div>
-            <div class="nav-item" data-cat="gatos">
+            <div class="nav-item">
                 <a href="productos.html?categoria=gatos" class="nav-link" data-edit-id="nav-gatos" data-edit-type="text">
-                    🐈 GATOS
+                    GATOS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
                 <ul class="nav-dropdown" aria-label="Categorías gatos">
@@ -66,9 +62,9 @@
                     <li><a href="productos.html?categoria=gatos&etapa=castrado">Castrado</a></li>
                 </ul>
             </div>
-            <div class="nav-item" data-cat="marcas">
+            <div class="nav-item">
                 <a href="productos.html" class="nav-link" data-edit-id="nav-marcas" data-edit-type="text">
-                    🏷️ MARCAS
+                    MARCAS
                     <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l5 5 5-5"/></svg>
                 </a>
                 <ul class="nav-dropdown" aria-label="Marcas">
@@ -80,15 +76,8 @@
                     <li><a href="productos.html?marca=valiant">Valiant</a></li>
                 </ul>
             </div>
-            <div class="nav-item" data-cat="contacto">
-                <a href="contacto.html" class="nav-link" data-edit-id="nav-contacto" data-edit-type="text">📍 CONTACTO</a>
-            </div>
-            <div class="nav-panel-social">
-                <a href="https://wa.me/5492615081413" target="_blank" rel="noopener noreferrer" class="nav-whatsapp">💬 WhatsApp</a>
-                <div class="nav-social-links">
-                    <a href="#" aria-label="Instagram">📷</a>
-                    <a href="#" aria-label="Facebook">📘</a>
-                </div>
+            <div class="nav-item">
+                <a href="contacto.html" class="nav-link" data-edit-id="nav-contacto" data-edit-type="text">CONTACTO</a>
             </div>
         </nav>
 
@@ -169,23 +158,19 @@
 
 <footer class="footer" role="contentinfo">
     <div class="container footer-grid">
-        <div class="footer-logo">
-            <img src="img/logo.png" alt="BICHITOS SHOP">
+        <div>
+            <h4 class="logo"><span class="logo-bichitos">BICHITOS</span><span class="logo-shop"> SHOP</span></h4>
+            <p>Alimentos y accesorios premium para mascotas en Mendoza</p>
         </div>
-        <div class="footer-center">
-            <div>
-                <p>Alimentos y accesorios premium para mascotas en Mendoza</p>
-            </div>
-            <div>
-                <h4 data-edit-id="ft-h-contacto" data-edit-type="heading">Contacto</h4>
-                <p>📱 <a href="https://wa.me/5492615081413">+54 9 261 508-1413</a></p>
-                <p>📍 Gran Mendoza</p>
-            </div>
-            <div>
-                <h4 data-edit-id="ft-h-horarios" data-edit-type="heading">Horarios</h4>
-                <p>Lun a Sáb: 9:00 – 20:00</p>
-                <p>Dom: cerrado</p>
-            </div>
+        <div>
+            <h4 data-edit-id="ft-h-contacto" data-edit-type="heading">Contacto</h4>
+            <p>📱 <a href="https://wa.me/5492615081413">+54 9 261 508-1413</a></p>
+            <p class="footer-mapa">📍 Gran Mendoza</p>
+        </div>
+        <div>
+            <h4 data-edit-id="ft-h-horarios" data-edit-type="heading">Horarios</h4>
+            <p>Lun a Sáb: 9:00 – 20:00</p>
+            <p class="footer-dom">Dom: cerrado</p>
         </div>
     </div>
     <div class="container footer-bottom"><p>&copy; 2026 BICHITOS SHOP — Mendoza, Argentina</p></div>
