@@ -340,6 +340,16 @@ function renderModalContent(grupo, varIdx) {
         addBtnHtml = `<button class="btn-add-cart" data-id="${p.id}" data-accion="modal-add">${addText}</button>`;
     }
 
+    // Sticky footer
+    let stickyFooterHtml;
+    if (sinStock) {
+        stickyFooterHtml = `<div class="prod-modal-sticky-footer"><span class="sticky-price">Sin stock</span></div>`;
+    } else if (cant > 0) {
+        stickyFooterHtml = `<div class="prod-modal-sticky-footer"><span class="sticky-price">$${(p.precio * cant).toLocaleString('es-AR')}</span><button class="sticky-add added" disabled>✓ En carrito</button></div>`;
+    } else {
+        stickyFooterHtml = `<div class="prod-modal-sticky-footer"><span class="sticky-price">$${p.precio.toLocaleString('es-AR')}</span><button class="sticky-add" data-id="${p.id}" data-accion="modal-add">${addText}</button></div>`;
+    }
+
     // Relacionados: misma categoria, excluyendo el actual
     const relacionados = window.productosAPI.groupByVariants(
         productos.filter(pr => pr.categoria === p.categoria && pr._base !== grupo._base)
@@ -369,6 +379,7 @@ function renderModalContent(grupo, varIdx) {
             ${addBtnHtml}
             ${relacionadosHtml}
         </div>
+        ${stickyFooterHtml}
     `;
 }
 
@@ -425,15 +436,13 @@ function crearCardGrupo(grupo, skipAnim) {
             <div class="producto-body" data-base="${grupo._base}">
                 <div class="producto-marca">${escHtml(p.marca || '')}</div>
                 <div class="producto-nombre">${escHtml(defaultName)}</div>
-                ${!isSingle ? `<div class="kg-selector">${kgPills}</div>` : ''}
                 <div class="producto-precio">$${p.precio.toLocaleString('es-AR')}</div>
                 ${cant > 0 ? `<div class="qty-selector">
                     <button class="qty-btn" data-id="${p.id}" data-accion="restar" aria-label="Quitar ${p.nombre}">−</button>
                     <span class="qty-cant" aria-live="polite">${cant}</span>
                     <button class="qty-btn" data-id="${p.id}" data-accion="sumar" aria-label="Agregar ${p.nombre}">+</button>
-                </div>` : ''}
-                ${accionHtml}
-                ${cant > 0 ? `<div class="producto-subtotal">Subtotal: $${subtotal.toLocaleString('es-AR')}</div>` : ''}
+                </div>` : accionHtml}
+                ${cant > 0 ? `<div class="producto-subtotal">$${subtotal.toLocaleString('es-AR')}</div>` : ''}
             </div>
         </div>`;
     }
@@ -545,8 +554,8 @@ document.addEventListener('click', function (e) {
         return;
     }
 
-    // Modal: add to cart
-    const modalAdd = e.target.closest('.btn-add-cart[data-accion="modal-add"]');
+    // Modal: add to cart (both inline button and sticky footer)
+    const modalAdd = e.target.closest('[data-accion="modal-add"]');
     if (modalAdd && _modalGrupo) {
         modalAdd.disabled = true;
         const id = parseInt(modalAdd.dataset.id);
@@ -897,15 +906,31 @@ function initScrollAnimations(scope) {
 function setupMegaMenu() {
     const menuToggle = document.getElementById('menuToggle');
     const nav = document.getElementById('nav');
+    const overlay = document.getElementById('navOverlay');
+
+    function closeNav() {
+        nav?.classList.remove('open');
+        menuToggle?.classList.remove('open');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+        menuToggle?.setAttribute('aria-label', 'Abrir menú');
+        overlay?.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
     if (menuToggle && nav) {
         menuToggle.addEventListener('click', () => {
             const isOpen = nav.classList.toggle('open');
             menuToggle.classList.toggle('open', isOpen);
             menuToggle.setAttribute('aria-expanded', isOpen);
             menuToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+            overlay?.classList.toggle('open', isOpen);
             document.body.style.overflow = isOpen ? 'hidden' : '';
         });
     }
+
+    // Close on overlay click
+    overlay?.addEventListener('click', closeNav);
+
     // Acordeón en mobile: tap en el link con dropdown abre/cierra
     nav?.querySelectorAll('.nav-item').forEach(item => {
         const dropdown = item.querySelector('.nav-dropdown');
