@@ -44,6 +44,11 @@ Sin build system. Editás archivos → commit → push.
 
 ## Variables CSS (design tokens)
 
+> 🔒 **PALETA BLOQUEADA — NO CAMBIAR.** Esta es la colorimetría definitiva del proyecto,
+> confirmada por el dueño. NO proponer ni aplicar paletas nuevas (ej: el naranja `#F97316` +
+> azul `#2563EB` que sugirió OpenCode/OpenAI fue rechazado explícitamente). La fuente es **Inter**.
+> Cualquier rediseño visual debe respetar estos tokens tal cual.
+
 ```css
 --blue:   #1B3B5A   /* primario, header, footer */
 --orange: #FF6B35   /* acción, botones CTA */
