@@ -234,6 +234,7 @@ li { list-style: none; }
 @media (min-width: 768px) {
   body { padding-bottom: 0; }
   .desktop-only { display: revert; }
+  .icon-btn.desktop-only { display: grid; }   /* restaura el centrado del ícono cuenta */
   .bottom-nav { display: none; }
   .menu-toggle { display: none; }
   .topbar-in { justify-content: space-between; }
@@ -248,14 +249,19 @@ li { list-style: none; }
   .mega-nav a.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--orange); border-radius: 2px; }
   .logo { margin-right: 24px; }
 
+  /* Hero contenido: no gigante en desktop (se topea por alto y se centra) */
   .hero-wrap { padding-top: 20px; }
+  .hero { width: fit-content; max-width: 100%; margin: 0 auto; }
+  .hero-img { max-height: 460px; width: auto; max-width: 100%; }
 
-  .trust { grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 22px; margin-top: 20px; }
+  .trust { grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 16px; margin-top: 20px; }
   .trust-item { flex-direction: row; text-align: left; gap: 12px; justify-content: flex-start; padding-left: 8px; }
   .trust-ic { width: 50px; height: 50px; flex: none; }
   .trust-item b { font-size: 14px; }
 
   .cat-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .cat-card { height: 420px; }                       /* no tan altas en desktop */
+  .cat-card img { object-fit: cover; object-position: top; }
   .section-head { margin: 36px 0 18px; }
   .section-title { font-size: 28px; }
 

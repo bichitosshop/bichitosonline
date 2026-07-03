@@ -83,7 +83,7 @@
       <div class="pcard-img">
         ${flag ? `<span class="pcard-flag">${flag}</span>` : ''}
         <button class="pcard-fav${favOn}" data-fav="${p.id}" aria-label="Favorito">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.4-9.3-8.5C1.2 9.7 2.6 6 6 6c2 0 3.2 1.2 6 4 2.8-2.8 4-4 6-4 3.4 0 4.8 3.7 3.3 6.5C19 16.6 12 21 12 21z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.4 5.4 0 0 0-7.7 0L12 6.7l-1.1-1.1a5.4 5.4 0 1 0-7.7 7.7L12 22l8.8-8.7a5.4 5.4 0 0 0 0-7.7z"/></svg>
         </button>
         <img src="${imgFor(p)}" alt="${esc(p.nombre)}" loading="lazy" width="400" height="400" onerror="${imgErr(p)}" />
       </div>

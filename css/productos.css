@@ -49,12 +49,16 @@
 .pcard-img img.img-fallback { object-fit: contain; padding: 26%; opacity: .5; }
 /* Corazón wishlist */
 .pcard-fav {
-  position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(255,255,255,.85); color: var(--navy); display: grid; place-items: center;
-  transition: transform .15s var(--spring), color .2s;
+  position: absolute; z-index: 3; top: 8px; right: 8px; width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,.92); color: var(--navy);
+  box-shadow: 0 2px 8px rgba(27,58,89,.12); display: grid; place-items: center;
+  transition: transform .15s var(--spring), color .2s, background .2s;
 }
-.pcard-fav:active { transform: scale(.85); }
-.pcard-fav svg { width: 18px; height: 18px; }
+.pcard-fav:hover { background: #fff; }
+.pcard-fav:active { transform: scale(.82); }
+.pcard-fav svg { width: 19px; height: 19px; transition: transform .2s var(--spring); }
+.pcard-fav.on { color: var(--orange); }
+.pcard-fav.on svg { fill: var(--orange); transform: scale(1.05); }
 .pcard-fav.on { color: var(--orange); }
 .pcard-fav.on svg { fill: var(--orange); }
 /* Flag oferta */
