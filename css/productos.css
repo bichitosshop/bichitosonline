@@ -10,14 +10,7 @@
 /* Pills de filtro */
 .filtros-pills { display: flex; gap: 8px; overflow-x: auto; padding: 10px 16px 12px; scrollbar-width: none; scroll-snap-type: x proximity; }
 .filtros-pills::-webkit-scrollbar { display: none; }
-.fpill {
-  scroll-snap-align: start; flex: none; height: 38px; padding: 0 16px;
-  border-radius: var(--r-pill); border: 1px solid var(--hairline);
-  background: var(--paper); color: var(--navy); font-size: 13.5px; font-weight: 700;
-  transition: background .2s, color .2s, border-color .2s, transform .12s var(--spring);
-}
-.fpill:active { transform: scale(.95); }
-.fpill.act { background: var(--navy); border-color: var(--navy); color: #fff; }
+/* .fpill vive en home.css (compartido con el blog) */
 
 /* Buscador */
 .buscador-wrap { padding: 0 16px 6px; }

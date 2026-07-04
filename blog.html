@@ -4,36 +4,361 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Blog — BICHITOS SHOP</title>
-<meta name="description" content="Consejos, tips y noticias para el bienestar de tu mascota. Próximamente." />
+<meta name="description" content="Consejos, tips y noticias para el bienestar de tu mascota. Alimentación, salud, educación y más." />
 <meta name="theme-color" content="#1B3B5A" />
 <link rel="icon" type="image/png" href="img/favicon.png" />
+<link rel="apple-touch-icon" href="img/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/home.css?v=4" />
-<style>
-  .blog-hero { text-align: center; padding: 70px 20px 40px; }
-  .blog-hero .paw { font-size: 52px; }
-  .blog-hero h1 { font-size: clamp(28px, 7vw, 40px); color: var(--navy); font-weight: 900; margin: 14px 0 10px; }
-  .blog-hero p { color: var(--muted); max-width: 32ch; margin: 0 auto 26px; }
-</style>
+<link rel="stylesheet" href="css/home.css?v=5" />
 </head>
 <body>
+
+<a href="#main" class="skip-link">Saltar al contenido principal</a>
+
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <p class="topbar-msg">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 4h11v11H1zM12 8h4l3 3v4h-7z"/><circle cx="5.5" cy="18" r="1.6"/><circle cx="16.5" cy="18" r="1.6"/></svg>
+      Envío gratis en compras superiores a <b>$49.990</b>
+    </p>
+    <nav class="topbar-links" aria-label="Enlaces de ayuda">
+      <a href="contacto.html">Ayuda</a>
+      <a href="contacto.html">Seguimiento de pedido</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
 <header class="header" id="header">
   <div class="wrap header-in">
+    <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
     <a href="index.html" class="logo" aria-label="BICHITOS SHOP — Inicio"><img src="img/logo.png" alt="BICHITOS SHOP" /></a>
-    <a href="index.html" class="btn-primary" style="margin-left:auto">Volver al inicio</a>
+    <nav class="mega-nav" aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="productos.html?categoria=perros">Perros</a>
+      <a href="productos.html?categoria=gatos">Gatos</a>
+      <a href="productos.html">Accesorios</a>
+      <a href="productos.html?categoria=ofertas">Ofertas</a>
+      <a href="blog.html" class="active">Blog</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+    <div class="header-actions">
+      <a href="productos.html" class="icon-btn" aria-label="Buscar productos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </a>
+      <a href="productos.html" class="icon-btn cart-btn" aria-label="Ver carrito">
+        <img src="img/icons/ic-cart.png" alt="" class="ic-img" />
+        <span class="cart-badge" id="cartBadge" aria-live="polite">0</span>
+      </a>
+    </div>
   </div>
 </header>
-<main id="main">
-  <section class="blog-hero wrap">
-    <div class="paw" aria-hidden="true">🐾</div>
-    <h1>Blog</h1>
-    <p>Consejos, tips y noticias para el bienestar de tu mascota. <b>Muy pronto.</b></p>
-    <a href="index.html" class="btn-primary">Ver productos
-      <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+
+<!-- ===== SLIDE-OUT MENU ===== -->
+<div class="nav-overlay" id="navOverlay" hidden></div>
+<aside class="nav-panel" id="navPanel" aria-label="Menú de navegación">
+  <div class="nav-panel-head">
+    <img src="img/logo.png" alt="BICHITOS SHOP" />
+    <button class="icon-btn" id="navClose" aria-label="Cerrar menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
+    </button>
+  </div>
+  <nav class="nav-panel-links" aria-label="Categorías">
+    <span class="np-group-label">Comprá por categoría</span>
+    <a href="productos.html?categoria=perros" data-cat="perros">
+      <span class="np-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 10c.7-.7 1.7 0 2.5 0a2.5 2.5 0 1 0 0-5 .5.5 0 0 1-.5-.5 2.5 2.5 0 1 0-5 0c0 .8.7 1.8 0 2.5l-7 7c-.7.7-1.7 0-2.5 0a2.5 2.5 0 0 0 0 5 .5.5 0 0 1 .5.5 2.5 2.5 0 1 0 5 0c0-.8-.7-1.8 0-2.5z"/></svg></span>
+      <span class="np-txt">Perros</span>
+      <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
     </a>
-  </section>
+    <a href="productos.html?categoria=gatos" data-cat="gatos">
+      <span class="np-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3.8 8 7.6c1.2-.5 2.5-.8 4-.8s2.8.3 4 .8l3-3.8V11a7 7 0 0 1-14 0z"/><circle cx="9.6" cy="11.4" r=".7" fill="currentColor" stroke="none"/><circle cx="14.4" cy="11.4" r=".7" fill="currentColor" stroke="none"/><path d="M11 14.2c.6.5 1.4.5 2 0"/></svg></span>
+      <span class="np-txt">Gatos</span>
+      <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
+    <a href="productos.html" data-cat="otras">
+      <span class="np-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11h17l-1.4 5.6a2 2 0 0 1-2 1.4H6.9a2 2 0 0 1-2-1.4z"/><path d="M6 11a6 6 0 0 1 12 0"/></svg></span>
+      <span class="np-txt">Accesorios de mascotas</span>
+      <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
+    <a href="productos.html?categoria=ofertas" data-cat="ofertas">
+      <span class="np-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11.5 11 4h7a2 2 0 0 1 2 2v7l-7.5 7.5a1.5 1.5 0 0 1-2.1 0L3.5 13.6a1.5 1.5 0 0 1 0-2.1z"/><circle cx="16" cy="8" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+      <span class="np-txt">Ofertas</span>
+      <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
+    <span class="np-divider" aria-hidden="true"></span>
+    <a href="blog.html" data-cat="blog">
+      <span class="np-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 8h6M9 12h5"/></svg></span>
+      <span class="np-txt">Blog</span>
+      <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
+    <a href="contacto.html" data-cat="contacto">
+      <span class="np-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v10H9l-4 4z"/></svg></span>
+      <span class="np-txt">Contacto</span>
+      <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
+  </nav>
+</aside>
+
+<main id="main">
+  <div class="wrap blog-main">
+    <p class="crumbs"><a href="index.html">Inicio</a> › <b>Blog</b></p>
+
+    <div class="blog-head">
+      <h1>Blog</h1>
+      <p>Consejos, tips y noticias para el bienestar de tu mascota.</p>
+    </div>
+
+    <div class="blog-note">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7-4.4-9.3-8.5C1.2 9.7 2.6 6 6 6c2 0 3.2 1.2 6 4 2.8-2.8 4-4 6-4 3.4 0 4.8 3.7 3.3 6.5C19 16.6 12 21 12 21z"/></svg>
+      Información confiable para dueños responsables.
+    </div>
+
+    <div class="blog-pills" role="group" aria-label="Filtrar artículos">
+      <button class="fpill act" data-tag="todos">Todos</button>
+      <button class="fpill" data-tag="perros">Perros</button>
+      <button class="fpill" data-tag="gatos">Gatos</button>
+      <button class="fpill" data-tag="salud">Salud</button>
+      <button class="fpill" data-tag="alimentacion">Alimentación</button>
+      <button class="fpill" data-tag="productos">Productos</button>
+    </div>
+
+    <div class="blog-list" id="blogList">
+
+      <!-- 1 · ALIMENTACIÓN -->
+      <article class="post" data-tags="perros alimentacion">
+        <div class="post-top">
+          <div class="post-img"><img src="img/blog/blog-alimento-perro.jpg" alt="Perro comiendo de un bowl celeste" loading="lazy" /></div>
+          <div class="post-body">
+            <span class="post-chip chip-alimentacion">Alimentación</span>
+            <h2 class="post-title">¿Cómo elegir el mejor alimento para tu perro?</h2>
+            <p class="post-excerpt">Te contamos qué factores tener en cuenta según su edad, tamaño y estilo de vida para asegurar una nutrición completa y balanceada.</p>
+            <div class="post-meta">
+              <span class="post-mins"><img src="img/icons/ic-clock.png" alt="" />5 min de lectura</span>
+              <button class="post-read" aria-expanded="false">Leer artículo
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="post-full">
+          <p><b>La edad manda.</b> Un cachorro necesita más proteína y calcio para crecer; un adulto necesita mantener su peso y energía; y un senior suele necesitar menos calorías y articulaciones cuidadas. Por eso las líneas se dividen en cachorro, adulto y senior: no es marketing, es nutrición.</p>
+          <p><b>El tamaño también importa.</b> Las razas pequeñas tienen mandíbulas chicas y metabolismo rápido: les va mejor una croqueta pequeña y más densa en energía. Las razas grandes necesitan control de calcio y condroprotectores para sus articulaciones.</p>
+          <p><b>Cómo leer la etiqueta:</b></p>
+          <ul>
+            <li>El primer ingrediente debería ser una proteína identificable (carne, pollo, pescado).</li>
+            <li>Desconfiá de los rellenos excesivos sin valor nutricional.</li>
+            <li>Verificá que diga "alimento completo y balanceado", no "complemento".</li>
+          </ul>
+          <p><b>Cambio de alimento: siempre gradual.</b> Mezclá el alimento nuevo con el anterior durante 7 a 10 días, aumentando la proporción de a poco. Un cambio brusco suele terminar en diarrea o rechazo.</p>
+          <p>¿Dudas sobre qué línea le conviene a tu perro? Escribinos por WhatsApp y te asesoramos sin compromiso.</p>
+        </div>
+      </article>
+
+      <!-- 2 · GATOS -->
+      <article class="post" data-tags="gatos">
+        <div class="post-top">
+          <div class="post-img"><img src="img/blog/blog-gatos-juego.jpg" alt="Gato jugando con un ratón de juguete" loading="lazy" /></div>
+          <div class="post-body">
+            <span class="post-chip chip-gatos">Gatos</span>
+            <h2 class="post-title">Enriquecimiento ambiental: clave para gatos felices</h2>
+            <p class="post-excerpt">Ideas simples para estimular su mente, reducir el estrés y mejorar su calidad de vida dentro de casa.</p>
+            <div class="post-meta">
+              <span class="post-mins"><img src="img/icons/ic-clock.png" alt="" />4 min de lectura</span>
+              <button class="post-read" aria-expanded="false">Leer artículo
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="post-full">
+          <p>Un gato de interior puede vivir feliz, pero necesita que su entorno lo desafíe. El aburrimiento crónico se nota: duerme de más, come por ansiedad, rasca muebles o se pelea con otros gatos de la casa.</p>
+          <p><b>Las claves del enriquecimiento:</b></p>
+          <ul>
+            <li><b>Espacio vertical:</b> estantes, torres o rascadores altos. Mirar desde arriba les da seguridad.</li>
+            <li><b>Sesiones de caza:</b> 10-15 minutos por día con cañas o juguetes que imiten presas. Terminá el juego dejándolo "atrapar" la presa.</li>
+            <li><b>Comederos didácticos:</b> hacer que "trabaje" por su comida imita la conducta natural de caza.</li>
+            <li><b>Ventanas accesibles:</b> una repisa al sol con vista afuera es televisión para gatos.</li>
+            <li><b>Rotación de juguetes:</b> guardá algunos y rotalos cada semana; lo "nuevo" vuelve a ser interesante.</li>
+          </ul>
+          <p>El rascador no es un lujo: es una necesidad física (estirar la espalda, marcar territorio, mantener uñas). Si rasca el sillón, no tiene dónde hacerlo bien.</p>
+        </div>
+      </article>
+
+      <!-- 3 · EDUCACIÓN -->
+      <article class="post" data-tags="perros">
+        <div class="post-top">
+          <div class="post-img"><img src="img/blog/blog-refuerzo-positivo.jpg" alt="Perro recibiendo un premio de su dueño" loading="lazy" /></div>
+          <div class="post-body">
+            <span class="post-chip chip-educacion">Educación</span>
+            <h2 class="post-title">Refuerzo positivo: educá a tu perro de forma efectiva</h2>
+            <p class="post-excerpt">Aprendé cómo usar premios, caricias y juegos para enseñarle buenos hábitos sin miedo ni castigos.</p>
+            <div class="post-meta">
+              <span class="post-mins"><img src="img/icons/ic-clock.png" alt="" />6 min de lectura</span>
+              <button class="post-read" aria-expanded="false">Leer artículo
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="post-full">
+          <p>El refuerzo positivo es simple: <b>lo que se premia, se repite.</b> En vez de castigar lo que hace mal, premiás lo que hace bien. Es el método con más respaldo científico y el que mejor cuida el vínculo con tu perro.</p>
+          <p><b>Las reglas de oro:</b></p>
+          <ul>
+            <li><b>Timing:</b> el premio tiene que llegar en 1-2 segundos. Si llegás tarde, premiás otra cosa.</li>
+            <li><b>Sesiones cortas:</b> 5 a 10 minutos, 2-3 veces por día. Mejor poco y seguido que una hora agotadora.</li>
+            <li><b>Una palabra por orden:</b> "quieto" y "quedate" son órdenes distintas para él. Elegí una y que toda la familia use la misma.</li>
+            <li><b>Premios chicos:</b> del tamaño de una arveja alcanza. Los snacks de entrenamiento están pensados para eso.</li>
+            <li><b>Terminá ganando:</b> cerrá siempre la sesión con un ejercicio que le salga bien.</li>
+          </ul>
+          <p>¿Y los castigos? El grito o el golpe generan miedo, y el miedo bloquea el aprendizaje. Un perro que obedece por miedo no aprendió: solo se paralizó.</p>
+          <p>Cuando ya domine una orden en casa, practicala en la vereda, en la plaza, con distracciones. Generalizar es la parte que casi todos se saltean.</p>
+        </div>
+      </article>
+
+      <!-- 4 · PRODUCTOS -->
+      <article class="post" data-tags="productos">
+        <div class="post-top">
+          <div class="post-img"><img src="img/blog/blog-productos-cuidado.jpg" alt="Productos de cuidado e higiene para mascotas" loading="lazy" /></div>
+          <div class="post-body">
+            <span class="post-chip chip-productos">Productos</span>
+            <h2 class="post-title">Productos esenciales para el cuidado diario</h2>
+            <p class="post-excerpt">Descubrí los accesorios y productos que no pueden faltar para mantener a tu mascota saludable y cómoda.</p>
+            <div class="post-meta">
+              <span class="post-mins"><img src="img/icons/ic-clock.png" alt="" />3 min de lectura</span>
+              <button class="post-read" aria-expanded="false">Leer artículo
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="post-full">
+          <p>No hace falta comprar todo el pet shop: con estos básicos bien elegidos cubrís el 90% del cuidado diario.</p>
+          <ul>
+            <li><b>Cepillo según su pelo:</b> carda para doble manto, cepillo de cerdas para pelo corto. Cepillar 2-3 veces por semana reduce pelos en casa y previene nudos.</li>
+            <li><b>Shampoo específico para mascotas:</b> el de humanos les reseca la piel (su pH es distinto). Baño cada 4-6 semanas alcanza para la mayoría.</li>
+            <li><b>Comederos de acero inoxidable:</b> más higiénicos que el plástico, que se raya y acumula bacterias.</li>
+            <li><b>Cama propia:</b> del tamaño justo (que pueda estirarse) y lavable. Dormir bien también es salud.</li>
+            <li><b>Juguetes seguros:</b> de caucho macizo para mordedores fuertes; nada que pueda astillarse o tragarse.</li>
+            <li><b>Cortauñas o lima:</b> uñas largas deforman la pisada. Si se escuchan al caminar, ya están largas.</li>
+          </ul>
+          <p>Todos estos productos los encontrás en nuestro catálogo, y si no sabés cuál le va mejor a tu mascota, escribinos y te ayudamos a elegir.</p>
+        </div>
+      </article>
+
+      <!-- 5 · SALUD -->
+      <article class="post" data-tags="salud perros gatos">
+        <div class="post-top">
+          <div class="post-img"><img src="img/blog/blog-salud-vet.jpg" alt="Perro con compresa, cuidados de salud" loading="lazy" /></div>
+          <div class="post-body">
+            <span class="post-chip chip-salud">Salud</span>
+            <h2 class="post-title">Señales de alerta: ¿cuándo consultar al veterinario?</h2>
+            <p class="post-excerpt">Conocé los síntomas que no debés ignorar y que indican que es momento de una consulta profesional.</p>
+            <div class="post-meta">
+              <span class="post-mins"><img src="img/icons/ic-clock.png" alt="" />5 min de lectura</span>
+              <button class="post-read" aria-expanded="false">Leer artículo
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="post-full">
+          <p>Las mascotas esconden el dolor por instinto. Cuando el síntoma es evidente, muchas veces el problema ya lleva tiempo. Estas señales ameritan consulta:</p>
+          <ul>
+            <li><b>No come hace más de 24 horas</b> (en gatos es especialmente urgente).</li>
+            <li><b>Letargo marcado:</b> no se levanta a recibirte, no le interesa el paseo ni el juego.</li>
+            <li><b>Vómitos o diarrea persistentes</b> (más de un día) o con sangre.</li>
+            <li><b>Dificultad para respirar,</b> tos constante o encías pálidas/azuladas.</li>
+            <li><b>Cambios al orinar:</b> esfuerzo, sangre, o un gato macho que no logra orinar (emergencia inmediata).</li>
+            <li><b>Toma mucha más agua</b> de lo habitual durante varios días.</li>
+            <li><b>Bultos nuevos,</b> heridas que no cierran o rascado incesante.</li>
+          </ul>
+          <p><b>La regla de oro:</b> ante la duda, consultá. Una llamada al veterinario no cuesta nada; esperar puede costar mucho. Y aunque no haya síntomas, un chequeo anual (con vacunas y desparasitación al día) es la mejor prevención.</p>
+          <p><i>Este artículo es informativo y no reemplaza la consulta veterinaria profesional.</i></p>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- CTA -->
+    <section class="blog-cta" aria-label="Novedades por WhatsApp">
+      <p>¿No te querés perder ninguna novedad?
+        <small>Ofertas, consejos y noticias directo a tu WhatsApp.</small>
+      </p>
+      <a href="https://wa.me/5492615081413?text=%C2%A1Hola%20BICHITOS%20SHOP!%20Quiero%20recibir%20novedades%20y%20ofertas." target="_blank" rel="noopener">Suscribirme</a>
+    </section>
+  </div>
 </main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div class="f-brand">
+      <img src="img/logo.png" alt="BICHITOS SHOP" />
+      <p>Todo para tu mascota en Mendoza.</p>
+    </div>
+    <div class="f-col">
+      <h4>Contacto</h4>
+      <a href="https://wa.me/5492615081413" target="_blank" rel="noopener">+54 9 261 508-1413</a>
+      <p>Gran Mendoza, Argentina</p>
+    </div>
+    <div class="f-col">
+      <h4>Horarios</h4>
+      <p>Lun a Sáb: 9:00 – 20:00</p>
+      <p class="f-dim">Dom: cerrado</p>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">© 2026 BICHITOS SHOP · Pedidos por WhatsApp</div>
+</footer>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav" aria-label="Navegación inferior">
+  <a href="index.html">
+    <img src="img/icons/ic-home.png" alt="" /><span>Inicio</span>
+  </a>
+  <a href="productos.html">
+    <img src="img/icons/ic-grid.png" alt="" /><span>Categorías</span>
+  </a>
+  <a href="productos.html?categoria=ofertas">
+    <img src="img/icons/ic-ticket.png" alt="" /><span>Ofertas</span>
+  </a>
+  <a href="productos.html?wishlist=1">
+    <svg class="nav-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 5.6a5.4 5.4 0 0 0-7.7 0L12 6.7l-1.1-1.1a5.4 5.4 0 1 0-7.7 7.7L12 22l8.8-8.7a5.4 5.4 0 0 0 0-7.7z"/></svg>
+    <span>Favoritos</span>
+  </a>
+  <a href="contacto.html">
+    <img src="img/icons/ic-whatsapp.png" alt="" /><span>Contacto</span>
+  </a>
+</nav>
+
+<script src="js/home.js?v=5"></script>
+<script>
+/* Blog: filtro por pills + expandir/colapsar artículos */
+(function () {
+  'use strict';
+  document.querySelectorAll('.blog-pills .fpill').forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      document.querySelectorAll('.blog-pills .fpill').forEach(function (p) { p.classList.remove('act'); });
+      pill.classList.add('act');
+      var tag = pill.dataset.tag;
+      document.querySelectorAll('.post').forEach(function (post) {
+        var show = tag === 'todos' || (post.dataset.tags || '').split(' ').indexOf(tag) !== -1;
+        post.style.display = show ? '' : 'none';
+      });
+    });
+  });
+  document.querySelectorAll('.post-read').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var post = btn.closest('.post');
+      var open = post.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+})();
+</script>
 </body>
 </html>
