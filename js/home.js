@@ -58,4 +58,32 @@
   addEventListener('scroll', () => {
     header?.classList.toggle('scrolled', scrollY > 6);
   }, { passive: true });
+
+  /* ---- Bottom-nav: activo según la URL actual ----
+     Los íconos PNG no cambian de color por CSS, así que el activo
+     intercambia el src por su variante -teal. */
+  function setActiveNav() {
+    const path = location.pathname.split('/').pop() || 'index.html';
+    const params = new URLSearchParams(location.search);
+    let key = 'inicio';
+    if (path === 'productos.html') {
+      if (params.get('wishlist') === '1') key = 'favoritos';
+      else if ((params.get('categoria') || '') === 'ofertas') key = 'ofertas';
+      else key = 'categorias';
+    } else if (path === 'blog.html') key = 'blog';
+    else if (path === 'contacto.html') key = 'contacto';
+
+    document.querySelectorAll('.bottom-nav a[data-nav]').forEach((a) => {
+      const on = a.dataset.nav === key;
+      a.classList.toggle('active', on);
+      if (on) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+      const img = a.querySelector('img');
+      if (img) {
+        const base = img.getAttribute('src').replace('-teal.png', '.png');
+        img.setAttribute('src', on ? base.replace('.png', '-teal.png') : base);
+      }
+    });
+  }
+  setActiveNav();
 })();

@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/home.css?v=5" />
+<link rel="stylesheet" href="css/home.css?v=6" />
 </head>
 <body>
 
@@ -317,25 +317,29 @@
 
 <!-- ===== BOTTOM NAV ===== -->
 <nav class="bottom-nav" aria-label="Navegación inferior">
-  <a href="index.html">
+  <a href="index.html" data-nav="inicio">
     <img src="img/icons/ic-home.png" alt="" /><span>Inicio</span>
   </a>
-  <a href="productos.html">
+  <a href="productos.html" data-nav="categorias">
     <img src="img/icons/ic-grid.png" alt="" /><span>Categorías</span>
   </a>
-  <a href="productos.html?categoria=ofertas">
+  <a href="productos.html?categoria=ofertas" data-nav="ofertas">
     <img src="img/icons/ic-ticket.png" alt="" /><span>Ofertas</span>
   </a>
-  <a href="productos.html?wishlist=1">
+  <a href="blog.html" data-nav="blog">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 8h6M9 12h5"/></svg>
+    <span>Blog</span>
+  </a>
+  <a href="productos.html?wishlist=1" data-nav="favoritos">
     <svg class="nav-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 5.6a5.4 5.4 0 0 0-7.7 0L12 6.7l-1.1-1.1a5.4 5.4 0 1 0-7.7 7.7L12 22l8.8-8.7a5.4 5.4 0 0 0 0-7.7z"/></svg>
     <span>Favoritos</span>
   </a>
-  <a href="contacto.html">
+  <a href="contacto.html" data-nav="contacto">
     <img src="img/icons/ic-whatsapp.png" alt="" /><span>Contacto</span>
   </a>
 </nav>
 
-<script src="js/home.js?v=5"></script>
+<script src="js/home.js?v=6"></script>
 <script>
 /* Blog: filtro por pills + expandir/colapsar artículos */
 (function () {
