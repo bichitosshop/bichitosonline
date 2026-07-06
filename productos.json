@@ -11,7 +11,14 @@
     "destacado": true,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 12
+    "stock": 12,
+    "grupo": "Estampa Plus perro RAZAS PEQUEÑAS",
+    "medida": "8 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 2,
@@ -25,7 +32,14 @@
     "destacado": true,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 8
+    "stock": 8,
+    "grupo": "Estampa Plus perro",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 3,
@@ -39,7 +53,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 5
+    "stock": 5,
+    "grupo": "Estampa Plus perro",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 4,
@@ -53,7 +74,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 3
+    "stock": 3,
+    "grupo": "Estampa plus RAZA PEQUEÑA",
+    "medida": "15 KG",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 5,
@@ -67,7 +95,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 10
+    "stock": 10,
+    "grupo": "ESTAMPA RAZA PEQUEÑA",
+    "medida": "3KG (3 unid)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 6,
@@ -81,7 +116,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 20
+    "stock": 20,
+    "grupo": "Estampa Criadores",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 7,
@@ -95,7 +137,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 6
+    "stock": 6,
+    "grupo": "Estampa Criadores",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 8,
@@ -109,7 +158,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 15
+    "stock": 15,
+    "grupo": "Estampa Criadores",
+    "medida": "8kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 9,
@@ -123,7 +179,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 4
+    "stock": 4,
+    "grupo": "Estampa Plus Cachorro",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 10,
@@ -137,7 +200,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 7
+    "stock": 7,
+    "grupo": "Estampa Plus Cachorro",
+    "medida": "8kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 11,
@@ -151,7 +221,14 @@
     "destacado": true,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 12
+    "stock": 12,
+    "grupo": "Estampa Plus Gato",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 12,
@@ -165,7 +242,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 9
+    "stock": 9,
+    "grupo": "Estampa Plus Gato",
+    "medida": "8kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 13,
@@ -179,7 +263,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 2
+    "stock": 2,
+    "grupo": "Estampa Gato",
+    "medida": "1 kg (pack x8 u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 14,
@@ -193,7 +284,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 25
+    "stock": 25,
+    "grupo": "Valiant Criadores",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 15,
@@ -207,7 +305,14 @@
     "destacado": true,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 8
+    "stock": 8,
+    "grupo": "Estampa Insignia Perro Adulto",
+    "medida": "20kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 16,
@@ -221,7 +326,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 4
+    "stock": 4,
+    "grupo": "Estampa Insignia Perro Adulto",
+    "medida": "3kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 17,
@@ -235,7 +347,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 6
+    "stock": 6,
+    "grupo": "Estampa Insignia Perro Adulto",
+    "medida": "15 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 18,
@@ -249,7 +368,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 3
+    "stock": 3,
+    "grupo": "Estampa Insignia Perro Cachorro",
+    "medida": "8kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 19,
@@ -263,7 +389,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 5
+    "stock": 5,
+    "grupo": "Estampa Insignia Perro Cachorro",
+    "medida": "3kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 20,
@@ -277,7 +410,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 7
+    "stock": 7,
+    "grupo": "Estampa Insignia Perro Mordida Pequeña",
+    "medida": "8kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 21,
@@ -291,7 +431,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 2
+    "stock": 2,
+    "grupo": "Estampa Insignia Perro Mordida Pequeña",
+    "medida": "3kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 22,
@@ -305,7 +452,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 30
+    "stock": 30,
+    "grupo": "Jaspe Adulto",
+    "medida": "20 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 23,
@@ -319,7 +473,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 18
+    "stock": 18,
+    "grupo": "Jaspe Adulto Raza Pequeña",
+    "medida": "20 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 24,
@@ -333,7 +494,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 22
+    "stock": 22,
+    "grupo": "Jaspe Adulto",
+    "medida": "8 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 25,
@@ -347,7 +515,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 14
+    "stock": 14,
+    "grupo": "Jaspe Adulto Raza Pequeña",
+    "medida": "8 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 26,
@@ -361,7 +536,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 0
+    "stock": 0,
+    "grupo": "Jaspe Adulto",
+    "medida": "3 kg (4u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 27,
@@ -375,7 +557,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 0
+    "stock": 0,
+    "grupo": "Jaspe Adulto Raza Pequeña",
+    "medida": "3kg (4u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 28,
@@ -389,7 +578,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 11
+    "stock": 11,
+    "grupo": "Jaspe Cachorro",
+    "medida": "15 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 29,
@@ -403,7 +599,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 8
+    "stock": 8,
+    "grupo": "Jaspe Cachorro Premium",
+    "medida": "15 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 30,
@@ -417,7 +620,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 4
+    "stock": 4,
+    "grupo": "Jaspe Cachorro Premium",
+    "medida": "1,5kg (8u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 31,
@@ -431,7 +641,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 16
+    "stock": 16,
+    "grupo": "Jaspe Gato",
+    "medida": "10 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 32,
@@ -445,7 +662,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 6
+    "stock": 6,
+    "grupo": "Jaspe Gato",
+    "medida": "1 kg (12u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 33,
@@ -459,7 +683,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 3
+    "stock": 3,
+    "grupo": "Jaspe Gato",
+    "medida": "20 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 34,
@@ -473,7 +704,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 9
+    "stock": 9,
+    "grupo": "Jaspe Gato Premium",
+    "medida": "8 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 35,
@@ -487,7 +725,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 1
+    "stock": 1,
+    "grupo": "Jaspe Gato Premium",
+    "medida": "1kg (12u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 36,
@@ -501,7 +746,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 5
+    "stock": 5,
+    "grupo": "Jaspe Premium",
+    "medida": "20 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 37,
@@ -515,7 +767,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 7
+    "stock": 7,
+    "grupo": "Jaspe Premium",
+    "medida": "1,5kg (8u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 38,
@@ -529,7 +788,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 12
+    "stock": 12,
+    "grupo": "KJaspe Premium",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 39,
@@ -543,7 +809,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 10
+    "stock": 10,
+    "grupo": "Jaspe Premium Raza Pequeña",
+    "medida": "8 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 40,
@@ -557,7 +830,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 8
+    "stock": 8,
+    "grupo": "Jaspe Premium Raza Pequeña",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 41,
@@ -571,7 +851,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 0
+    "stock": 0,
+    "grupo": "Jaspe Premium Raza Pequeña",
+    "medida": "1,5kg (8u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 42,
@@ -585,7 +872,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 20
+    "stock": 20,
+    "grupo": "Jaspe Criadores",
+    "medida": "20 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 43,
@@ -599,7 +893,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 15
+    "stock": 15,
+    "grupo": "Liwué",
+    "medida": "15 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 44,
@@ -613,7 +914,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 9
+    "stock": 9,
+    "grupo": "Liwué",
+    "medida": "20 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 45,
@@ -627,7 +935,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 4
+    "stock": 4,
+    "grupo": "Liwué Gato",
+    "medida": "10 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 46,
@@ -641,7 +956,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 6
+    "stock": 6,
+    "grupo": "Liwué Gato",
+    "medida": "20 kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 47,
@@ -655,7 +977,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 11
+    "stock": 11,
+    "grupo": "Liwué Plus",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 48,
@@ -669,7 +998,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 13
+    "stock": 13,
+    "grupo": "Vagoneta Gourmet",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 49,
@@ -683,7 +1019,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 8
+    "stock": 8,
+    "grupo": "Vagoneta Gourmet",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 50,
@@ -697,7 +1040,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 5
+    "stock": 5,
+    "grupo": "Vagoneta Gourmet",
+    "medida": "1,5Kg (x6u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 51,
@@ -711,7 +1061,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 16
+    "stock": 16,
+    "grupo": "Vagoneta Carne y Cereales",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 52,
@@ -725,7 +1082,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 22
+    "stock": 22,
+    "grupo": "Vagoneta Tradicional",
+    "medida": "8 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 53,
@@ -739,7 +1103,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 7
+    "stock": 7,
+    "grupo": "Vagoneta Raza Pequeña",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 54,
@@ -753,7 +1124,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 4
+    "stock": 4,
+    "grupo": "Vagoneta Raza Pequeña",
+    "medida": "8 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 55,
@@ -767,7 +1145,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 2
+    "stock": 2,
+    "grupo": "Vagoneta Raza Pequeña",
+    "medida": "1,5 Kg (x6u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 56,
@@ -781,7 +1166,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 9
+    "stock": 9,
+    "grupo": "Vagoneta Cachorro",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 57,
@@ -795,7 +1187,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 3
+    "stock": 3,
+    "grupo": "Vagoneta Cachorro",
+    "medida": "1,5 Kg (x6u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 58,
@@ -809,7 +1208,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 18
+    "stock": 18,
+    "grupo": "Dr Perrot",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 59,
@@ -823,7 +1229,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 14
+    "stock": 14,
+    "grupo": "Dr Perrot",
+    "medida": "15 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 60,
@@ -837,7 +1250,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 6
+    "stock": 6,
+    "grupo": "Dr Perrot",
+    "medida": "1,5 Kg (pack x6u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 61,
@@ -851,7 +1271,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 10
+    "stock": 10,
+    "grupo": "Vagoneta Gato",
+    "medida": "10 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 62,
@@ -865,7 +1292,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 5
+    "stock": 5,
+    "grupo": "Vagoneta Gato",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 63,
@@ -879,7 +1313,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 8
+    "stock": 8,
+    "grupo": "Vagoneta Gato",
+    "medida": "1 Kg (pack x8u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 64,
@@ -893,7 +1334,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 3
+    "stock": 3,
+    "grupo": "Vagoneta Gato Gourmet",
+    "medida": "10 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 65,
@@ -907,7 +1355,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 4
+    "stock": 4,
+    "grupo": "Vagoneta Gato Gourmet",
+    "medida": "20 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 66,
@@ -921,7 +1376,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 0
+    "stock": 0,
+    "grupo": "Vagoneta Gato Gourmet",
+    "medida": "1 Kg (pack x8u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 67,
@@ -935,7 +1397,14 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 7
+    "stock": 7,
+    "grupo": "Vagoneta Gatito",
+    "medida": "10 Kg",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   },
   {
     "id": 68,
@@ -949,6 +1418,13 @@
     "destacado": false,
     "oferta": false,
     "envio_gratis": false,
-    "stock": 12
+    "stock": 12,
+    "grupo": "Vagoneta Gatito",
+    "medida": "0,5 Kg (pack x12u)",
+    "costo": 0,
+    "ganancia": 0,
+    "oculto": false,
+    "precio_actualizado": "",
+    "actualizado": ""
   }
 ]

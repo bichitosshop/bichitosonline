@@ -34,28 +34,53 @@
     return `this.onerror=null;this.src='images/icons/${icon}.svg';this.classList.add('img-fallback')`;
   }
 
-  /* ---- filtro ---- */
-  function visibles() {
+  /* ---- estado: variante (medida) elegida por grupo ---- */
+  const selVar = new Map(); // clave de grupo -> id de la variante elegida
+  const grupoKey = (p) => p.grupo || p.nombre;
+
+  /* ---- filtro + agrupado por grupo (variantes de medida en una card) ---- */
+  function visibleGroups() {
     const t = q.trim().toLowerCase();
-    return PRODUCTOS
-      .filter((p) => {
-        if (wishlistMode) { if (!favs.has(p.id)) return false; }
-        else if (filtro === 'ofertas') { if (!(p.oferta || p.destacado)) return false; }
-        else if (filtro !== 'todos') { if (p.categoria !== filtro) return false; }
-        if (t && !(`${p.nombre} ${p.marca || ''}`.toLowerCase().includes(t))) return false;
-        return true;
-      })
-      .sort((a, b) => String(a.nombre).localeCompare(String(b.nombre), 'es'));
+    const map = new Map();
+    for (const p of PRODUCTOS) {
+      if (p.oculto) continue;                 // ocultos no aparecen en la web
+      const k = grupoKey(p);
+      if (!map.has(k)) map.set(k, { key: k, grupo: k, variants: [] });
+      map.get(k).variants.push(p);
+    }
+    let groups = [...map.values()].filter((g) => {
+      if (wishlistMode) return g.variants.some((v) => favs.has(v.id));
+      if (filtro === 'ofertas') return g.variants.some((v) => v.oferta || v.destacado);
+      if (filtro !== 'todos') return g.variants.some((v) => v.categoria === filtro);
+      return true;
+    }).filter((g) => {
+      if (!t) return true;
+      const hay = (g.grupo + ' ' + g.variants.map((v) => `${v.nombre} ${v.marca || ''}`).join(' ')).toLowerCase();
+      return hay.includes(t);
+    });
+    groups.forEach((g) => g.variants.sort((a, b) => (parseFloat(a.medida) || 0) - (parseFloat(b.medida) || 0)));
+    groups.sort((a, b) => String(a.grupo).localeCompare(String(b.grupo), 'es'));
+    return groups;
   }
 
   /* ---- render cards ---- */
-  function cardHTML(p) {
+  function cardHTML(g) {
+    const vs = g.variants;
+    const multi = vs.length > 1;
+    const p = vs.find((v) => v.id === selVar.get(g.key)) || vs[0]; // variante activa
     const enCart = cart.find((i) => i.id === p.id);
-    const sinStock = p.stock === 0 || p.agotado;
-    const flag = p.oferta ? 'OFERTA' : (p.destacado ? 'DESTACADO' : '');
-    const sub = p.descripcion ? p.descripcion : (p.marca || '');
-    const favOn = favs.has(p.id) ? ' on' : '';
     const cant = enCart ? enCart.cant : 0;
+    const sinStock = p.stock === 0 || p.agotado;
+    const flag = vs.some((v) => v.oferta) ? 'OFERTA' : (vs.some((v) => v.destacado) ? 'DESTACADO' : '');
+    const title = multi ? g.grupo : p.nombre;
+    const sub = multi ? (p.marca || '') : (p.descripcion || p.marca || '');
+    const favOn = favs.has(p.id) ? ' on' : '';
+
+    const sizes = multi ? `
+        <div class="pcard-sizes" role="group" aria-label="Elegí el tamaño">
+          ${vs.map((v) => `<button class="pcard-size${v.id === p.id ? ' on' : ''}" data-size="${v.id}">${esc(v.medida || '—')}</button>`).join('')}
+        </div>` : '';
+
     let footer;
     if (sinStock) {
       footer = '<span class="pcard-add" style="background:#eee;color:#999;cursor:default">Sin stock</span>';
@@ -88,8 +113,9 @@
         <img src="${imgFor(p)}" alt="${esc(p.nombre)}" loading="lazy" width="400" height="400" onerror="${imgErr(p)}" />
       </div>
       <div class="pcard-body">
-        <p class="pcard-name">${esc(p.nombre)}</p>
+        <p class="pcard-name">${esc(title)}</p>
         <span class="pcard-sub">${esc(sub)}</span>
+        ${sizes}
         <span class="pcard-price">${fmt(p.precio)}</span>
         ${footer}
       </div>
@@ -97,12 +123,12 @@
   }
 
   function render() {
-    const list = visibles();
+    const groups = visibleGroups();
     const titulo = wishlistMode ? 'Favoritos' : ({ perros: 'Perros', gatos: 'Gatos', ofertas: 'Ofertas', todos: 'Todos los productos' }[filtro] || 'Productos');
     $('#catTitle').textContent = titulo;
-    $('#catCount').textContent = `${list.length} ${list.length === 1 ? 'producto' : 'productos'}`;
-    $('#grid').innerHTML = list.length
-      ? list.map(cardHTML).join('')
+    $('#catCount').textContent = `${groups.length} ${groups.length === 1 ? 'producto' : 'productos'}`;
+    $('#grid').innerHTML = groups.length
+      ? groups.map(cardHTML).join('')
       : '<div class="prod-empty"><b>No encontramos nada</b>Probá con otra palabra o cambiá la categoría.</div>';
     document.querySelectorAll('.fpill').forEach((b) => b.classList.toggle('act', b.dataset.cat === filtro));
   }
@@ -168,6 +194,13 @@
 
   /* ---- eventos ---- */
   document.addEventListener('click', (e) => {
+    const size = e.target.closest('[data-size]');
+    if (size) {
+      const id = parseInt(size.dataset.size);
+      const p = PRODUCTOS.find((x) => x.id === id);
+      if (p) { selVar.set(grupoKey(p), id); render(); }
+      return;
+    }
     const cardQ = e.target.closest('.pcard-qty [data-q]');
     if (cardQ) { setQty(parseInt(cardQ.dataset.id), parseInt(cardQ.dataset.q)); return; }
     const del = e.target.closest('[data-del]');

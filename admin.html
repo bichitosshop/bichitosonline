@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Panel · BICHITOS SHOP</title>
+<meta name="theme-color" content="#1B3B5A" />
+<link rel="icon" type="image/png" href="img/favicon.png" />
+<link rel="apple-touch-icon" href="img/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css?v=1" />
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="adm-login" id="loginScreen">
+  <div class="adm-login-card" id="loginCard">
+    <img class="adm-login-logo" src="img/logo.png" alt="BICHITOS SHOP" />
+    <h1>Panel de productos</h1>
+    <p>Ingresá la contraseña para administrar tu tienda.</p>
+    <input type="password" id="pass" placeholder="Contraseña" autocomplete="off" inputmode="text" />
+    <p class="adm-login-err" id="loginErr" hidden>Contraseña incorrecta</p>
+    <button class="adm-btn-lg" id="btnLogin">Entrar</button>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app" hidden>
+
+  <header class="adm-header">
+    <div class="adm-h-title">
+      <img src="img/logo.png" alt="" />
+      <div><b>Mis productos</b><small>Panel de administración</small></div>
+    </div>
+    <span class="adm-h-count" id="contador">—</span>
+  </header>
+
+  <div class="adm-tools">
+    <div class="adm-buscar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="buscar" type="search" placeholder="Buscar producto o marca…" autocomplete="off" />
+    </div>
+    <div class="adm-filtros">
+      <button class="adm-fpill on" data-f="todos">Todos</button>
+      <button class="adm-fpill" data-f="perros">Perros</button>
+      <button class="adm-fpill" data-f="gatos">Gatos</button>
+      <button class="adm-fpill" data-f="accesorios">Accesorios</button>
+      <button class="adm-fpill" data-f="ofertas">Ofertas</button>
+      <button class="adm-fpill" data-f="ocultos">Ocultos</button>
+      <button class="adm-fpill" data-f="sincosto">Falta costo</button>
+    </div>
+  </div>
+
+  <!-- botón deshacer flotante -->
+  <button class="adm-undo-fab" id="undoFab" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>
+    Deshacer <span id="undoCount">0</span>
+  </button>
+
+  <main id="lista"></main>
+
+  <!-- nuevo producto -->
+  <button class="adm-fab-nuevo" id="btnNuevo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Nuevo
+  </button>
+
+  <!-- barra publicar -->
+  <div class="adm-publicar" id="publicarBar" hidden>
+    <div class="adm-publicar-txt" id="publicarTxt">0 cambios sin publicar<small>Tocá publicar para verlos en la web</small></div>
+    <button class="adm-btn-publicar" id="btnPublicar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      Publicar
+    </button>
+  </div>
+
+</div>
+
+<!-- ===== EDITOR ===== -->
+<div class="adm-editor" id="editor" hidden>
+  <div class="adm-ed-head">
+    <button class="adm-ed-x" id="edCerrar" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg>
+    </button>
+    <h2 id="edTitulo">Editar producto</h2>
+    <button class="adm-ed-trash" id="btnEliminar" aria-label="Eliminar producto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/></svg>
+    </button>
+  </div>
+
+  <div class="adm-ed-scroll">
+    <div class="adm-section">
+      <h3>Datos del producto</h3>
+      <label class="adm-field"><span>Nombre</span><input class="adm-inp" id="edGrupo" placeholder="Ej: Estampa Criadores" /></label>
+      <label class="adm-field"><span>Marca</span><input class="adm-inp" id="edMarca" placeholder="Ej: Estampa" /></label>
+      <label class="adm-field"><span>Categoría</span>
+        <select class="adm-inp" id="edCategoria">
+          <option value="perros">Perros</option>
+          <option value="gatos">Gatos</option>
+          <option value="accesorios">Accesorios</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="adm-section">
+      <h3>Foto</h3>
+      <div class="adm-img-box" id="edImgBox"><span class="adm-img-vacia">Sin foto</span></div>
+      <label class="adm-btn-foto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        Subir foto desde el celular
+        <input type="file" id="imgFile" accept="image/*" />
+      </label>
+    </div>
+
+    <div class="adm-section">
+      <h3>Medidas y precios</h3>
+      <div id="variantes"></div>
+      <button class="adm-btn-addvar" id="btnAddVar">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Agregar otra medida
+      </button>
+    </div>
+  </div>
+
+  <div class="adm-ed-foot">
+    <button class="adm-btn-guardar" id="btnGuardarProd">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      Guardar producto
+    </button>
+  </div>
+</div>
+
+<!-- ===== MODAL TOKEN ===== -->
+<div class="adm-modal" id="tokenModal" hidden>
+  <div class="adm-modal-card">
+    <h3>Conectar con GitHub</h3>
+    <p>Una sola vez: pegá tu token de GitHub para poder publicar cambios y subir fotos. Se guarda solo en este celular.<br>
+    Crealo en <a href="https://github.com/settings/tokens/new?scopes=repo&description=Bichitos%20Admin" target="_blank" rel="noopener">github.com/settings/tokens</a> (permiso «repo»).</p>
+    <input type="password" id="tokenInput" placeholder="ghp_..." autocomplete="off" />
+    <div class="adm-modal-acc">
+      <button class="cancel" id="tokenCancelar">Cancelar</button>
+      <button class="ok" id="tokenGuardar">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="adm-toast" id="toast"></div>
+
+<script src="js/admin.js?v=1"></script>
+</body>
+</html>
