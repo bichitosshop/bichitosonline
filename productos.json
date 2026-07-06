@@ -1446,6 +1446,27 @@
     "ganancia": 20,
     "precio": 6000,
     "oferta": false,
-    "imagen": "https://bichitosshop.github.io/bichitosonline/images/productos/prod_1783342365322.jpg"
+    "imagen": "https://bichitosshop.github.io/bichitosonline/images/productos/prod_1783342439479.jpg"
+  },
+  {
+    "id": 71,
+    "categoria": "perros",
+    "etapa": "adulto",
+    "descripcion": "",
+    "destacado": false,
+    "envio_gratis": false,
+    "oculto": false,
+    "stock": 10,
+    "precio_actualizado": "2026-07-06",
+    "actualizado": "2026-07-06",
+    "grupo": "Osito",
+    "marca": "Osito",
+    "medida": "10kg",
+    "nombre": "Osito x 10kg",
+    "costo": 10000,
+    "ganancia": 10,
+    "precio": 11000,
+    "oferta": true,
+    "imagen": "https://bichitosshop.github.io/bichitosonline/images/productos/prod_1783342439479.jpg"
   }
 ]
