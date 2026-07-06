@@ -1426,5 +1426,26 @@
     "oculto": false,
     "precio_actualizado": "",
     "actualizado": "2026-07-06"
+  },
+  {
+    "id": 69,
+    "categoria": "perros",
+    "etapa": "adulto",
+    "descripcion": "",
+    "destacado": false,
+    "envio_gratis": false,
+    "oculto": false,
+    "stock": 10,
+    "precio_actualizado": "2026-07-06",
+    "actualizado": "2026-07-06",
+    "grupo": "Osito",
+    "marca": "Osito",
+    "medida": "5 kg",
+    "nombre": "Osito x 5 kg",
+    "costo": 5000,
+    "ganancia": 20,
+    "precio": 6000,
+    "oferta": false,
+    "imagen": "https://bichitosshop.github.io/bichitosonline/images/productos/prod_1783342365322.jpg"
   }
 ]
