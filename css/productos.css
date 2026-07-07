@@ -191,33 +191,42 @@ body.is-ofertas .cat-title-row,
 body.is-ofertas #mainPills,
 body.is-ofertas .buscador-wrap { display: none; }
 
-/* Banner superior — MOBILE: apilado (texto arriba, foto abajo, nada cortado) */
+/* Banner superior — MOBILE: UN solo banner (título + botón overlay a la izq sobre la imagen) */
 #ofertasHero { margin-top: 12px; }
 .of-hero {
-  display: flex; flex-direction: column; overflow: hidden;
-  background: #F9F1E8; border-radius: 18px;
+  position: relative; overflow: hidden; border-radius: 18px;
   border: 1px solid var(--hairline); box-shadow: var(--shadow-sm);
 }
-.of-hero-txt { padding: 18px; }
-.of-hero-txt h1 { font-size: 22px; font-weight: 900; color: var(--navy); line-height: 1.08; letter-spacing: -.01em; }
-.of-hero-txt p { font-size: 13px; color: #86745f; margin-top: 6px; line-height: 1.4; }
+.of-hero-img { display: block; width: 100%; }
+.of-hero-mobile { height: auto; }              /* ratio natural: perro y gato completos */
+.of-hero-desktop { display: none; }
+/* degradado peach (MISMO color de la imagen) → el texto se lee y no se ve corte de dos colores */
+.of-hero::before {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(246,238,229,.98) 0%, rgba(246,238,229,.92) 33%, rgba(246,238,229,0) 60%);
+}
+.of-hero-txt {
+  position: absolute; z-index: 2; left: 0; top: 0; bottom: 0; width: 58%;
+  display: flex; flex-direction: column; justify-content: center; padding: 0 8px 0 16px;
+}
+.of-hero-txt h1 { font-size: 21px; font-weight: 900; color: var(--navy); line-height: 1.05; letter-spacing: -.01em; }
+.of-hero-sub { display: none; }                /* sin subtítulo en mobile */
 .of-hero-btn {
-  margin-top: 14px; display: inline-flex; align-items: center; justify-content: center;
-  height: 44px; padding: 0 20px; border-radius: var(--r-pill);
-  background: var(--orange); color: #fff; font-size: 13.5px; font-weight: 800;
+  align-self: flex-start; margin-top: 13px; display: inline-flex; align-items: center; justify-content: center;
+  height: 40px; padding: 0 15px; border-radius: var(--r-pill);
+  background: var(--orange); color: #fff; font-size: 12.5px; font-weight: 800; line-height: 1.05;
   box-shadow: 0 8px 20px rgba(255,107,53,.3); transition: transform .12s var(--spring);
 }
 .of-hero-btn:active { transform: scale(.96); }
-.of-hero-img { display: block; width: 100%; }
-.of-hero-mobile { height: auto; }         /* ratio natural: se ven perro y gato completos */
-.of-hero-desktop { display: none; }
 
-/* Banner superior — DESKTOP: en fila (texto izq, animales der) */
+/* Banner superior — DESKTOP: en fila (texto izq, animales der), sin overlay */
 @media (min-width: 640px) {
-  .of-hero { flex-direction: row; align-items: stretch; min-height: 172px; }
-  .of-hero-txt { flex: 1 1 58%; min-width: 0; align-self: center; padding: 24px; }
+  .of-hero { display: flex; flex-direction: row; align-items: stretch; min-height: 172px; background: #F9F1E8; }
+  .of-hero::before { display: none; }
+  .of-hero-txt { position: static; width: auto; flex: 1 1 58%; min-width: 0; align-self: center; padding: 24px; }
   .of-hero-txt h1 { font-size: 27px; }
-  .of-hero-txt p { font-size: 14.5px; max-width: 34ch; }
+  .of-hero-sub { display: block; font-size: 14.5px; color: #86745f; margin-top: 6px; line-height: 1.4; max-width: 34ch; }
+  .of-hero-btn { height: 44px; padding: 0 20px; font-size: 13.5px; margin-top: 16px; }
   .of-hero-mobile { display: none; }
   .of-hero-desktop { display: block; flex: 0 0 40%; min-width: 0; align-self: stretch; object-fit: cover; object-position: center; }
 }
