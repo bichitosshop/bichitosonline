@@ -264,28 +264,6 @@
     "descuento": 0
   },
   {
-    "id": 13,
-    "nombre": "Estampa Gato x 1 kg (pack x8 u)",
-    "marca": "Estampa",
-    "categoria": "gatos",
-    "etapa": "adulto",
-    "precio": 39679,
-    "imagen": "https://bichitosshop.github.io/bichitosonline/images/productos/prod_1779416382124.jpg",
-    "descripcion": "",
-    "destacado": false,
-    "oferta": false,
-    "envio_gratis": false,
-    "stock": 2,
-    "grupo": "Estampa Gato",
-    "medida": "1 kg (pack x8 u)",
-    "costo": 0,
-    "ganancia": 0,
-    "oculto": false,
-    "precio_actualizado": "",
-    "actualizado": "",
-    "descuento": 0
-  },
-  {
     "id": 14,
     "nombre": "Valiant Criadores x 20 Kg",
     "marca": "Valiant",
@@ -1494,5 +1472,27 @@
     "precio_actualizado": "",
     "actualizado": "2026-07-06",
     "descuento": 0
+  },
+  {
+    "id": 13,
+    "nombre": "Estampa Gato x 1 kg (pack x8 u)",
+    "marca": "Estampa",
+    "categoria": "gatos",
+    "etapa": "adulto",
+    "precio": 44030,
+    "imagen": "https://bichitosshop.github.io/bichitosonline/images/productos/prod_1779416382124.jpg",
+    "descripcion": "",
+    "destacado": false,
+    "oferta": true,
+    "envio_gratis": false,
+    "stock": 2,
+    "grupo": "Estampa Gato",
+    "medida": "1 kg (pack x8 u)",
+    "costo": 25900,
+    "ganancia": 70,
+    "oculto": false,
+    "precio_actualizado": "2026-07-06",
+    "actualizado": "2026-07-06",
+    "descuento": 10
   }
 ]
