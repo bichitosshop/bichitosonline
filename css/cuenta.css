@@ -10,30 +10,39 @@
 
 /* ===== Perfil ===== */
 .cuenta-perfil {
-  background: linear-gradient(135deg, #EAF3FC, #E7F6F4);
-  border: 1px solid var(--hairline); border-radius: 20px;
+  position: relative; overflow: hidden;
+  background: #B5DAE2;                 /* mismo celeste de la imagen del perro → se integra */
+  border: 1px solid #a3ccd6; border-radius: 20px;
   padding: 16px; box-shadow: var(--shadow-sm);
 }
-.cp-row { display: flex; align-items: center; gap: 12px; }
+/* perro con laptop: recortado del mismo celeste, se funde en la card */
+.cp-dog { position: absolute; right: -8px; bottom: -10px; width: 128px; height: auto; z-index: 1; pointer-events: none; }
+.cuenta-perfil.editing .cp-dog { display: none; }   /* al editar, el perro no tapa el formulario */
+.cp-row { position: relative; z-index: 2; display: flex; align-items: center; gap: 12px; padding-right: 104px; min-height: 82px; }
 .cp-avatar {
   width: 58px; height: 58px; border-radius: 50%; flex: none;
   background: #fff; color: var(--navy); display: grid; place-items: center;
-  box-shadow: 0 2px 8px rgba(27,59,90,.12); overflow: hidden;
+  box-shadow: 0 2px 8px rgba(27,59,90,.18); overflow: hidden;
 }
 .cp-avatar svg { width: 30px; height: 30px; }
+.cp-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .cp-initial { font-size: 26px; font-weight: 900; color: var(--navy); }
 .cp-info { flex: 1; min-width: 0; }
 .cp-info h1 { font-size: 20px; font-weight: 900; color: var(--navy); line-height: 1.1; letter-spacing: -.01em; }
-.cp-mail { font-size: 12.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-mail { font-size: 12.5px; color: #35566a; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cp-edit {
   display: inline-flex; align-items: center; gap: 5px; margin-top: 7px;
-  color: var(--teal); font-size: 12.5px; font-weight: 800; background: none; border: 0; cursor: pointer;
+  color: var(--navy); font-size: 12.5px; font-weight: 800; background: none; border: 0; cursor: pointer;
 }
 .cp-edit svg { width: 14px; height: 14px; }
-.cp-pets {
-  width: 82px; height: 82px; flex: none; border-radius: 16px; object-fit: cover;
-  border: 3px solid #fff; box-shadow: 0 3px 12px rgba(27,59,90,.15);
-}
+
+/* selector de avatares (dentro del form de edición) */
+.cp-avatars-label { display: block; font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.cp-avatars-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.cp-av-btn { padding: 0; border: 2px solid transparent; border-radius: 50%; background: #fff; cursor: pointer; aspect-ratio: 1/1; overflow: hidden; transition: transform .1s var(--spring), border-color .15s; }
+.cp-av-btn img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cp-av-btn:active { transform: scale(.92); }
+.cp-av-btn.on { border-color: var(--teal); box-shadow: 0 0 0 2px rgba(46,196,182,.3); }
 
 /* Formulario de edición */
 .cp-form:not([hidden]) { display: flex; }

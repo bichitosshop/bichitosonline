@@ -14,12 +14,16 @@
   let perfil = cargar();
 
   const AVATAR_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>';
+  const N_AVATARS = 10;
+  let avatarSel = perfil.avatar || 0;   // 0 = ninguno elegido todavía
 
   function render() {
     const nombre = (perfil.nombre || '').trim();
     $('#cpHola').textContent = nombre ? `¡Hola, ${nombre}!` : '¡Hola!';
     $('#cpMail').textContent = perfil.email ? perfil.email : 'Completá tu perfil';
-    $('#cpAvatar').innerHTML = nombre ? `<span class="cp-initial">${esc(nombre[0].toUpperCase())}</span>` : AVATAR_SVG;
+    if (perfil.avatar) $('#cpAvatar').innerHTML = `<img src="img/perfil/avatar-${perfil.avatar}.png" alt="Foto de perfil" />`;
+    else if (nombre) $('#cpAvatar').innerHTML = `<span class="cp-initial">${esc(nombre[0].toUpperCase())}</span>`;
+    else $('#cpAvatar').innerHTML = AVATAR_SVG;
 
     let favs = 0;
     try { const f = JSON.parse(localStorage.getItem('bichitos_favs') || '[]'); if (Array.isArray(f)) favs = f.length; } catch (_) {}
@@ -28,15 +32,39 @@
     $('#dirSub').textContent = perfil.direccion ? perfil.direccion : 'Agregar';
   }
 
+  /* ---- Selector de avatares ---- */
+  function buildAvatars() {
+    let html = '';
+    for (let i = 1; i <= N_AVATARS; i++) {
+      html += `<button type="button" class="cp-av-btn" data-av="${i}" aria-label="Foto ${i}"><img src="img/perfil/avatar-${i}.png" alt="" loading="lazy" /></button>`;
+    }
+    $('#avatarGrid').innerHTML = html;
+    $('#avatarGrid').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-av]');
+      if (!b) return;
+      avatarSel = +b.dataset.av;
+      marcarAvatar();
+    });
+  }
+  function marcarAvatar() {
+    $('#avatarGrid').querySelectorAll('.cp-av-btn').forEach((b) => b.classList.toggle('on', +b.dataset.av === avatarSel));
+  }
+
   /* ---- Editar perfil ---- */
   function abrirForm() {
     $('#inNombre').value = perfil.nombre || '';
     $('#inMail').value = perfil.email || '';
     $('#inDir').value = perfil.direccion || '';
+    avatarSel = perfil.avatar || 0;
+    marcarAvatar();
     $('#cpForm').hidden = false;
+    document.querySelector('.cuenta-perfil').classList.add('editing');
     $('#inNombre').focus();
   }
-  function cerrarForm() { $('#cpForm').hidden = true; }
+  function cerrarForm() {
+    $('#cpForm').hidden = true;
+    document.querySelector('.cuenta-perfil').classList.remove('editing');
+  }
 
   $('#btnEditar').addEventListener('click', abrirForm);
   $('#chipDir').addEventListener('click', abrirForm);
@@ -46,6 +74,7 @@
     perfil.nombre = $('#inNombre').value.trim();
     perfil.email = $('#inMail').value.trim();
     perfil.direccion = $('#inDir').value.trim();
+    if (avatarSel) perfil.avatar = avatarSel;
     guardar(perfil);
     render();
     cerrarForm();
@@ -54,6 +83,7 @@
     if (confirm('¿Cerrar sesión? Se borran tus datos de perfil de este celular.')) {
       localStorage.removeItem(KEY);
       perfil = {};
+      avatarSel = 0;
       render();
     }
   });
@@ -88,5 +118,6 @@
     }
   })();
 
+  buildAvatars();
   render();
 })();
