@@ -85,6 +85,7 @@
         if (p.medida == null) p.medida = '';
         if (p.costo == null) p.costo = 0;
         if (p.ganancia == null) p.ganancia = 0;
+        if (p.descuento == null) p.descuento = 0;
         if (p.oculto == null) p.oculto = false;
         if (p.precio_actualizado == null) p.precio_actualizado = '';
         if (p.actualizado == null) p.actualizado = '';
@@ -250,7 +251,7 @@
     editandoKey = key;
     let vs;
     if (key === '__nuevo__') {
-      vs = [{ id: nuevaId(), nombre: '', grupo: '', marca: '', categoria: 'perros', etapa: 'adulto', medida: '', costo: 0, ganancia: 0, precio: 0, imagen: '', descripcion: '', destacado: false, oferta: false, envio_gratis: false, oculto: false, stock: 10, precio_actualizado: '', actualizado: '' }];
+      vs = [{ id: nuevaId(), nombre: '', grupo: '', marca: '', categoria: 'perros', etapa: 'adulto', medida: '', costo: 0, ganancia: 0, precio: 0, imagen: '', descripcion: '', destacado: false, oferta: false, descuento: 0, envio_gratis: false, oculto: false, stock: 10, precio_actualizado: '', actualizado: '' }];
     } else {
       vs = clone(productos.filter((p) => grupoKey(p) === key)).sort((a, b) => (parseFloat(a.medida) || 0) - (parseFloat(b.medida) || 0));
     }
@@ -316,6 +317,11 @@
         <input type="checkbox" class="v-oferta" ${v.oferta ? 'checked' : ''} />
         <span>Mostrar en <b>Ofertas</b></span>
       </label>
+      <label class="adm-field adm-field-desc" ${v.oferta ? '' : 'hidden'}>
+        <span>Descuento en oferta (%)</span>
+        <input class="adm-inp v-descuento" type="number" inputmode="decimal" min="0" max="90" placeholder="0" value="${v.descuento ? v.descuento : ''}" />
+        <small class="v-of-result"></small>
+      </label>
     </div>`;
   }
 
@@ -335,6 +341,10 @@
     el.textContent = fmt(pf);
     el.className = 'v-precio ' + (auto ? 'auto' : 'manual');
     row.querySelector('.adm-field-manual').hidden = auto;
+    // resultado del descuento de oferta (precio final que verá el cliente)
+    const desc = num(row.querySelector('.v-descuento') ? row.querySelector('.v-descuento').value : 0);
+    const res = row.querySelector('.v-of-result');
+    if (res) res.textContent = desc > 0 ? ('En oferta queda en ' + fmt(Math.round(pf * (1 - desc / 100)))) : '';
   }
 
   function leerEditor() {
@@ -349,7 +359,8 @@
       const ganancia = num(row.querySelector('.v-ganancia').value);
       const precman = num(row.querySelector('.v-precman').value);
       const oferta = row.querySelector('.v-oferta').checked;
-      return { id, medida, costo, ganancia, precman, oferta };
+      const descuento = oferta ? num(row.querySelector('.v-descuento').value) : 0;
+      return { id, medida, costo, ganancia, precman, oferta, descuento };
     });
     return { grupo, marca, categoria, vs };
   }
@@ -380,6 +391,7 @@
         ganancia: v.ganancia,
         precio: nuevoPrecio,
         oferta: v.oferta,
+        descuento: v.oferta ? v.descuento : 0,
         imagen: editorImg,
         precio_actualizado: precioCambio ? hoy() : (prev.precio_actualizado || ''),
         actualizado: hoy(),
@@ -537,12 +549,19 @@
   $('#btnAddVar').addEventListener('click', () => {
     const cont = $('#variantes');
     const wrap = document.createElement('div');
-    wrap.innerHTML = varRowHTML({ id: nuevaId() + cont.children.length, medida: '', costo: 0, ganancia: 0, precio: 0, oferta: false });
+    wrap.innerHTML = varRowHTML({ id: nuevaId() + cont.children.length, medida: '', costo: 0, ganancia: 0, precio: 0, oferta: false, descuento: 0 });
     cont.appendChild(wrap.firstElementChild);
     cont.lastElementChild.querySelector('.v-medida').focus();
   });
   $('#variantes').addEventListener('input', (e) => {
-    if (e.target.matches('.v-costo, .v-ganancia, .v-precman')) recalcVar(e.target.closest('.adm-var'));
+    if (e.target.matches('.v-costo, .v-ganancia, .v-precman, .v-descuento')) recalcVar(e.target.closest('.adm-var'));
+  });
+  $('#variantes').addEventListener('change', (e) => {
+    if (e.target.matches('.v-oferta')) {
+      const row = e.target.closest('.adm-var');
+      row.querySelector('.adm-field-desc').hidden = !e.target.checked;
+      recalcVar(row);
+    }
   });
   $('#variantes').addEventListener('click', (e) => {
     const del = e.target.closest('[data-delvar]');

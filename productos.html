@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/home.css?v=6" />
-<link rel="stylesheet" href="css/productos.css?v=8" />
+<link rel="stylesheet" href="css/productos.css?v=10" />
 </head>
 <body>
 
@@ -122,6 +122,18 @@
 </aside>
 
 <main id="main">
+  <!-- OFERTAS: banner superior (solo en modo ofertas) -->
+  <div class="wrap ofertas-only" id="ofertasHero">
+    <section class="of-hero">
+      <div class="of-hero-txt">
+        <h1>Ofertas imperdibles</h1>
+        <p>Los mejores descuentos para tu mascota.</p>
+        <button class="of-hero-btn" data-oferta-todas>Ver todas las ofertas</button>
+      </div>
+      <img class="of-hero-img" src="img/home/ofertas-banner.jpg?v=1" alt="Perro y gato felices con ofertas" />
+    </section>
+  </div>
+
   <div class="wrap">
     <div class="cat-title-row">
       <h1 id="catTitle">Productos</h1>
@@ -129,11 +141,18 @@
     </div>
   </div>
 
-  <div class="filtros-pills" role="group" aria-label="Filtrar por categoría">
+  <div class="filtros-pills" id="mainPills" role="group" aria-label="Filtrar por categoría">
     <button class="fpill" data-cat="todos">Todos</button>
     <button class="fpill" data-cat="perros">Perros</button>
     <button class="fpill" data-cat="gatos">Gatos</button>
     <button class="fpill" data-cat="ofertas">Ofertas</button>
+  </div>
+
+  <!-- OFERTAS: filtro por categoría (sin "Todos"; se ve todo con el botón del banner) -->
+  <div class="filtros-pills ofertas-only" id="ofertasPills" role="group" aria-label="Filtrar ofertas por categoría">
+    <button class="fpill" data-ofcat="perros">Perros</button>
+    <button class="fpill" data-ofcat="gatos">Gatos</button>
+    <button class="fpill" data-ofcat="accesorios">Accesorios</button>
   </div>
 
   <div class="wrap buscador-wrap">
@@ -144,6 +163,17 @@
   </div>
 
   <section class="prod-grid wrap" id="grid" aria-live="polite"></section>
+
+  <!-- OFERTAS: banner inferior (solo en modo ofertas) -->
+  <div class="wrap ofertas-only" id="ofertasBottom">
+    <section class="of-bottom">
+      <div class="of-bottom-txt">
+        <b>¡Ahorrá en grande!</b>
+        <span>Descuentos por tiempo limitado en tus marcas favoritas.</span>
+      </div>
+      <button class="of-bottom-btn" data-oferta-todas>Ver todas las ofertas</button>
+    </section>
+  </div>
 </main>
 
 <!-- ===== FOOTER ===== -->
@@ -231,7 +261,7 @@
 
 <script src="js/config.js"></script>
 <script src="js/api-service.js"></script>
-<script src="js/productos.js?v=8"></script>
+<script src="js/productos.js?v=9"></script>
 <script src="js/home.js?v=6"></script>
 </body>
 </html>

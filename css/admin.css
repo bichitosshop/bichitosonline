@@ -236,6 +236,8 @@ select.adm-inp { appearance: none; background-image: url("data:image/svg+xml,%3C
 .adm-check { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 10px 12px; background: #fff; border: 1.5px solid var(--hairline); border-radius: 12px; }
 .adm-check input { width: 22px; height: 22px; accent-color: var(--orange); flex: none; }
 .adm-check span { font-size: 14px; font-weight: 600; }
+.adm-field-desc { margin-top: 12px; }
+.v-of-result { display: block; margin-top: 6px; font-size: 12px; font-weight: 800; color: var(--green); }
 .adm-btn-addvar {
   width: 100%; height: 50px; border-radius: 12px; background: var(--green-bg); color: var(--green);
   border: 1.5px dashed var(--green); font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;

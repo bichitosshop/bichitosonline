@@ -9,9 +9,12 @@
   const KEY = 'bichitos_carrito';
   const fmt = (n) => '$' + (n || 0).toLocaleString('es-AR');
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const enOferta = (p) => !!(p.oferta && (+p.descuento || 0) > 0);
+  const precioEf = (p) => enOferta(p) ? Math.round(p.precio * (1 - (+p.descuento) / 100)) : p.precio;
 
   let PRODUCTOS = [];
   let filtro = (new URLSearchParams(location.search).get('categoria') || 'todos').toLowerCase();
+  let ofCat = 'perros';   // categoría dentro de Ofertas (perros/gatos/accesorios o 'todas')
   let q = '';
   let cart = cargarCart();
   let favs = new Set(cargarFavs());
@@ -50,7 +53,10 @@
     }
     let groups = [...map.values()].filter((g) => {
       if (wishlistMode) return g.variants.some((v) => favs.has(v.id));
-      if (filtro === 'ofertas') return g.variants.some((v) => v.oferta || v.destacado);
+      if (filtro === 'ofertas') {
+        if (!g.variants.some((v) => v.oferta)) return false;          // SOLO ofertas reales
+        return ofCat === 'todas' || g.variants[0].categoria === ofCat; // filtro por categoría dentro de ofertas
+      }
       if (filtro !== 'todos') return g.variants.some((v) => v.categoria === filtro);
       return true;
     }).filter((g) => {
@@ -101,25 +107,34 @@
             <img src="img/icons/ic-trash.png" alt="" />
           </button>
         </div>
-        <div class="pcard-subtotal">Subtotal: <b>${fmt(p.precio * cant)}</b></div>`;
+        <div class="pcard-subtotal">Subtotal: <b>${fmt(precioEf(p) * cant)}</b></div>`;
     } else {
       footer = `<button class="pcard-add" data-add="${p.id}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M3 4h2l2.2 11.2a1 1 0 0 0 1 .8h8.3a1 1 0 0 0 1-.8L20 7.5H6"/></svg>
           Agregar al carrito
         </button>`;
     }
+    const priceBlock = enOferta(p)
+      ? `<span class="pcard-pricewrap"><span class="pcard-oldprice">${fmt(p.precio)}</span><span class="pcard-price">${fmt(precioEf(p))}</span></span>`
+      : `<span class="pcard-price">${fmt(p.precio)}</span>`;
     return `
         <p class="pcard-name">${esc(title)}</p>
         <span class="pcard-sub">${esc(sub)}</span>
         ${sizes}
-        <span class="pcard-price">${fmt(p.precio)}</span>
+        ${priceBlock}
         ${footer}`;
+  }
+
+  // Etiqueta de la esquina: -X% si la variante activa tiene descuento, sino OFERTA si hay alguna oferta
+  function flagFor(g, p) {
+    if (enOferta(p)) return '-' + (+p.descuento) + '%';
+    return g.variants.some((v) => v.oferta) ? 'OFERTA' : '';
   }
 
   function cardHTML(g) {
     const p = activeVar(g);
     const cant = (cart.find((i) => i.id === p.id) || {}).cant || 0;
-    const flag = g.variants.some((v) => v.oferta) ? 'OFERTA' : '';
+    const flag = flagFor(g, p);
     const favOn = favs.has(p.id) ? ' on' : '';
     return `
     <article class="pcard${cant > 0 ? ' in-cart' : ''}" data-id="${p.id}" data-gkey="${esc(g.key)}">
@@ -145,8 +160,17 @@
     card.dataset.id = p.id;
     const fav = card.querySelector('.pcard-fav');
     if (fav) { fav.dataset.fav = p.id; fav.classList.toggle('on', favs.has(p.id)); }
-    const img = card.querySelector('.pcard-img');
-    if (img) img.dataset.zoom = imgFor(p);
+    const box = card.querySelector('.pcard-img');
+    if (box) {
+      box.dataset.zoom = imgFor(p);
+      // la etiqueta -X% / OFERTA puede cambiar según la medida elegida
+      const txt = flagFor(g, p);
+      let flagEl = box.querySelector('.pcard-flag');
+      if (txt) {
+        if (!flagEl) { flagEl = document.createElement('span'); flagEl.className = 'pcard-flag'; box.insertBefore(flagEl, box.firstChild); }
+        flagEl.textContent = txt;
+      } else if (flagEl) { flagEl.remove(); }
+    }
     card.querySelector('.pcard-body').innerHTML = cardBodyHTML(g, p);
   }
   function syncAllCards() { document.querySelectorAll('.pcard').forEach(refreshCard); }
@@ -174,14 +198,18 @@
   }
 
   function render() {
+    const esOfertas = filtro === 'ofertas' && !wishlistMode;
+    document.body.classList.toggle('is-ofertas', esOfertas);
     const groups = visibleGroups();
     const titulo = wishlistMode ? 'Favoritos' : ({ perros: 'Perros', gatos: 'Gatos', ofertas: 'Ofertas', todos: 'Todos los productos' }[filtro] || 'Productos');
     $('#catTitle').textContent = titulo;
     $('#catCount').textContent = `${groups.length} ${groups.length === 1 ? 'producto' : 'productos'}`;
-    $('#grid').innerHTML = groups.length
-      ? groups.map(cardHTML).join('')
+    const vacio = esOfertas
+      ? '<div class="prod-empty"><b>No hay ofertas en esta categoría</b>Probá con otra categoría o mirá todas las ofertas.</div>'
       : '<div class="prod-empty"><b>No encontramos nada</b>Probá con otra palabra o cambiá la categoría.</div>';
-    document.querySelectorAll('.fpill').forEach((b) => b.classList.toggle('act', b.dataset.cat === filtro));
+    $('#grid').innerHTML = groups.length ? groups.map(cardHTML).join('') : vacio;
+    document.querySelectorAll('#mainPills .fpill').forEach((b) => b.classList.toggle('act', b.dataset.cat === filtro));
+    document.querySelectorAll('#ofertasPills .fpill').forEach((b) => b.classList.toggle('act', b.dataset.ofcat === ofCat));
   }
 
   /* ---- carrito ---- */
@@ -191,7 +219,7 @@
     else {
       const p = PRODUCTOS.find((x) => x.id === id);
       if (!p) return;
-      cart.push({ id: p.id, nombre: p.nombre, precio: p.precio, marca: p.marca || '', cant: 1 });
+      cart.push({ id: p.id, nombre: p.nombre, precio: precioEf(p), marca: p.marca || '', cant: 1 });
     }
     guardarCart();
     if (card) refreshCard(card); else syncAllCards();
@@ -273,7 +301,13 @@
     // tocar la imagen → agrandar
     const zoom = e.target.closest('.pcard-img img');
     if (zoom) { const box = zoom.closest('.pcard-img'); openZoom(box ? box.dataset.zoom : zoom.src, zoom.alt); return; }
-    const pill = e.target.closest('.fpill');
+    // botones "Ver todas las ofertas" (banner superior + inferior) → todas las categorías juntas
+    const verTodas = e.target.closest('[data-oferta-todas]');
+    if (verTodas) { filtro = 'ofertas'; wishlistMode = false; ofCat = 'todas'; q = ''; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    // pills de categoría DENTRO de ofertas (perros/gatos/accesorios, sin "todos")
+    const ofPill = e.target.closest('[data-ofcat]');
+    if (ofPill) { ofCat = ofPill.dataset.ofcat; render(); return; }
+    const pill = e.target.closest('.fpill[data-cat]');
     if (pill) { filtro = pill.dataset.cat; wishlistMode = false; q = ''; const b = $('#buscador'); if (b) b.value = ''; render(); return; }
     const mini = e.target.closest('.titem-mini [data-q]');
     if (mini) { setQty(parseInt(mini.closest('.titem-mini').dataset.id), parseInt(mini.dataset.q)); return; }
@@ -285,6 +319,13 @@
   const buscador = $('#buscador');
   if (buscador) buscador.addEventListener('input', (e) => { q = e.target.value; render(); });
 
+  function primeraCatOferta() {
+    for (const c of ['perros', 'gatos', 'accesorios']) {
+      if (PRODUCTOS.some((p) => p.oferta && p.categoria === c)) return c;
+    }
+    return 'perros';
+  }
+
   /* ---- init ---- */
   (async function init() {
     try {
@@ -293,6 +334,7 @@
       $('#grid').innerHTML = '<div class="prod-empty"><b>No pudimos cargar los productos</b>Probá recargar la página.</div>';
       return;
     }
+    if (filtro === 'ofertas' && !wishlistMode) ofCat = primeraCatOferta();
     render(); syncBar();
   })();
 })();
