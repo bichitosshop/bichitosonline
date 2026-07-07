@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/home.css?v=6" />
-<link rel="stylesheet" href="css/productos.css?v=10" />
+<link rel="stylesheet" href="css/productos.css?v=11" />
 </head>
 <body>
 
@@ -127,10 +127,11 @@
     <section class="of-hero">
       <div class="of-hero-txt">
         <h1>Ofertas imperdibles</h1>
-        <p>Los mejores descuentos para tu mascota.</p>
+        <p>Productos seleccionados con los mejores descuentos para tu mascota.</p>
         <button class="of-hero-btn" data-oferta-todas>Ver todas las ofertas</button>
       </div>
-      <img class="of-hero-img" src="img/home/ofertas-banner.jpg?v=1" alt="Perro y gato felices con ofertas" />
+      <img class="of-hero-img of-hero-desktop" src="img/home/ofertas-banner.jpg?v=1" alt="Perro y gato felices con ofertas" />
+      <img class="of-hero-img of-hero-mobile" src="img/home/ofertas-banner-mobile.jpg?v=1" alt="Perro y gato felices con ofertas" />
     </section>
   </div>
 
@@ -167,11 +168,16 @@
   <!-- OFERTAS: banner inferior (solo en modo ofertas) -->
   <div class="wrap ofertas-only" id="ofertasBottom">
     <section class="of-bottom">
+      <img class="of-bottom-tag" src="img/icons/ic-oferta-tag.png" alt="" />
       <div class="of-bottom-txt">
-        <b>¡Ahorrá en grande!</b>
-        <span>Descuentos por tiempo limitado en tus marcas favoritas.</span>
+        <b>¡Ahorrá más en grande!</b>
+        <span>Muchos productos con descuento por tiempo limitado. No te lo pierdas.</span>
       </div>
-      <button class="of-bottom-btn" data-oferta-todas>Ver todas las ofertas</button>
+      <img class="of-bottom-lines" src="img/icons/ic-oferta-lines.png" alt="" />
+      <button class="of-bottom-btn" data-oferta-todas>
+        Ver todas las ofertas
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
     </section>
   </div>
 </main>

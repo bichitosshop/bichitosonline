@@ -191,51 +191,68 @@ body.is-ofertas .cat-title-row,
 body.is-ofertas #mainPills,
 body.is-ofertas .buscador-wrap { display: none; }
 
-/* Banner superior: texto a la izquierda, animales a la derecha (nunca encima) */
+/* Banner superior — MOBILE: apilado (texto arriba, foto abajo, nada cortado) */
 #ofertasHero { margin-top: 12px; }
 .of-hero {
-  display: flex; align-items: stretch; overflow: hidden;
+  display: flex; flex-direction: column; overflow: hidden;
   background: #F9F1E8; border-radius: 18px;
   border: 1px solid var(--hairline); box-shadow: var(--shadow-sm);
-  min-height: 140px;
 }
-.of-hero-txt { flex: 1 1 56%; min-width: 0; align-self: center; padding: 16px 12px 16px 18px; }
-.of-hero-txt h1 { font-size: 21px; font-weight: 900; color: var(--navy); line-height: 1.08; letter-spacing: -.01em; }
-.of-hero-txt p { font-size: 12.5px; color: #86745f; margin-top: 6px; line-height: 1.35; }
+.of-hero-txt { padding: 18px; }
+.of-hero-txt h1 { font-size: 22px; font-weight: 900; color: var(--navy); line-height: 1.08; letter-spacing: -.01em; }
+.of-hero-txt p { font-size: 13px; color: #86745f; margin-top: 6px; line-height: 1.4; }
 .of-hero-btn {
-  margin-top: 12px; display: inline-flex; align-items: center; justify-content: center;
-  height: 42px; padding: 0 18px; border-radius: var(--r-pill);
-  background: var(--orange); color: #fff; font-size: 13px; font-weight: 800;
+  margin-top: 14px; display: inline-flex; align-items: center; justify-content: center;
+  height: 44px; padding: 0 20px; border-radius: var(--r-pill);
+  background: var(--orange); color: #fff; font-size: 13.5px; font-weight: 800;
   box-shadow: 0 8px 20px rgba(255,107,53,.3); transition: transform .12s var(--spring);
 }
 .of-hero-btn:active { transform: scale(.96); }
-.of-hero-img { flex: 0 0 43%; min-width: 0; align-self: stretch; object-fit: cover; object-position: center; }
+.of-hero-img { display: block; width: 100%; }
+.of-hero-mobile { height: auto; }         /* ratio natural: se ven perro y gato completos */
+.of-hero-desktop { display: none; }
 
-/* Banner inferior */
+/* Banner superior — DESKTOP: en fila (texto izq, animales der) */
+@media (min-width: 640px) {
+  .of-hero { flex-direction: row; align-items: stretch; min-height: 172px; }
+  .of-hero-txt { flex: 1 1 58%; min-width: 0; align-self: center; padding: 24px; }
+  .of-hero-txt h1 { font-size: 27px; }
+  .of-hero-txt p { font-size: 14.5px; max-width: 34ch; }
+  .of-hero-mobile { display: none; }
+  .of-hero-desktop { display: block; flex: 0 0 40%; min-width: 0; align-self: stretch; object-fit: cover; object-position: center; }
+}
+
+/* Pills de categoría de ofertas: centradas en desktop */
+@media (min-width: 640px) {
+  #ofertasPills { justify-content: center; }
+}
+
+/* Banner inferior (con íconos del mockup: etiqueta % + rayitas) */
 #ofertasBottom { margin-top: 4px; }
 .of-bottom {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
   padding: 16px 18px; border-radius: 18px;
   background: linear-gradient(135deg, #E7F6F3, #EAF4FB); border: 1px solid var(--hairline);
 }
+.of-bottom-tag { width: 44px; height: auto; flex: none; }
+.of-bottom-lines { width: 30px; height: auto; flex: none; display: none; }
+.of-bottom-txt { flex: 1; min-width: 150px; }
 .of-bottom-txt b { display: block; font-size: 15.5px; font-weight: 900; color: var(--navy); }
-.of-bottom-txt span { font-size: 12px; color: var(--muted); }
+.of-bottom-txt span { font-size: 12px; color: var(--muted); line-height: 1.35; }
 .of-bottom-btn {
-  flex: none; height: 44px; padding: 0 18px; border-radius: var(--r-pill);
-  background: var(--navy); color: #fff; font-size: 13px; font-weight: 800;
+  flex: 1 1 100%; margin-top: 6px; height: 46px; padding: 0 18px; border-radius: var(--r-pill);
+  background: var(--navy); color: #fff; font-size: 13.5px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: transform .12s var(--spring); white-space: nowrap;
 }
-.of-bottom-btn:active { transform: scale(.96); }
+.of-bottom-btn svg { width: 16px; height: 16px; }
+.of-bottom-btn:active { transform: scale(.98); }
+@media (min-width: 560px) {
+  .of-bottom-lines { display: block; }
+  .of-bottom-btn { flex: 0 0 auto; margin-top: 0; margin-left: auto; }
+}
 
 /* Precio con descuento en las cards */
 .pcard-pricewrap { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; margin-top: 6px; }
 .pcard-pricewrap .pcard-price { margin-top: 0; }
 .pcard-oldprice { font-size: 13px; font-weight: 700; color: var(--muted); text-decoration: line-through; font-variant-numeric: tabular-nums; }
-
-@media (min-width: 640px) {
-  .of-hero { min-height: 168px; }
-  .of-hero-txt h1 { font-size: 26px; }
-  .of-hero-txt p { font-size: 14px; }
-  .of-hero-txt { padding: 22px; }
-  .of-hero-img { flex-basis: 40%; }
-}
