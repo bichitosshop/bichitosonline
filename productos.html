@@ -68,6 +68,9 @@
       <a href="#main" class="icon-btn" aria-label="Buscar productos" onclick="document.getElementById('buscador').focus();return false;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       </a>
+      <a href="cuenta.html" class="icon-btn" aria-label="Mi cuenta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
+      </a>
       <button class="icon-btn cart-btn" id="openCart" aria-label="Ver pedido">
         <img src="img/icons/ic-cart.png" alt="" class="ic-img" />
         <span class="cart-badge" id="cartBadge" aria-live="polite">0</span>
@@ -122,16 +125,19 @@
 </aside>
 
 <main id="main">
-  <!-- OFERTAS: banner superior (solo en modo ofertas) -->
-  <div class="wrap ofertas-only" id="ofertasHero">
-    <section class="of-hero">
-      <div class="of-hero-txt">
-        <h1>Ofertas imperdibles</h1>
-        <p class="of-hero-sub">Productos seleccionados con los mejores descuentos para tu mascota.</p>
-        <button class="of-hero-btn" data-oferta-todas>Ver todas las ofertas</button>
+  <!-- OFERTAS: banner (solo en modo ofertas) -->
+  <div class="wrap ofertas-only" id="ofertasBanner">
+    <section class="of-bottom">
+      <img class="of-bottom-tag" src="img/icons/ic-oferta-tag.png" alt="" />
+      <div class="of-bottom-txt">
+        <b>¡Ahorrá más en grande!</b>
+        <span>Muchos productos con descuento por tiempo limitado. No te lo pierdas.</span>
       </div>
-      <img class="of-hero-img of-hero-desktop" src="img/home/ofertas-banner.jpg?v=1" alt="Perro y gato felices con ofertas" />
-      <img class="of-hero-img of-hero-mobile" src="img/home/ofertas-banner-mobile.jpg?v=1" alt="Perro y gato felices con ofertas" />
+      <img class="of-bottom-lines" src="img/icons/ic-oferta-lines.png" alt="" />
+      <button class="of-bottom-btn" data-oferta-todas>
+        Ver todas las ofertas
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
     </section>
   </div>
 
@@ -164,22 +170,6 @@
   </div>
 
   <section class="prod-grid wrap" id="grid" aria-live="polite"></section>
-
-  <!-- OFERTAS: banner inferior (solo en modo ofertas) -->
-  <div class="wrap ofertas-only" id="ofertasBottom">
-    <section class="of-bottom">
-      <img class="of-bottom-tag" src="img/icons/ic-oferta-tag.png" alt="" />
-      <div class="of-bottom-txt">
-        <b>¡Ahorrá más en grande!</b>
-        <span>Muchos productos con descuento por tiempo limitado. No te lo pierdas.</span>
-      </div>
-      <img class="of-bottom-lines" src="img/icons/ic-oferta-lines.png" alt="" />
-      <button class="of-bottom-btn" data-oferta-todas>
-        Ver todas las ofertas
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-    </section>
-  </div>
 </main>
 
 <!-- ===== FOOTER ===== -->
@@ -268,6 +258,6 @@
 <script src="js/config.js"></script>
 <script src="js/api-service.js"></script>
 <script src="js/productos.js?v=9"></script>
-<script src="js/home.js?v=6"></script>
+<script src="js/home.js?v=7"></script>
 </body>
 </html>

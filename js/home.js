@@ -72,6 +72,7 @@
       else key = 'categorias';
     } else if (path === 'blog.html') key = 'blog';
     else if (path === 'contacto.html') key = 'contacto';
+    else if (path === 'cuenta.html') key = 'cuenta';   // no está en la bottom-nav: no resalta ninguno
 
     document.querySelectorAll('.bottom-nav a[data-nav]').forEach((a) => {
       const on = a.dataset.nav === key;
