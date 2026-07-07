@@ -6,12 +6,15 @@
 <meta name="robots" content="noindex, nofollow" />
 <title>Panel · BICHITOS SHOP</title>
 <meta name="theme-color" content="#1B3B5A" />
-<link rel="icon" type="image/png" href="img/favicon.png" />
-<link rel="apple-touch-icon" href="img/favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png?v=7" />
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16.png?v=7" />
+<link rel="icon" type="image/png" href="img/favicon.png?v=7" />
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png?v=7" />
+<link rel="manifest" href="site.webmanifest" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/admin.css?v=1" />
+<link rel="stylesheet" href="css/admin.css?v=4" />
 </head>
 <body>
 
@@ -31,14 +34,20 @@
 <div id="app" hidden>
 
   <header class="adm-header">
-    <div class="adm-h-title">
-      <img src="img/logo.png" alt="" />
-      <div><b>Mis productos</b><small>Panel de administración</small></div>
+    <a class="adm-h-title" href="index.html" target="_blank" rel="noopener" aria-label="Abrir la tienda en otra pestaña">
+      <img src="img/apple-touch-icon.png?v=7" alt="BICHITOS SHOP" />
+      <div><b>Mis productos</b><small>Ver la tienda&nbsp;↗</small></div>
+    </a>
+    <div class="adm-h-actions">
+      <button class="adm-h-undo" id="undoFab" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>
+        Deshacer<span id="undoCount">0</span>
+      </button>
     </div>
-    <span class="adm-h-count" id="contador">—</span>
   </header>
 
   <div class="adm-tools">
+    <p class="adm-count-row">Mostrando <span id="contador">—</span> productos</p>
     <div class="adm-buscar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="buscar" type="search" placeholder="Buscar producto o marca…" autocomplete="off" />
@@ -53,12 +62,6 @@
       <button class="adm-fpill" data-f="sincosto">Falta costo</button>
     </div>
   </div>
-
-  <!-- botón deshacer flotante -->
-  <button class="adm-undo-fab" id="undoFab" hidden>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>
-    Deshacer <span id="undoCount">0</span>
-  </button>
 
   <main id="lista"></main>
 
