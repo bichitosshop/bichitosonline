@@ -87,4 +87,52 @@
     });
   }
   setActiveNav();
+
+  /* ---- Popup de bienvenida: crear cuenta rápida (sin contraseña) ---- */
+  (function welcomePopup() {
+    const KEY = 'bichitos_perfil', SEEN = 'bichitos_bienvenida';
+    let perfil = {};
+    try { perfil = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) {}
+    if ((perfil.nombre && perfil.nombre.trim()) || localStorage.getItem(SEEN)) return; // ya tiene cuenta o ya lo vio
+    const escT = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    const el = document.createElement('div');
+    el.className = 'welcome-pop';
+    el.innerHTML =
+      '<div class="welcome-card" role="dialog" aria-label="Bienvenido a BICHITOS SHOP">' +
+        '<button class="welcome-x" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg></button>' +
+        '<img class="welcome-pet" src="img/perfil/avatar-1.png?v=2" alt="" />' +
+        '<h2>¡Bienvenido a BICHITOS SHOP! 🐾</h2>' +
+        '<p>Creá tu cuenta en 10 segundos y hacé tus pedidos más rápido. Sin contraseña.</p>' +
+        '<form class="welcome-form" novalidate>' +
+          '<input type="text" id="wpNombre" placeholder="Tu nombre" autocomplete="name" />' +
+          '<input type="email" id="wpMail" placeholder="Tu email (opcional)" autocomplete="email" />' +
+          '<button type="submit" class="welcome-crear">Crear mi cuenta</button>' +
+        '</form>' +
+        '<button class="welcome-skip">Ahora no</button>' +
+      '</div>';
+    document.body.appendChild(el);
+    void el.offsetWidth; el.classList.add('on');   // reflow forzado (dispara la transición)
+
+    function cerrar() { el.classList.remove('on'); localStorage.setItem(SEEN, '1'); setTimeout(() => el.remove(), 320); }
+    el.querySelector('.welcome-x').addEventListener('click', cerrar);
+    el.querySelector('.welcome-skip').addEventListener('click', cerrar);
+    el.querySelector('.welcome-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nombre = el.querySelector('#wpNombre').value.trim();
+      if (!nombre) { el.querySelector('#wpNombre').focus(); return; }
+      perfil.nombre = nombre;
+      const mail = el.querySelector('#wpMail').value.trim();
+      if (mail) perfil.email = mail;
+      if (!perfil.avatar) perfil.avatar = 1;              // avatar por defecto
+      localStorage.setItem(KEY, JSON.stringify(perfil));
+      localStorage.setItem(SEEN, '1');
+      el.querySelector('.welcome-card').innerHTML =
+        '<img class="welcome-pet" src="img/perfil/avatar-1.png?v=2" alt="" />' +
+        '<h2>¡Listo, ' + escT(nombre) + '! 🐾</h2>' +
+        '<p>Tu cuenta ya está creada. Podés cambiar tu foto y datos cuando quieras.</p>' +
+        '<a class="welcome-crear" href="cuenta.html">Ver mi cuenta</a>';
+      setTimeout(cerrar, 3000);
+    });
+  })();
 })();

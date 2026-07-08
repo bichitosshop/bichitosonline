@@ -13,17 +13,16 @@
   function guardar(p) { localStorage.setItem(KEY, JSON.stringify(p)); }
   let perfil = cargar();
 
-  const AVATAR_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>';
   const N_AVATARS = 10;
-  let avatarSel = perfil.avatar || 0;   // 0 = ninguno elegido todavía
+  const DEFAULT_AVATAR = 1;              // foto de perfil por defecto (golden con anteojos)
+  let avatarSel = perfil.avatar || DEFAULT_AVATAR;
 
   function render() {
     const nombre = (perfil.nombre || '').trim();
     $('#cpHola').textContent = nombre ? `¡Hola, ${nombre}!` : '¡Hola!';
     $('#cpMail').textContent = perfil.email ? perfil.email : 'Completá tu perfil';
-    if (perfil.avatar) $('#cpAvatar').innerHTML = `<img src="img/perfil/avatar-${perfil.avatar}.png" alt="Foto de perfil" />`;
-    else if (nombre) $('#cpAvatar').innerHTML = `<span class="cp-initial">${esc(nombre[0].toUpperCase())}</span>`;
-    else $('#cpAvatar').innerHTML = AVATAR_SVG;
+    const avId = perfil.avatar || DEFAULT_AVATAR;   // avatar por defecto para cuentas nuevas
+    $('#cpAvatar').innerHTML = `<img src="img/perfil/avatar-${avId}.png?v=2" alt="Foto de perfil" />`;
 
     let favs = 0;
     try { const f = JSON.parse(localStorage.getItem('bichitos_favs') || '[]'); if (Array.isArray(f)) favs = f.length; } catch (_) {}
@@ -36,7 +35,7 @@
   function buildAvatars() {
     let html = '';
     for (let i = 1; i <= N_AVATARS; i++) {
-      html += `<button type="button" class="cp-av-btn" data-av="${i}" aria-label="Foto ${i}"><img src="img/perfil/avatar-${i}.png" alt="" loading="lazy" /></button>`;
+      html += `<button type="button" class="cp-av-btn" data-av="${i}" aria-label="Foto ${i}"><img src="img/perfil/avatar-${i}.png?v=2" alt="" /></button>`;
     }
     $('#avatarGrid').innerHTML = html;
     $('#avatarGrid').addEventListener('click', (e) => {
@@ -55,7 +54,7 @@
     $('#inNombre').value = perfil.nombre || '';
     $('#inMail').value = perfil.email || '';
     $('#inDir').value = perfil.direccion || '';
-    avatarSel = perfil.avatar || 0;
+    avatarSel = perfil.avatar || DEFAULT_AVATAR;
     marcarAvatar();
     $('#cpForm').hidden = false;
     document.querySelector('.cuenta-perfil').classList.add('editing');
@@ -83,7 +82,7 @@
     if (confirm('¿Cerrar sesión? Se borran tus datos de perfil de este celular.')) {
       localStorage.removeItem(KEY);
       perfil = {};
-      avatarSel = 0;
+      avatarSel = DEFAULT_AVATAR;
       render();
     }
   });
@@ -133,7 +132,6 @@
       return `<div class="pedido-card">
         <div class="pedido-top">
           <div class="pedido-thumb">${img ? `<img src="${esc(img)}" alt="" loading="lazy" onerror="this.style.display='none'" />` : ''}</div>
-          <span class="pedido-badge">Enviado</span>
         </div>
         <b class="pedido-n">Pedido #${p.n}</b>
         <span class="pedido-meta">${p.count} ${p.count === 1 ? 'producto' : 'productos'} · ${esc(p.fecha)}</span>
