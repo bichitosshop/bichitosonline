@@ -157,6 +157,14 @@
 }
 .sheet-wa:active { transform: scale(.98); }
 .sheet-wa svg { width: 21px; height: 21px; }
+
+/* checkout de datos de envío (nombre + dirección) dentro del sheet */
+.co-form { display: flex; flex-direction: column; gap: 8px; flex: none; margin: 2px 0 10px; padding: 12px; background: #F2F6FA; border-radius: 14px; }
+.co-form[hidden] { display: none; }
+.co-title { font-size: 13px; font-weight: 800; color: var(--navy); }
+.co-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--navy); }
+.co-form input { height: 44px; border: 1.5px solid var(--hairline); border-radius: 10px; padding: 0 12px; font: inherit; font-size: 15px; background: #fff; outline: none; transition: border-color .2s; }
+.co-form input:focus { border-color: var(--navy); }
 .sheet-empty { padding: 40px 16px; text-align: center; color: var(--muted); }
 .sheet-empty b { display: block; font-size: 18px; color: var(--navy); font-weight: 800; margin-bottom: 6px; }
 .sheet-note { text-align: center; font-size: 11.5px; color: var(--muted); margin-top: 10px; flex: none; }

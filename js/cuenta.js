@@ -118,6 +118,31 @@
     }
   })();
 
+  /* ---- Mis pedidos (historial de lo enviado por WhatsApp) ---- */
+  function cargarPedidos() { try { const h = JSON.parse(localStorage.getItem('bichitos_pedidos') || '[]'); return Array.isArray(h) ? h : []; } catch (_) { return []; } }
+  function renderPedidos() {
+    const hist = cargarPedidos();
+    $('#pedidosSub').textContent = hist.length === 1 ? '1 pedido' : `${hist.length} pedidos`;
+    const grid = $('#pedidosGrid');
+    if (!hist.length) {
+      grid.innerHTML = '<div class="pedidos-vacio">Todavía no hiciste pedidos.<br>Cuando envíes uno por WhatsApp, va a aparecer acá.</div>';
+      return;
+    }
+    grid.innerHTML = hist.slice(0, 4).map((p) => {
+      const img = (p.items && p.items[0] && p.items[0].img) || '';
+      return `<div class="pedido-card">
+        <div class="pedido-top">
+          <div class="pedido-thumb">${img ? `<img src="${esc(img)}" alt="" loading="lazy" onerror="this.style.display='none'" />` : ''}</div>
+          <span class="pedido-badge">Enviado</span>
+        </div>
+        <b class="pedido-n">Pedido #${p.n}</b>
+        <span class="pedido-meta">${p.count} ${p.count === 1 ? 'producto' : 'productos'} · ${esc(p.fecha)}</span>
+        <span class="pedido-total">${fmt(p.total)}</span>
+      </div>`;
+    }).join('');
+  }
+
   buildAvatars();
   render();
+  renderPedidos();
 })();

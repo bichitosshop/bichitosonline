@@ -16,9 +16,9 @@
   padding: 16px; box-shadow: var(--shadow-sm);
 }
 /* perro con laptop: recortado del mismo celeste, se funde en la card */
-.cp-dog { position: absolute; right: -8px; bottom: -10px; width: 128px; height: auto; z-index: 1; pointer-events: none; }
+.cp-dog { position: absolute; right: 8px; bottom: 6px; width: 96px; height: auto; z-index: 1; pointer-events: none; }
 .cuenta-perfil.editing .cp-dog { display: none; }   /* al editar, el perro no tapa el formulario */
-.cp-row { position: relative; z-index: 2; display: flex; align-items: center; gap: 12px; padding-right: 104px; min-height: 82px; }
+.cp-row { position: relative; z-index: 2; display: flex; align-items: center; gap: 12px; padding-right: 96px; min-height: 96px; }
 .cp-avatar {
   width: 58px; height: 58px; border-radius: 50%; flex: none;
   background: #fff; color: var(--navy); display: grid; place-items: center;
@@ -108,6 +108,19 @@ details.clist-item[open] > summary .clist-chev { transform: rotate(180deg); }
 .reco-img img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
 .reco-name { font-size: 12.5px; font-weight: 800; color: var(--navy); margin-top: 8px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .reco-price { font-size: 15px; font-weight: 900; color: var(--orange); margin-top: 2px; display: block; font-variant-numeric: tabular-nums; }
+
+/* ===== Mis pedidos (2×2) ===== */
+#pedidos { scroll-margin-top: 80px; }
+.cuenta-pedidos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.pedido-card { background: var(--paper); border: 1px solid var(--hairline); border-radius: 14px; padding: 12px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; }
+.pedido-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+.pedido-thumb { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid var(--hairline); flex: none; display: grid; place-items: center; }
+.pedido-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+.pedido-badge { font-size: 10.5px; font-weight: 800; color: #1FA463; background: #E6F6EE; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.pedido-n { font-size: 13.5px; font-weight: 900; color: var(--navy); }
+.pedido-meta { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+.pedido-total { font-size: 15px; font-weight: 900; color: var(--orange); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.pedidos-vacio { grid-column: 1 / -1; text-align: center; color: var(--muted); font-size: 13px; padding: 24px 16px; background: var(--paper); border: 1px dashed var(--hairline); border-radius: 14px; line-height: 1.55; }
 
 @media (min-width: 640px) {
   .cp-info h1 { font-size: 23px; }

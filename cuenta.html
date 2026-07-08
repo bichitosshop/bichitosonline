@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/home.css?v=6" />
-<link rel="stylesheet" href="css/cuenta.css?v=4" />
+<link rel="stylesheet" href="css/cuenta.css?v=5" />
 </head>
 <body>
 
@@ -161,10 +161,10 @@
         <b>Mis favoritos</b>
         <span class="cchip-sub" id="favsSub">0 productos</span>
       </a>
-      <a class="cchip" href="https://wa.me/5492615081413" target="_blank" rel="noopener">
+      <a class="cchip" href="#pedidos">
         <span class="cchip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H2"/></svg></span>
         <b>Mis pedidos</b>
-        <span class="cchip-sub">Consultá por WhatsApp</span>
+        <span class="cchip-sub" id="pedidosSub">0 pedidos</span>
       </a>
       <button class="cchip" id="chipDir">
         <span class="cchip-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
@@ -172,6 +172,15 @@
         <span class="cchip-sub" id="dirSub">Agregar</span>
       </button>
     </div>
+
+    <!-- Mis pedidos (historial de lo enviado por WhatsApp) -->
+    <section class="cuenta-sec" id="pedidos">
+      <div class="cuenta-sec-head">
+        <h2>Mis pedidos</h2>
+        <a href="productos.html">Seguir comprando</a>
+      </div>
+      <div class="cuenta-pedidos" id="pedidosGrid"></div>
+    </section>
 
     <!-- Información útil -->
     <section class="cuenta-sec">
@@ -258,6 +267,6 @@
 <script src="js/home.js?v=7"></script>
 <script src="js/config.js"></script>
 <script src="js/api-service.js"></script>
-<script src="js/cuenta.js?v=3"></script>
+<script src="js/cuenta.js?v=4"></script>
 </body>
 </html>
