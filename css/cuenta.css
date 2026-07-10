@@ -112,8 +112,11 @@ details.clist-item[open] > summary .clist-chev { transform: rotate(180deg); }
 /* ===== Mis pedidos (2×2) ===== */
 #pedidos { scroll-margin-top: 80px; }
 .cuenta-pedidos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.pedido-card { background: var(--paper); border: 1px solid var(--hairline); border-radius: 14px; padding: 12px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; }
+.pedido-card { width: 100%; text-align: left; font: inherit; cursor: pointer; background: var(--paper); border: 1px solid var(--hairline); border-radius: 14px; padding: 12px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; transition: transform .12s var(--spring), box-shadow .2s; }
+.pedido-card:hover { box-shadow: var(--shadow); }
+.pedido-card:active { transform: scale(.98); }
 .pedido-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+.pedido-chev { width: 18px; height: 18px; color: var(--muted); flex: none; }
 .pedido-thumb { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid var(--hairline); flex: none; display: grid; place-items: center; }
 .pedido-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
 .pedido-badge { font-size: 10.5px; font-weight: 800; color: #1FA463; background: #E6F6EE; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
@@ -127,3 +130,42 @@ details.clist-item[open] > summary .clist-chev { transform: rotate(180deg); }
   .cp-pets { width: 96px; height: 96px; }
   .cuenta-chips { gap: 12px; }
 }
+
+/* ===== Direcciones en el formulario de perfil ===== */
+.cp-dirs-field { display: flex; flex-direction: column; gap: 8px; }
+.cp-dirs-label { font-size: 12.5px; font-weight: 700; color: var(--navy); }
+.cp-dir-row { display: flex; gap: 8px; }
+.cp-dir-in { flex: 1; height: 46px; border: 1.5px solid var(--hairline); border-radius: 12px; padding: 0 14px; font: inherit; font-size: 15px; background: #fff; outline: none; transition: border-color .2s; }
+.cp-dir-in:focus { border-color: var(--navy); }
+.cp-dir-del { width: 46px; height: 46px; border-radius: 12px; background: #FBE9E7; color: #E3402B; font-size: 15px; font-weight: 800; flex: none; border: 0; cursor: pointer; }
+.cp-add-dir { align-self: flex-start; font-size: 13px; font-weight: 800; color: var(--teal); background: none; border: 0; cursor: pointer; padding: 2px 0; }
+
+/* ===== Modal detalle de pedido ===== */
+.pedido-modal { position: fixed; inset: 0; z-index: 150; }
+.pedido-modal[hidden] { display: none; }
+.pm-overlay { position: absolute; inset: 0; background: rgba(20,32,40,.5); opacity: 0; transition: opacity .25s; }
+.pedido-modal.on .pm-overlay { opacity: 1; }
+.pm-card { position: absolute; left: 0; right: 0; bottom: 0; max-width: 480px; margin: 0 auto; background: #fff; border-radius: 22px 22px 0 0; padding: 8px 18px calc(18px + env(safe-area-inset-bottom)); max-height: 88vh; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .3s cubic-bezier(.32,.72,0,1); }
+.pedido-modal.on .pm-card { transform: none; }
+.pm-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 0 10px; flex: none; }
+.pm-head h3 { font-size: 18px; font-weight: 900; color: var(--navy); }
+.pm-x { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--hairline); background: #fff; color: var(--navy); display: grid; place-items: center; cursor: pointer; }
+.pm-x svg { width: 15px; height: 15px; }
+.pm-body { overflow-y: auto; flex: 1; min-height: 0; }
+.pm-fecha { font-size: 12.5px; color: var(--muted); margin-bottom: 6px; }
+.pm-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--hairline); }
+.pm-thumb { width: 46px; height: 46px; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid var(--hairline); flex: none; display: grid; place-items: center; }
+.pm-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+.pm-item-info { flex: 1; min-width: 0; }
+.pm-item-info p { font-size: 13.5px; font-weight: 700; color: var(--navy); line-height: 1.25; }
+.pm-item-info small { font-size: 11.5px; color: var(--muted); }
+.pm-item-sub { font-size: 14px; font-weight: 900; color: var(--navy); flex: none; font-variant-numeric: tabular-nums; }
+.pm-total { display: flex; align-items: baseline; justify-content: space-between; padding: 14px 0 10px; }
+.pm-total span { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pm-total b { font-size: 20px; font-weight: 900; color: var(--navy); font-variant-numeric: tabular-nums; }
+.pm-dir { font-size: 13px; color: var(--muted); background: #F2F6FA; border-radius: 12px; padding: 10px 12px; line-height: 1.4; }
+.pm-dir b { color: var(--navy); font-weight: 800; }
+.pm-reorder { flex: none; margin-top: 14px; height: 52px; border-radius: 14px; background: var(--orange); color: #fff; font-size: 15.5px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; cursor: pointer; transition: transform .12s var(--spring); }
+.pm-reorder:active { transform: scale(.98); }
+.pm-reorder:disabled { filter: grayscale(.5) opacity(.6); cursor: default; }
+.pm-reorder svg { width: 19px; height: 19px; }

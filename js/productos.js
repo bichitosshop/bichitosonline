@@ -204,9 +204,18 @@
     const titulo = wishlistMode ? 'Favoritos' : ({ perros: 'Perros', gatos: 'Gatos', ofertas: 'Ofertas', todos: 'Todos los productos' }[filtro] || 'Productos');
     $('#catTitle').textContent = titulo;
     $('#catCount').textContent = `${groups.length} ${groups.length === 1 ? 'producto' : 'productos'}`;
-    const vacio = esOfertas
-      ? '<div class="prod-empty"><b>No hay ofertas en esta categoría</b>Probá con otra categoría o mirá todas las ofertas.</div>'
-      : '<div class="prod-empty"><b>No encontramos nada</b>Probá con otra palabra o cambiá la categoría.</div>';
+    let vacio;
+    if (wishlistMode && !q.trim()) {
+      vacio = '<div class="prod-empty prod-empty-fav">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 5.6a5.4 5.4 0 0 0-7.7 0L12 6.7l-1.1-1.1a5.4 5.4 0 1 0-7.7 7.7L12 22l8.8-8.7a5.4 5.4 0 0 0 0-7.7z"/></svg>' +
+        '<b>Todavía no tenés favoritos</b>' +
+        'Tocá el corazón&nbsp;❤ de cualquier producto y se va a guardar acá para encontrarlo fácil.' +
+        '<a class="prod-empty-cta" href="productos.html">Ver productos</a></div>';
+    } else if (esOfertas) {
+      vacio = '<div class="prod-empty"><b>No hay ofertas en esta categoría</b>Probá con otra categoría o mirá todas las ofertas.</div>';
+    } else {
+      vacio = '<div class="prod-empty"><b>No encontramos nada</b>Probá con otra palabra o cambiá la categoría.</div>';
+    }
     $('#grid').innerHTML = groups.length ? groups.map(cardHTML).join('') : vacio;
     document.querySelectorAll('#mainPills .fpill').forEach((b) => b.classList.toggle('act', b.dataset.cat === filtro));
     document.querySelectorAll('#ofertasPills .fpill').forEach((b) => b.classList.toggle('act', b.dataset.ofcat === ofCat));
@@ -249,15 +258,21 @@
   /* ---- perfil + historial de pedidos (localStorage) ---- */
   function cargarPerfil() { try { return JSON.parse(localStorage.getItem('bichitos_perfil') || '{}') || {}; } catch (_) { return {}; } }
   function guardarPerfil(p) { localStorage.setItem('bichitos_perfil', JSON.stringify(p)); }
+  function getDirecciones(perfil) {
+    if (Array.isArray(perfil.direcciones)) return perfil.direcciones.filter(Boolean);
+    if (perfil.direccion) return [perfil.direccion];   // compat con formato viejo
+    return [];
+  }
   function fechaHoy() { const d = new Date(); return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`; }
   function imgDe(id) { const p = PRODUCTOS.find((x) => x.id === id); return p ? imgFor(p) : ''; }
-  function guardarPedido(ls) {
+  function marcaDe(id) { const p = PRODUCTOS.find((x) => x.id === id); return p ? (p.marca || '') : ''; }
+  function guardarPedido(ls, dir) {
     let hist = []; try { const h = JSON.parse(localStorage.getItem('bichitos_pedidos') || '[]'); if (Array.isArray(h)) hist = h; } catch (_) {}
     const n = (parseInt(localStorage.getItem('bichitos_pedido_n')) || 0) + 1;
     localStorage.setItem('bichitos_pedido_n', String(n));
     hist.unshift({
-      n, fecha: fechaHoy(), total: totales().t, count: ls.reduce((s, i) => s + i.cant, 0),
-      items: ls.map((i) => ({ nombre: i.nombre, cant: i.cant, precio: i.precio, img: imgDe(i.id) })),
+      n, fecha: fechaHoy(), total: totales().t, count: ls.reduce((s, i) => s + i.cant, 0), direccion: dir || '',
+      items: ls.map((i) => ({ id: i.id, nombre: i.nombre, cant: i.cant, precio: i.precio, marca: marcaDe(i.id), img: imgDe(i.id) })),
     });
     localStorage.setItem('bichitos_pedidos', JSON.stringify(hist.slice(0, 50)));
   }
@@ -281,39 +296,69 @@
       </div>`).join('');
     $('#tTotal').textContent = fmt(totales().t);
   }
-  function waLink(ls, perfil) {
+  function waLink(ls, dir, nombre) {
     const cuerpo = ls.map((i) => `• ${i.cant}× ${i.nombre} — ${fmt(i.precio * i.cant)}`).join('\n');
     let msg = `¡Hola BICHITOS SHOP! 🐾 Quiero hacer este pedido:\n\n${cuerpo}\n\nTotal: ${fmt(totales().t)}`;
-    if (perfil.direccion) msg += `\n\n📍 Enviar a: ${perfil.direccion}`;
+    if (dir) {
+      msg += `\n\n📍 Enviar a: ${dir}`;
+      msg += `\n🗺️ Mapa: https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dir)}`;
+    }
     msg += `\n\n¿Cómo coordinamos la entrega?`;
-    if (perfil.nombre) msg += `\n\n¡Gracias! ${perfil.nombre} 🐾`;
+    if (nombre) msg += `\n\n¡Gracias! ${nombre} 🐾`;
     return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
   }
-  function resetCheckout() { $('#coForm').hidden = true; $('#sheetWaTxt').textContent = 'Enviar pedido por WhatsApp'; }
+  function resetCheckout() { $('#coForm').hidden = true; $('#coBody').innerHTML = ''; $('#sheetWaTxt').textContent = 'Enviar pedido por WhatsApp'; }
+
+  // Abre el paso de confirmación de datos (nombre si falta + elegir dirección)
+  function abrirCheckout() {
+    const perfil = cargarPerfil();
+    const dirs = getDirecciones(perfil);
+    const nombre = (perfil.nombre || '').trim();
+    let html = '<p class="co-title">Confirmá tus datos para la entrega</p>';
+    if (!nombre) html += '<label class="co-field"><span>Tu nombre</span><input type="text" id="coNombre" placeholder="Ej: Camila" autocomplete="name" /></label>';
+    html += '<span class="co-label">Dirección de entrega</span><div class="co-dirs">';
+    dirs.forEach((d, i) => {
+      html += `<label class="co-radio"><input type="radio" name="codir" value="${i}"${i === 0 ? ' checked' : ''} /><span>${esc(d)}</span></label>`;
+    });
+    const nuevaOn = dirs.length === 0;
+    html += `<label class="co-radio"><input type="radio" name="codir" value="nueva"${nuevaOn ? ' checked' : ''} /><span>Otra dirección…</span></label>`;
+    html += `<input type="text" id="coNueva" class="co-nueva" placeholder="Calle, número, barrio"${nuevaOn ? '' : ' hidden'} autocomplete="street-address" /></div>`;
+    $('#coBody').innerHTML = html;
+    $('#coForm').hidden = false;
+    $('#sheetWaTxt').textContent = 'Confirmar y enviar';
+    const f = $('#coNombre') || $('#coNueva');
+    if (f && !f.hidden) f.focus();
+  }
+
   function enviarPedido() {
     const ls = [...cart].sort((a, b) => String(a.nombre).localeCompare(String(b.nombre), 'es'));
     if (!ls.length) return;
-    let perfil = cargarPerfil();
-    const faltan = !((perfil.nombre || '').trim()) || !((perfil.direccion || '').trim());
-    // Faltan datos y el checkout no está abierto → pedirlos primero (como un checkout)
-    if (faltan && $('#coForm').hidden) {
-      $('#coNombre').value = perfil.nombre || '';
-      $('#coDir').value = perfil.direccion || '';
-      $('#coForm').hidden = false;
-      $('#sheetWaTxt').textContent = 'Confirmar y enviar';
-      (perfil.nombre ? $('#coDir') : $('#coNombre')).focus();
-      return;
-    }
-    // Checkout abierto → leer y validar
-    if (!$('#coForm').hidden) {
-      const nombre = $('#coNombre').value.trim();
-      const dir = $('#coDir').value.trim();
-      if (!nombre || !dir) { alert('Completá tu nombre y tu dirección para poder enviarte el pedido.'); return; }
-      perfil.nombre = nombre; perfil.direccion = dir; guardarPerfil(perfil);
-    }
-    guardarPedido(ls);                                   // guarda en el historial (pestaña Cuenta)
-    window.open(waLink(ls, perfil), '_blank', 'noopener'); // abre WhatsApp con el mensaje
-    cart = []; guardarCart(); syncBar(); syncAllCards(); // vacía el carrito
+    // 1er toque: abrir confirmación (siempre se confirma la dirección antes de enviar)
+    if ($('#coForm').hidden) { abrirCheckout(); return; }
+    // 2do toque: leer, validar y enviar
+    const perfil = cargarPerfil();
+    let nombre = (perfil.nombre || '').trim();
+    const nInput = $('#coNombre');
+    if (nInput) nombre = nInput.value.trim();
+    if (!nombre) { alert('Escribí tu nombre para el pedido.'); if (nInput) nInput.focus(); return; }
+    const dirs = getDirecciones(perfil);
+    const sel = document.querySelector('#coBody input[name="codir"]:checked');
+    let dir = '';
+    if (sel && sel.value !== 'nueva') dir = dirs[+sel.value] || '';
+    else dir = ($('#coNueva') ? $('#coNueva').value.trim() : '');
+    if (!dir) { alert('Elegí o escribí la dirección de entrega.'); return; }
+    // guardar perfil (nombre + dirección nueva al frente de la lista)
+    perfil.nombre = nombre;
+    let nd = getDirecciones(perfil);
+    if (!nd.includes(dir)) nd = [dir, ...nd];
+    perfil.direcciones = nd.slice(0, 6);
+    delete perfil.direccion;
+    if (!perfil.avatar) perfil.avatar = 1;
+    guardarPerfil(perfil);
+    // enviar
+    guardarPedido(ls, dir);
+    window.open(waLink(ls, dir, nombre), '_blank', 'noopener');
+    cart = []; guardarCart(); syncBar(); syncAllCards();
     resetCheckout(); closeSheet();
   }
   function openSheet() { resetCheckout(); renderSheet(); $('#sheet').classList.add('on'); $('#sheetOverlay').classList.add('on'); }
@@ -366,6 +411,12 @@
 
   $('#sheetWa')?.addEventListener('click', enviarPedido);
   $('#coForm')?.addEventListener('submit', (e) => { e.preventDefault(); enviarPedido(); });
+  $('#coForm')?.addEventListener('change', (e) => {
+    if (e.target.name === 'codir') {
+      const nueva = $('#coNueva');
+      if (nueva) { nueva.hidden = e.target.value !== 'nueva'; if (e.target.value === 'nueva') nueva.focus(); }
+    }
+  });
 
   function primeraCatOferta() {
     for (const c of ['perros', 'gatos', 'accesorios']) {
