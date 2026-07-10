@@ -23,7 +23,7 @@
     $('#cpHola').textContent = nombre ? `¡Hola, ${nombre}!` : '¡Hola!';
     $('#cpMail').textContent = perfil.email ? perfil.email : 'Completá tu perfil';
     const avId = perfil.avatar || DEFAULT_AVATAR;   // avatar por defecto para cuentas nuevas
-    $('#cpAvatar').innerHTML = `<img src="img/perfil/avatar-${avId}.png?v=2" alt="Foto de perfil" />`;
+    $('#cpAvatar').innerHTML = `<img src="img/perfil/avatar-${avId}.png?v=3" alt="Foto de perfil" />`;
 
     let favs = 0;
     try { const f = JSON.parse(localStorage.getItem('bichitos_favs') || '[]'); if (Array.isArray(f)) favs = f.length; } catch (_) {}
@@ -50,7 +50,7 @@
   function buildAvatars() {
     let html = '';
     for (let i = 1; i <= N_AVATARS; i++) {
-      html += `<button type="button" class="cp-av-btn" data-av="${i}" aria-label="Foto ${i}"><img src="img/perfil/avatar-${i}.png?v=2" alt="" /></button>`;
+      html += `<button type="button" class="cp-av-btn" data-av="${i}" aria-label="Foto ${i}"><img src="img/perfil/avatar-${i}.png?v=3" alt="" /></button>`;
     }
     $('#avatarGrid').innerHTML = html;
     $('#avatarGrid').addEventListener('click', (e) => {
