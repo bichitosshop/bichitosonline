@@ -94,7 +94,7 @@
 
     let footer;
     if (sinStock) {
-      footer = '<span class="pcard-add" style="background:#eee;color:#999;cursor:default">Sin stock</span>';
+      footer = '<span class="pcard-add agotado">Sin stock</span>';
     } else if (cant > 0) {
       footer = `
         <div class="pcard-cart">
@@ -201,7 +201,7 @@
     const esOfertas = filtro === 'ofertas' && !wishlistMode;
     document.body.classList.toggle('is-ofertas', esOfertas);
     const groups = visibleGroups();
-    const titulo = wishlistMode ? 'Favoritos' : ({ perros: 'Perros', gatos: 'Gatos', ofertas: 'Ofertas', todos: 'Todos los productos' }[filtro] || 'Productos');
+    const titulo = wishlistMode ? 'Favoritos' : ({ perros: 'Perros', gatos: 'Gatos', accesorios: 'Accesorios', ofertas: 'Ofertas', todos: 'Todos los productos' }[filtro] || 'Productos');
     $('#catTitle').textContent = titulo;
     $('#catCount').textContent = `${groups.length} ${groups.length === 1 ? 'producto' : 'productos'}`;
     let vacio;
@@ -209,7 +209,7 @@
       vacio = '<div class="prod-empty prod-empty-fav">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 5.6a5.4 5.4 0 0 0-7.7 0L12 6.7l-1.1-1.1a5.4 5.4 0 1 0-7.7 7.7L12 22l8.8-8.7a5.4 5.4 0 0 0 0-7.7z"/></svg>' +
         '<b>Todavía no tenés favoritos</b>' +
-        'Tocá el corazón&nbsp;❤ de cualquier producto y se va a guardar acá para encontrarlo fácil.' +
+        'Tocá el corazón de cualquier producto y se va a guardar acá para encontrarlo fácil.' +
         '<a class="prod-empty-cta" href="productos.html">Ver productos</a></div>';
     } else if (esOfertas) {
       vacio = '<div class="prod-empty"><b>No hay ofertas en esta categoría</b>Probá con otra categoría o mirá todas las ofertas.</div>';

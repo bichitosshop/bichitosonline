@@ -88,7 +88,7 @@ img { display: block; max-width: 100%; }
 .adm-h-undo svg { width: 16px; height: 16px; }
 .adm-h-undo span { background: rgba(255,255,255,.28); border-radius: 999px; min-width: 18px; text-align: center; padding: 0 5px; font-size: 11.5px; }
 
-.adm-tools { position: sticky; top: 0; z-index: 55; background: var(--bg); padding: 12px 16px 6px; }
+.adm-tools { position: sticky; top: calc(56px + env(safe-area-inset-top)); z-index: 55; background: var(--bg); padding: 12px 16px 6px; }
 .adm-buscar {
   display: flex; align-items: center; gap: 10px; height: 48px; background: #fff;
   border: 1.5px solid var(--hairline); border-radius: 14px; padding: 0 14px; box-shadow: var(--shadow);
@@ -122,7 +122,7 @@ img { display: block; max-width: 100%; }
 .adm-card-top { display: flex; gap: 12px; }
 .adm-card-img { width: 66px; height: 66px; border-radius: 12px; object-fit: contain; background: #fff; border: 1px solid var(--hairline); flex: none; padding: 4px; }
 .adm-card-info { flex: 1; min-width: 0; }
-.adm-card-nom { font-size: 15px; font-weight: 800; color: var(--navy); line-height: 1.2; }
+.adm-card-nom { font-size: 15px; font-weight: 800; color: var(--navy); line-height: 1.2; padding-right: 56px; }
 .adm-card-marca { font-size: 12px; color: var(--muted); margin-top: 1px; }
 .adm-card-precio { font-size: 17px; font-weight: 900; color: var(--orange); margin-top: 4px; font-variant-numeric: tabular-nums; }
 .adm-card-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }

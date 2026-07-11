@@ -108,7 +108,7 @@
     cerrarForm();
   });
   $('#btnCerrar').addEventListener('click', () => {
-    if (confirm('¿Cerrar sesión? Se borran tus datos de perfil de este celular.')) {
+    if (confirm('¿Cerrar sesión? Se borran tus datos de perfil de este dispositivo.')) {
       localStorage.removeItem(KEY);
       perfil = {};
       avatarSel = DEFAULT_AVATAR;
@@ -130,6 +130,12 @@
         if (sel.length >= 4) break;
       }
       if (!sel.length) { $('#reco').closest('.cuenta-sec').hidden = true; return; }
+      // corregir el contador de favoritos: contar GRUPOS (como la página de Favoritos), no variantes
+      try {
+        const favIds = new Set(JSON.parse(localStorage.getItem('bichitos_favs') || '[]'));
+        const gs = new Set(prods.filter((p) => favIds.has(p.id)).map((p) => p.grupo || p.nombre));
+        if (favIds.size) $('#favsSub').textContent = gs.size === 1 ? '1 producto' : `${gs.size} productos`;
+      } catch (_) {}
       $('#reco').innerHTML = sel.map((p) => {
         const of = p.oferta && (+p.descuento || 0) > 0;
         const precio = of ? Math.round(p.precio * (1 - p.descuento / 100)) : p.precio;
@@ -179,7 +185,7 @@
     const items = (p.items || []).map((it) => `
       <div class="pm-item">
         <div class="pm-thumb">${it.img ? `<img src="${esc(it.img)}" alt="" onerror="this.style.display='none'" />` : ''}</div>
-        <div class="pm-item-info"><p>${esc(it.nombre)}</p><small>${it.cant} × ${fmt(it.precio)}</small></div>
+        <div class="pm-item-info"><p>${esc(it.nombre)}</p><small>${fmt(it.precio)} c/u</small></div>
         <span class="pm-item-sub">${fmt(it.precio * it.cant)}</span>
       </div>`).join('');
     const dir = p.direccion ? `<div class="pm-dir"><b>Enviado a:</b> ${esc(p.direccion)}</div>` : '';

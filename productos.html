@@ -26,8 +26,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/home.css?v=9" />
-<link rel="stylesheet" href="css/productos.css?v=14" />
+<link rel="stylesheet" href="css/home.css?v=10" />
+<link rel="stylesheet" href="css/productos.css?v=17" />
 </head>
 <body>
 
@@ -42,7 +42,13 @@
     </p>
     <nav class="topbar-links" aria-label="Enlaces de ayuda">
       <a href="contacto.html">Ayuda</a>
-      <a href="contacto.html">Seguimiento de pedido</a>
+      <a href="https://wa.me/5492615081413?text=%C2%A1Hola%20BICHITOS%20SHOP!%20Quiero%20saber%20el%20estado%20de%20mi%20pedido." target="_blank" rel="noopener">Seguimiento de pedido</a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 22v-8h2.7l.4-3H13V9c0-.9.3-1.5 1.6-1.5H16V4.9c-.3 0-1.2-.1-2.3-.1-2.3 0-3.7 1.3-3.7 3.8V11H7.5v3H10v8z"/></svg>
+      </a>
     </nav>
   </div>
 </div>
@@ -58,7 +64,7 @@
       <a href="index.html">Inicio</a>
       <a href="productos.html?categoria=perros">Perros</a>
       <a href="productos.html?categoria=gatos">Gatos</a>
-      <a href="productos.html">Accesorios</a>
+      <a href="productos.html?categoria=accesorios">Accesorios</a>
       <a href="productos.html?categoria=ofertas">Ofertas</a>
       <a href="productos.html?wishlist=1">Favoritos</a>
       <a href="blog.html" target="_blank" rel="noopener">Blog</a>
@@ -71,7 +77,7 @@
       <a href="cuenta.html" class="icon-btn" aria-label="Mi cuenta">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
       </a>
-      <button class="icon-btn cart-btn" id="openCart" aria-label="Ver pedido">
+      <button class="icon-btn cart-btn" id="openCart" aria-label="Ver carrito">
         <img src="img/icons/ic-cart.png" alt="" class="ic-img" />
         <span class="cart-badge" id="cartBadge" aria-live="polite">0</span>
       </button>
@@ -100,7 +106,7 @@
       <span class="np-txt">Gatos</span>
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
     </a>
-    <a href="productos.html" data-cat="otras">
+    <a href="productos.html?categoria=accesorios" data-cat="otras">
       <span class="np-ic np-ic-img"><img src="img/icons/np-accesorios.png" alt="" /></span>
       <span class="np-txt">Accesorios de mascotas</span>
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
@@ -111,8 +117,13 @@
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
     </a>
     <span class="np-divider" aria-hidden="true"></span>
+    <a href="cuenta.html" data-cat="cuenta">
+      <span class="np-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></span>
+      <span class="np-txt">Mi cuenta</span>
+      <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
     <a href="blog.html" target="_blank" rel="noopener" data-cat="blog">
-      <span class="np-ic np-ic-img"><img src="img/icons/np-blog.png" alt="" /></span>
+      <span class="np-ic np-ic-img"><img src="img/icons/np-blog.png?v=2" alt="" /></span>
       <span class="np-txt">Blog</span>
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
     </a>
@@ -122,6 +133,17 @@
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
     </a>
   </nav>
+  <div class="nav-panel-social">
+    <a href="https://wa.me/5492615081413" target="_blank" rel="noopener" class="np-wsp" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-1.043zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.414z"/></svg>
+    </a>
+    <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 22v-8h2.7l.4-3H13V9c0-.9.3-1.5 1.6-1.5H16V4.9c-.3 0-1.2-.1-2.3-.1-2.3 0-3.7 1.3-3.7 3.8V11H7.5v3H10v8z"/></svg>
+    </a>
+  </div>
 </aside>
 
 <main id="main">
@@ -148,15 +170,16 @@
     </div>
   </div>
 
-  <div class="filtros-pills" id="mainPills" role="group" aria-label="Filtrar por categoría">
+  <div class="filtros-pills wrap" id="mainPills" role="group" aria-label="Filtrar por categoría">
     <button class="fpill" data-cat="todos">Todos</button>
     <button class="fpill" data-cat="perros">Perros</button>
     <button class="fpill" data-cat="gatos">Gatos</button>
+    <button class="fpill" data-cat="accesorios">Accesorios</button>
     <button class="fpill" data-cat="ofertas">Ofertas</button>
   </div>
 
   <!-- OFERTAS: filtro por categoría (sin "Todos"; se ve todo con el botón del banner) -->
-  <div class="filtros-pills ofertas-only" id="ofertasPills" role="group" aria-label="Filtrar ofertas por categoría">
+  <div class="filtros-pills wrap ofertas-only" id="ofertasPills" role="group" aria-label="Filtrar ofertas por categoría">
     <button class="fpill" data-ofcat="perros">Perros</button>
     <button class="fpill" data-ofcat="gatos">Gatos</button>
     <button class="fpill" data-ofcat="accesorios">Accesorios</button>
@@ -165,7 +188,7 @@
   <div class="wrap buscador-wrap">
     <label class="buscador">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="buscador" type="search" placeholder="Buscar producto, marca…" autocomplete="off" aria-label="Buscar productos" />
+      <input id="buscador" type="search" placeholder="Buscar producto o marca…" autocomplete="off" aria-label="Buscar productos" />
     </label>
   </div>
 
@@ -247,7 +270,7 @@
     <img src="img/icons/ic-ticket.png" alt="" /><span>Ofertas</span>
   </a>
   <a href="blog.html" data-nav="blog">
-    <img src="img/icons/ic-blog.png" alt="" />
+    <img src="img/icons/ic-blog.png?v=2" alt="" />
     <span>Blog</span>
   </a>
   <a href="productos.html?wishlist=1" data-nav="favoritos">
@@ -261,7 +284,7 @@
 
 <script src="js/config.js"></script>
 <script src="js/api-service.js"></script>
-<script src="js/productos.js?v=11"></script>
+<script src="js/productos.js?v=12"></script>
 <script src="js/home.js?v=10"></script>
 </body>
 </html>

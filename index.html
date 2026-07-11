@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/home.css?v=9" />
+<link rel="stylesheet" href="css/home.css?v=10" />
 </head>
 <body>
 
@@ -43,7 +43,7 @@
     </p>
     <nav class="topbar-links" aria-label="Enlaces de ayuda">
       <a href="contacto.html">Ayuda</a>
-      <a href="contacto.html">Seguimiento de pedido</a>
+      <a href="https://wa.me/5492615081413?text=%C2%A1Hola%20BICHITOS%20SHOP!%20Quiero%20saber%20el%20estado%20de%20mi%20pedido." target="_blank" rel="noopener">Seguimiento de pedido</a>
       <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
       </a>
@@ -69,7 +69,7 @@
       <a href="index.html" class="active">Inicio</a>
       <a href="productos.html?categoria=perros">Perros</a>
       <a href="productos.html?categoria=gatos">Gatos</a>
-      <a href="productos.html">Accesorios</a>
+      <a href="productos.html?categoria=accesorios">Accesorios</a>
       <a href="productos.html?categoria=ofertas">Ofertas</a>
       <a href="productos.html?wishlist=1">Favoritos</a>
       <a href="blog.html" target="_blank" rel="noopener">Blog</a>
@@ -112,7 +112,7 @@
       <span class="np-txt">Gatos</span>
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
     </a>
-    <a href="productos.html" data-cat="otras">
+    <a href="productos.html?categoria=accesorios" data-cat="otras">
       <span class="np-ic np-ic-img"><img src="img/icons/np-accesorios.png" alt="" /></span>
       <span class="np-txt">Accesorios de mascotas</span>
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
@@ -123,8 +123,13 @@
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
     </a>
     <span class="np-divider" aria-hidden="true"></span>
+    <a href="cuenta.html" data-cat="cuenta">
+      <span class="np-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></span>
+      <span class="np-txt">Mi cuenta</span>
+      <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+    </a>
     <a href="blog.html" target="_blank" rel="noopener" data-cat="blog">
-      <span class="np-ic np-ic-img"><img src="img/icons/np-blog.png" alt="" /></span>
+      <span class="np-ic np-ic-img"><img src="img/icons/np-blog.png?v=2" alt="" /></span>
       <span class="np-txt">Blog</span>
       <svg class="np-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
     </a>
@@ -148,6 +153,7 @@
 </aside>
 
 <main id="main">
+  <h1 class="visually-hidden">BICHITOS SHOP — Todo para tu mascota en Mendoza</h1>
 
   <!-- ===== HERO ===== -->
   <section class="hero-wrap wrap" aria-label="Bienvenida">
@@ -173,7 +179,7 @@
       <a class="cat-card" href="productos.html?categoria=gatos" aria-label="Ver productos para Gatos">
         <img src="img/home/cat-gatos.jpg" alt="Gatos" />
       </a>
-      <a class="cat-card" href="productos.html" aria-label="Ver Artículos para mascotas">
+      <a class="cat-card" href="productos.html?categoria=accesorios" aria-label="Ver Artículos para mascotas">
         <img src="img/home/cat-articulos.jpg" alt="Artículos para mascotas" />
       </a>
       <a class="cat-card" href="productos.html?categoria=ofertas" aria-label="Ver Ofertas">
@@ -253,7 +259,7 @@
     <img src="img/icons/ic-ticket.png" alt="" /><span>Ofertas</span>
   </a>
   <a href="blog.html" data-nav="blog">
-    <img src="img/icons/ic-blog.png" alt="" />
+    <img src="img/icons/ic-blog.png?v=2" alt="" />
     <span>Blog</span>
   </a>
   <a href="productos.html?wishlist=1" data-nav="favoritos">

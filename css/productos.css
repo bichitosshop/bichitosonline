@@ -8,7 +8,7 @@
 .cat-count { font-size: 12.5px; color: var(--muted); font-weight: 600; }
 
 /* Pills de filtro */
-.filtros-pills { display: flex; gap: 8px; overflow-x: auto; padding: 10px 16px 12px; scrollbar-width: none; scroll-snap-type: x proximity; }
+.filtros-pills { display: flex; gap: 8px; overflow-x: auto; padding-top: 10px; padding-bottom: 12px; scrollbar-width: none; scroll-snap-type: x proximity; scroll-padding-left: 16px; }
 .filtros-pills::-webkit-scrollbar { display: none; }
 /* .fpill vive en home.css (compartido con el blog) */
 
@@ -83,6 +83,7 @@
   font-size: 13.5px; font-weight: 800; transition: background .2s, transform .12s var(--spring);
 }
 .pcard-add svg { width: 18px; height: 18px; }
+.pcard-add.agotado { background: #EEF2F6; color: var(--muted); cursor: default; }
 .pcard-add:hover { background: #DCEBF7; }
 .pcard-add:active { transform: scale(.97); }
 .pcard-add.in-cart { background: var(--navy); color: #fff; }
@@ -164,7 +165,7 @@
 .co-title { font-size: 13.5px; font-weight: 800; color: var(--navy); margin-bottom: 2px; }
 .co-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-top: 4px; }
 .co-field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--navy); }
-.co-field input, .co-nueva { height: 44px; border: 1.5px solid var(--hairline); border-radius: 10px; padding: 0 12px; font: inherit; font-size: 15px; background: #fff; outline: none; transition: border-color .2s; }
+.co-field input, .co-nueva { height: 46px; border: 1.5px solid var(--hairline); border-radius: 12px; padding: 0 12px; font: inherit; font-size: 15px; background: #fff; outline: none; transition: border-color .2s; }
 .co-field input:focus, .co-nueva:focus { border-color: var(--navy); }
 .co-nueva[hidden] { display: none; }
 .co-dirs { display: flex; flex-direction: column; gap: 6px; }
